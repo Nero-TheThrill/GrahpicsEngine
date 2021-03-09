@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{ede7556e-1510-4b1a-abc0-c6659120ca01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EngineCore">
+      <UniqueIdentifier>{5f0a334c-9caa-4849-bc73-6632c95f2a34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EngineCore\Application">
+      <UniqueIdentifier>{d5c5ad5d-d572-441e-a327-ccabef57ae9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EngineCore\Input">
+      <UniqueIdentifier>{0609fffc-47c6-4324-b4e7-e21bfffc5c4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{a50eecd9-f99b-403a-856e-7055e1d36319}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Engine.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cpp">
+      <Filter>EngineCore\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>EngineCore\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\includes\source\glad\glad.c" />
+    <ClCompile Include="Graphics.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Engine.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineCore.h">
+      <Filter>EngineCore</Filter>
+    </ClInclude>
+    <ClInclude Include="Application.h">
+      <Filter>EngineCore\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>EngineCore\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="headers.h" />
+    <ClInclude Include="Graphics.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
