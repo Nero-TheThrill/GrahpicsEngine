@@ -65,8 +65,6 @@ void Application::Init()
 
     glViewport(0, 0, 800, 600);
 
-
-
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetKeyCallback(window, key_callback);
     glfwSetMouseButtonCallback(window, mouse_button_callback);

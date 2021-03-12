@@ -20,4 +20,3 @@ private:
     std::vector<EngineCore*> enginecore;
     bool isgamerunning;
 };
-extern Engine* ThrillEngine;

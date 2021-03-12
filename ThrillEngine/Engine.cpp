@@ -3,30 +3,29 @@
 #include "Application.h"
 #include "Graphics.h"
 #include "Input.h"
+#include "Material.h"
 
-
-Engine* ThrillEngine = nullptr;
 
 Engine::Engine()
 {
     isgamerunning = true;
-    ThrillEngine = this;
 }
 
 Engine::~Engine()
 {
-    ThrillEngine = nullptr;
 }
 
 void Engine::Init()
 {
     Input::Init();
-    AddCore(new Graphics());
     AddCore(new Application());
+    AddCore(new Graphics());
+    AddCore(new Material());
+
     for (auto* e_core : enginecore)
         e_core->Init();
     APPLICATION->AppSet(1380, 720);
-    GRAPHICS->DrawTriangle();
+   // GRAPHICS->DrawTriangle();
 }
 
 void Engine::Loop()
