@@ -19,7 +19,6 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos)
 {
     Input::SetMousePosition(static_cast<float>(xpos), static_cast<float>(ypos));
-    std::cout << Input::GetMousePosition().x << " " << Input::GetMousePosition().y << std::endl;
 }
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {

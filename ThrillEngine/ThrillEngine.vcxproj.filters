@@ -79,5 +79,8 @@
     <ClInclude Include="EngineCore.h">
       <Filter>EngineCore</Filter>
     </ClInclude>
+    <ClInclude Include="..\includes\source\stb_image.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

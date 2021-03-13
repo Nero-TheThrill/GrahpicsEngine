@@ -3,8 +3,7 @@
 #include "Application.h"
 #include "Graphics.h"
 #include "Input.h"
-#include "Material.h"
-
+#include "ObjectManager.h"
 
 Engine::Engine()
 {
@@ -20,8 +19,7 @@ void Engine::Init()
     Input::Init();
     AddCore(new Application());
     AddCore(new Graphics());
-    AddCore(new Material());
-
+    AddCore(new ObjectManager());
     for (auto* e_core : enginecore)
         e_core->Init();
     APPLICATION->AppSet(1380, 720);

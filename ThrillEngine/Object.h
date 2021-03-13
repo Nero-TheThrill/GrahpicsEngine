@@ -1,15 +1,23 @@
 #pragma once
 #include <string>
 #include <vector>
-#include <glad/glad.h>
 #include<glm/glm.hpp>
+
+#include "Material.h"
 
 class Object
 {
 public:
-    void LoadObject(const std::string& path);
+    Object();
+    void SetObject(const std::string& filepath, const std::string& shader_id);
     ~Object();
-    virtual void draw();
+    void LoadObject(const std::string& path);
+    void Update();
+
+    void draw();
+    void pick_shader(const std::string& name);
+    bool alive = true;
+    unsigned id;
 private:
     GLuint VAO;
     GLuint VBO;
@@ -19,4 +27,7 @@ private:
     std::vector<glm::vec3> normal;
     std::vector<glm::vec2> uv;
     std::vector<glm::vec4> color;
+    Material material;
+
+    //translate rotate scale... components needed
 };

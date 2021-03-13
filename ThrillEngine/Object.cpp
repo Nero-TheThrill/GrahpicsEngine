@@ -1,6 +1,9 @@
 #include "Object.h"
+#include "Input.h"
 #include "Material.h"
 #include<array>
+
+
 
 void Object::LoadObject(const std::string& path)
 {
@@ -29,11 +32,6 @@ void Object::LoadObject(const std::string& path)
     glVertexArrayVertexBuffer(VAO, 0, VBO, 0, sizeof(glm::vec2));
     glVertexArrayAttribFormat(VAO, 0, 2, GL_FLOAT, GL_FALSE, 0);
     glVertexArrayAttribBinding(VAO, 0, 0);
-    glCreateVertexArrays(1, &VAO);
-    glEnableVertexArrayAttrib(VAO, 0);
-    glVertexArrayVertexBuffer(VAO, 0, VBO, 0, sizeof(glm::vec2));
-    glVertexArrayAttribFormat(VAO, 0, 2, GL_FLOAT, GL_FALSE, 0);
-    glVertexArrayAttribBinding(VAO, 0, 0);
     glEnableVertexArrayAttrib(VAO, 1);
     glVertexArrayVertexBuffer(VAO, 1, VBO,
         sizeof(glm::vec2) * pos_vtx.size(), sizeof(glm::vec3));
@@ -54,8 +52,28 @@ void Object::LoadObject(const std::string& path)
     glVertexArrayElementBuffer(VAO, ebo_hdl);
     glBindVertexArray(0);
 
-   
 
+}
+
+void Object::Update()
+{
+    draw();
+}
+
+Object::Object()
+{
+    VAO = 0;
+    VBO = 0;
+    EBO = 0;
+    index_size = 0;
+    id = 0;
+}
+
+
+void Object::SetObject(const std::string& filepath, const std::string& shader_id)
+{
+    LoadObject(filepath);
+    pick_shader(shader_id);
 }
 
 Object::~Object()
@@ -66,9 +84,15 @@ Object::~Object()
 
 void Object::draw()
 {
-    MATERIALS->Use("box");
+    material.Use();
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, index_size, GL_UNSIGNED_SHORT, NULL);
     glBindVertexArray(0);
-    MATERIALS->UnUse();
+    material.UnUse();
 }
+
+void Object::pick_shader(const std::string& name)
+{
+    material.SetProgramHandle(name);
+}
+

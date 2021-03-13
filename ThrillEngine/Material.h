@@ -2,28 +2,22 @@
 #include <glad/glad.h>
 
 #include <string>
-#include <unordered_map>
 
-#include "EngineCore.h"
 
 // Material class will be used in objectmanager when drawing.
 // In draw part,  Use(id) -> draw function from object class-> UnUse()
-class Material : public EngineCore
+class Material
 {
 public:
-    void Init() override;
-    void Update() override;
-    ~Material() override;
-    void LoadVertexShader(const std::string& path, const std::string& id);
-    void LoadFragmentShader(const std::string& path, const std::string& id);
-    void CompileShader(const std::string& vertexshader_id, const std::string& fragmentshader_id, const std::string& program_id);
-    void Use(const std::string& program_id);
+    ~Material();
+
+    void Use();
     void UnUse();
-    
+    void SetProgramHandle(const std::string& input_program);
+    void set_bool(const std::string& value_name, bool value) const;
+    void set_int(const std::string& value_name, int value) const;
+    void set_float(const std::string& value_name, float value) const;
 private:
-    std::unordered_map<std::string /*id*/, std::string /*shader*/> fragment_shaders;
-    std::unordered_map<std::string /*id*/, std::string /*shader*/> vertex_shaders;
-    std::string log_string; // log for OpenGL compiler and linker messages
-    std::unordered_map < std::string /*id*/, GLuint/*program handle*/> program_handles;
+    GLuint program_handle=0;
+
 };
-extern Material* MATERIALS;
