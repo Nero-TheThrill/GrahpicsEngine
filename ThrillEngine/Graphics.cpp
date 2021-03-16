@@ -4,12 +4,16 @@
 #include<fstream>
 #include "Input.h"
 
+
+
 Graphics* GRAPHICS = nullptr;
 
 
 void Graphics::Init()
 {
     GRAPHICS = this;
+
+    //should make a function to do these stuffs in main.cpp
     LoadVertexShader("../shaders/basic.vert","basicvertex");
     LoadFragmentShader("../shaders/basic.frag","basicfrag");
     CompileShader("basicvertex", "basicfrag", "box");
@@ -17,6 +21,10 @@ void Graphics::Init()
     LoadVertexShader("../shaders/basic1.vert", "basicvertex1");
     LoadFragmentShader("../shaders/basic1.frag", "basicfrag1");
     CompileShader("basicvertex1", "basicfrag1", "box1");
+
+    LoadVertexShader("../shaders/texture.vert", "texturevert");
+    LoadFragmentShader("../shaders/texture.frag", "texturefrag");
+    CompileShader("texturevert", "texturefrag", "texture");
 }
 
 void Graphics::Update()

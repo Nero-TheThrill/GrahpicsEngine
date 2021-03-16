@@ -1,6 +1,5 @@
 #include "ObjectManager.h"
 #include <iostream>
-#include "Input.h"
 
 ObjectManager* OBJECTMANAGER = nullptr;
 void ObjectManager::Init()

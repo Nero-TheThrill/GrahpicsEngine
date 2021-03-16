@@ -29,5 +29,10 @@ private:
     std::vector<glm::vec4> color;
     Material material;
 
+
+    unsigned int texture1;
+    int width, height, nrChannels;
+    unsigned char* data;
+
     //translate rotate scale... components needed
 };

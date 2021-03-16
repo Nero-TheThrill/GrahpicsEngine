@@ -13,7 +13,7 @@ TestLevel::TestLevel()
 void TestLevel::Init()
 {
     obj = new Object();
-    obj->SetObject("null", "box");
+    obj->SetObject("null", "texture");
     OBJECTMANAGER->RegisterObject(obj);
 
 }
@@ -23,7 +23,7 @@ void TestLevel::Update()
     if (Input::IsTriggered(GLFW_KEY_1))
     {
         obj = new Object();
-        obj->SetObject("null", "box");
+        obj->SetObject("null", "texture");
         OBJECTMANAGER->RegisterObject(obj);
     }
     if (Input::IsTriggered(GLFW_KEY_2)&&obj!=nullptr)
