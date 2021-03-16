@@ -9,6 +9,7 @@ public:
     void Update() override;
     ~ObjectManager();
     void RegisterObject(Object* obj);
+    void DeleteAll();
 private:
     unsigned int genObjectsNum=0;
     std::unordered_map<unsigned, Object*> objects;

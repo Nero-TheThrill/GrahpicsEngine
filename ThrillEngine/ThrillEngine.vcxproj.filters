@@ -28,6 +28,9 @@
     <Filter Include="Graphics\Material">
       <UniqueIdentifier>{f6cf9ecb-c7fc-432e-bd23-cbd77d378c88}</UniqueIdentifier>
     </Filter>
+    <Filter Include="EngineCore\LevelManager">
+      <UniqueIdentifier>{1ed44a21-4f8e-4a4e-838d-822a79fb30c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -51,6 +54,9 @@
     </ClCompile>
     <ClCompile Include="ObjectManager.cpp">
       <Filter>Components\ObjectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelManager.cpp">
+      <Filter>EngineCore\LevelManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -81,6 +87,12 @@
     </ClInclude>
     <ClInclude Include="..\includes\source\stb_image.h">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelStructure.h">
+      <Filter>EngineCore\LevelManager</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelManager.h">
+      <Filter>EngineCore\LevelManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

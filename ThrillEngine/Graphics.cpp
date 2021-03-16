@@ -17,8 +17,6 @@ void Graphics::Init()
     LoadVertexShader("../shaders/basic1.vert", "basicvertex1");
     LoadFragmentShader("../shaders/basic1.frag", "basicfrag1");
     CompileShader("basicvertex1", "basicfrag1", "box1");
-
-
 }
 
 void Graphics::Update()

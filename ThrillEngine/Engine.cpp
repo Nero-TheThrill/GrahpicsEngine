@@ -4,7 +4,7 @@
 #include "Graphics.h"
 #include "Input.h"
 #include "ObjectManager.h"
-
+#include "LevelManager.h"
 Engine::Engine()
 {
     isgamerunning = true;
@@ -20,6 +20,7 @@ void Engine::Init()
     AddCore(new Application());
     AddCore(new Graphics());
     AddCore(new ObjectManager());
+    AddCore(new LevelManager());
     for (auto* e_core : enginecore)
         e_core->Init();
     APPLICATION->AppSet(1380, 720);

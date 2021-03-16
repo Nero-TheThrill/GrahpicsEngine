@@ -91,6 +91,7 @@
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
@@ -103,6 +104,8 @@
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="headers.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="LevelManager.h" />
+    <ClInclude Include="LevelStructure.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectManager.h" />
