@@ -31,6 +31,12 @@
     <Filter Include="EngineCore\LevelManager">
       <UniqueIdentifier>{1ed44a21-4f8e-4a4e-838d-822a79fb30c0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Components\Transform">
+      <UniqueIdentifier>{3c073931-c24a-4f36-b6fa-72a77df9cb99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Texture">
+      <UniqueIdentifier>{0a9a97c2-3a11-4df1-9114-c28cd907a4fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -60,6 +66,12 @@
     </ClCompile>
     <ClCompile Include="stb_image.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Components\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Components\Texture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -96,6 +108,12 @@
     </ClInclude>
     <ClInclude Include="LevelManager.h">
       <Filter>EngineCore\LevelManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Components\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Components\Texture</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

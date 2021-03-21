@@ -30,7 +30,7 @@ private:
     Material material;
 
 
-    unsigned int texture1;
+    unsigned int texture1,texture2;
     int width, height, nrChannels;
     unsigned char* data;
 
