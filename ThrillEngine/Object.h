@@ -1,9 +1,9 @@
 #pragma once
 #include <string>
-#include <vector>
-#include<glm/glm.hpp>
-
 #include "Material.h"
+#include "Mesh.h"
+#include "Texture.h"
+#include "Transform.h"
 
 class Object
 {
@@ -19,20 +19,13 @@ public:
     bool alive = true;
     unsigned id;
 private:
-    GLuint VAO;
-    GLuint VBO;
-    GLuint EBO;
-    int index_size;
-    std::vector<glm::vec3> position;
-    std::vector<glm::vec3> normal;
-    std::vector<glm::vec2> uv;
-    std::vector<glm::vec4> color;
+
     Material material;
+    Transform transform;
+    Mesh mesh;
+    Texture texture;
 
 
-    unsigned int texture1,texture2;
-    int width, height, nrChannels;
-    unsigned char* data;
 
     //translate rotate scale... components needed
 };

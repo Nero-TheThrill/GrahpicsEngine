@@ -88,11 +88,13 @@
   <ItemGroup>
     <ClCompile Include="..\includes\source\glad\glad.c" />
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="Material.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="stb_image.cpp" />
@@ -102,6 +104,8 @@
   <ItemGroup>
     <ClInclude Include="..\includes\source\stb_image.h" />
     <ClInclude Include="Application.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Component.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="EngineCore.h" />
     <ClInclude Include="Graphics.h" />
@@ -110,6 +114,7 @@
     <ClInclude Include="LevelManager.h" />
     <ClInclude Include="LevelStructure.h" />
     <ClInclude Include="Material.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Texture.h" />

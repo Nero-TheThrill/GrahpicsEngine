@@ -28,18 +28,31 @@ GLuint Material::GetProgramHandle()
     return program_handle;
 }
 
-void Material::set_bool(const std::string& value_name, bool value) const
+void Material::set(const std::string& value_name, glm::vec4 color) const
 {
-    glUniform1i(glGetUniformLocation(program_handle, value_name.c_str()), (int)value);
+    glUniform4fv(glGetUniformLocation(program_handle, value_name.c_str()),1, &color.x);
 }
 
-void Material::set_int(const std::string& value_name, int value) const
+void Material::set(const std::string& value_name, bool value) const
+{
+    glUniform1i(glGetUniformLocation(program_handle, value_name.c_str()), value);
+}
+
+void Material::set(const std::string& value_name, int value) const
 {
     GLint loc = glGetUniformLocation(program_handle, value_name.c_str());
     glUniform1i(loc, value);
 }
 
-void Material::set_float(const std::string& value_name, float value) const
+void Material::set(const std::string& value_name, float value) const
 {
     glUniform1f(glGetUniformLocation(program_handle, value_name.c_str()), value);
 }
+
+void Material::set(const std::string& value_name, glm::mat4 matrix) const
+{
+    glUniformMatrix4fv(glGetUniformLocation(program_handle, value_name.c_str()),1,GL_FALSE, glm::value_ptr(matrix));
+}
+
+
+//should make a unordered_map and store "value_name" and "uniform location" so that reduce calling "glGetUniformLocation"

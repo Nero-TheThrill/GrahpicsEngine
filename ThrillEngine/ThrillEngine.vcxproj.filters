@@ -16,26 +16,32 @@
     <Filter Include="Graphics">
       <UniqueIdentifier>{a50eecd9-f99b-403a-856e-7055e1d36319}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Components">
-      <UniqueIdentifier>{00653454-f75a-4c77-a1a6-ffa3664c9ef3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Components\Object">
-      <UniqueIdentifier>{9cbc66b7-e0de-4335-9b2d-eb709c536109}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Components\ObjectManager">
-      <UniqueIdentifier>{64d45c99-7700-429d-b0dc-da5fc81b3b87}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Graphics\Material">
       <UniqueIdentifier>{f6cf9ecb-c7fc-432e-bd23-cbd77d378c88}</UniqueIdentifier>
     </Filter>
     <Filter Include="EngineCore\LevelManager">
       <UniqueIdentifier>{1ed44a21-4f8e-4a4e-838d-822a79fb30c0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Components\Transform">
+    <Filter Include="Object">
+      <UniqueIdentifier>{9cbc66b7-e0de-4335-9b2d-eb709c536109}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\ObjectManager">
+      <UniqueIdentifier>{64d45c99-7700-429d-b0dc-da5fc81b3b87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Component">
+      <UniqueIdentifier>{00653454-f75a-4c77-a1a6-ffa3664c9ef3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Component\Transform">
       <UniqueIdentifier>{3c073931-c24a-4f36-b6fa-72a77df9cb99}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Components\Texture">
+    <Filter Include="Object\Component\Texture">
       <UniqueIdentifier>{0a9a97c2-3a11-4df1-9114-c28cd907a4fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Component\Mesh">
+      <UniqueIdentifier>{dc375ce1-294a-43c8-be7d-e3587c25f0e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Camera">
+      <UniqueIdentifier>{34a3f236-2d07-49ae-892a-c196e97264bd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -53,13 +59,13 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Object.cpp">
-      <Filter>Components\Object</Filter>
+      <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="Material.cpp">
       <Filter>Graphics\Material</Filter>
     </ClCompile>
     <ClCompile Include="ObjectManager.cpp">
-      <Filter>Components\ObjectManager</Filter>
+      <Filter>Object\ObjectManager</Filter>
     </ClCompile>
     <ClCompile Include="LevelManager.cpp">
       <Filter>EngineCore\LevelManager</Filter>
@@ -68,10 +74,16 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Transform.cpp">
-      <Filter>Components\Transform</Filter>
+      <Filter>Object\Component\Transform</Filter>
     </ClCompile>
     <ClCompile Include="Texture.cpp">
-      <Filter>Components\Texture</Filter>
+      <Filter>Object\Component\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Object\Component\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Graphics\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -89,13 +101,13 @@
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Object.h">
-      <Filter>Components\Object</Filter>
+      <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="Material.h">
       <Filter>Graphics\Material</Filter>
     </ClInclude>
     <ClInclude Include="ObjectManager.h">
-      <Filter>Components\ObjectManager</Filter>
+      <Filter>Object\ObjectManager</Filter>
     </ClInclude>
     <ClInclude Include="EngineCore.h">
       <Filter>EngineCore</Filter>
@@ -110,10 +122,19 @@
       <Filter>EngineCore\LevelManager</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h">
-      <Filter>Components\Transform</Filter>
+      <Filter>Object\Component\Transform</Filter>
     </ClInclude>
     <ClInclude Include="Texture.h">
-      <Filter>Components\Texture</Filter>
+      <Filter>Object\Component\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Object\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Object\Component\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Graphics\Camera</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -23,7 +23,7 @@ void Engine::Init()
     AddCore(new LevelManager());
     for (auto* e_core : enginecore)
         e_core->Init();
-    APPLICATION->AppSet(1380, 720);
+    APPLICATION->AppSet(800, 600);
    // GRAPHICS->DrawTriangle();
 }
 
