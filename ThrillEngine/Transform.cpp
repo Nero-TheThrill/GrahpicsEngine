@@ -19,6 +19,7 @@ void Transform::Translate(glm::vec3 input)
 {
     glm::mat4 tmp = glm::mat4(1.0f);
     translate = glm::translate(tmp, input);
+    position = input;
 }
 
 void Transform::Rotate(float degree, glm::vec3 v)
@@ -32,5 +33,10 @@ void Transform::Scale(glm::vec3 input)
 {
     glm::mat4 tmp = glm::mat4(1.0f);
     scale = glm::scale(tmp, input);
+}
+
+void Transform::Move(glm::vec3 input)
+{
+    translate = glm::translate(translate, input);
 }
 

@@ -54,5 +54,11 @@ void Material::set(const std::string& value_name, glm::mat4 matrix) const
     glUniformMatrix4fv(glGetUniformLocation(program_handle, value_name.c_str()),1,GL_FALSE, glm::value_ptr(matrix));
 }
 
+void Material::SetColor(glm::vec4 input)
+{
+    color = input;
+    glUniform4fv(glGetUniformLocation(program_handle,"ourColor"), 1, &color.x);
+}
+
 
 //should make a unordered_map and store "value_name" and "uniform location" so that reduce calling "glGetUniformLocation"

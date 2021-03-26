@@ -22,7 +22,10 @@ public:
     void set(const std::string& value_name, int value) const;
     void set(const std::string& value_name, float value) const;
     void set(const std::string& value_name, glm::mat4 matrix) const;
+    void SetColor(glm::vec4 input);
+
+    glm::vec4 color = glm::vec4(1.0f);
 private:
     GLuint program_handle=0;
-    std::vector<glm::vec4> color;
+   
 };

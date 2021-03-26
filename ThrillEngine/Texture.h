@@ -1,22 +1,17 @@
 #pragma once
 #include <string>
-#include <vector>
-#include <glad/glad.h>
-#include<glm/glm.hpp>
+
 
 #include "Component.h"
 
 class Texture : public Component
 {
 public:
-    unsigned int LoadTexture(std::string path);
     void Init();
     ~Texture();
+    void Update();
+    void SetTexture(const std::string& texture_id);
 private:
-    unsigned int texture1, texture2;
-    int width, height, nrChannels;
-    unsigned char* data;
-
-
+    unsigned int texture;
 };
 

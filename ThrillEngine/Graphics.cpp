@@ -16,17 +16,7 @@ void Graphics::Init()
     GRAPHICS = this;
 
     //should make a function to do these stuffs in main.cpp
-    LoadVertexShader("../shaders/basic.vert","basicvertex");
-    LoadFragmentShader("../shaders/basic.frag","basicfrag");
-    CompileShader("basicvertex", "basicfrag", "box");
-
-    LoadVertexShader("../shaders/basic1.vert", "basicvertex1");
-    LoadFragmentShader("../shaders/basic1.frag", "basicfrag1");
-    CompileShader("basicvertex1", "basicfrag1", "box1");
-
-    LoadVertexShader("../shaders/texture.vert", "texturevert");
-    LoadFragmentShader("../shaders/texture.frag", "texturefrag");
-    CompileShader("texturevert", "texturefrag", "texture");
+ 
 
 
     camera.Projection(45.0f, 0.1f, 100.f); //should update every screen size changes.
@@ -137,35 +127,92 @@ void Graphics::CompileShader(const std::string& vertexshader_id, const std::stri
         }
     }
 }
-void Graphics::LoadVertexShader(const std::string& path, const std::string& id)
-{
-    std::ifstream shader_file(path, std::ifstream::in);
-    if (!shader_file) {
-        log_string = "Error opening file " + path;
-        std::cout << log_string << std::endl;
-        return;
-    }
-    std::stringstream buffer;
-    buffer << shader_file.rdbuf();
-    shader_file.close();
-    vertex_shaders.insert(std::pair<std::string, std::string>(id, buffer.str()));
-}
-
-void Graphics::LoadFragmentShader(const std::string& path, const std::string& id)
-{
-    std::ifstream shader_file(path, std::ifstream::in);
-    if (!shader_file) {
-        log_string = "Error opening file " + path;
-        std::cout << log_string << std::endl;
-        return;
-    }
-    std::stringstream buffer;
-    buffer << shader_file.rdbuf();
-    shader_file.close();
-    fragment_shaders.insert(std::pair<std::string, std::string>(id, buffer.str()));
-}
 
 GLuint Graphics::GetProgramHandle(const std::string& program_id)
 {
-    return program_handles.find(program_id)->second;
+    return program_handles[program_id];
 }
+
+void Graphics::LoadShader(const std::string& path, const std::string& id, ShaderType type)
+{
+    std::ifstream shader_file(path, std::ifstream::in);
+    if (!shader_file) {
+        log_string = "Error opening file " + path;
+        std::cout << log_string << std::endl;
+        return;
+    }
+    std::stringstream buffer;
+    buffer << shader_file.rdbuf();
+    shader_file.close();
+    switch (type)
+    {
+    case FRAGMENT:
+        fragment_shaders.insert(std::pair<std::string, std::string>(id, buffer.str()));
+        break;
+
+    case VERTEX:
+        vertex_shaders.insert(std::pair<std::string, std::string>(id, buffer.str()));
+        break;
+
+    default:
+        std::cout << "wrong type" << std::endl;
+        break;
+    }
+ 
+}
+
+unsigned Graphics::GetTexture(const std::string& texture_id)
+{
+    if(textures.find(texture_id)==textures.end())
+    {
+        return 0;
+    }
+    else
+    {
+        return textures[texture_id];
+    }
+}
+
+void Graphics::AddTexture(const std::string& texture_id, unsigned texture)
+{
+    textures.insert(std::pair<std::string, unsigned>(texture_id, texture));
+}
+
+void Graphics::LoadTexture(const std::string& path, const std::string& texture_id, ImageType image_type)
+{
+    if (textures.find(texture_id) == textures.end())
+    {
+        int width, height, nrChannels;
+        unsigned char* data;
+        unsigned texture;
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        // set the texture wrapping parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        // set texture filtering parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        // load image, create texture and generate mipmaps
+
+
+        // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
+        data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
+        if (data)
+        {
+            if(image_type==RGBA)
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+            else if(image_type==RGB)
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
+        }
+        else
+        {
+            std::cout << "Failed to load texture" << std::endl;
+            return;
+        }
+        stbi_image_free(data);
+        GRAPHICS->AddTexture(texture_id, texture);
+    }
+}
+

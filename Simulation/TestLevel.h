@@ -10,7 +10,7 @@ public:
     void Close() override;
     ~TestLevel();
 private:
-    Object* obj;
+    Object* obj1,*obj2;
 
 };
 
