@@ -19,8 +19,8 @@ void Graphics::Init()
  
 
 
-    camera.Projection(45.0f, 0.1f, 100.f); //should update every screen size changes.
-    camera.View(glm::vec3(0.0f, 0.0f, -3.f)); //should update every camera moves
+    camera.Projection(45, 0.1f, 1000.f); //should update every screen size changes.
+    camera.View(glm::vec3(0.0f, 0.0f, 100.f)); //should update every camera moves
     InitVPmatrices();
     UpdateVPmatrices();
 }
@@ -29,6 +29,9 @@ void Graphics::Update()
 {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    UpdateVPmatrices();
+    camera.MouseMoveUpdate();
+    camera.MouseScrollUpdate();
 }
 
 Graphics::~Graphics()

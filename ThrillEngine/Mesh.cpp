@@ -84,19 +84,19 @@ void Mesh::Init()
 
 void Mesh::Bind()
 {
-    glBindVertexArray(VAO);  //mesh
+    glBindVertexArray(VAO);  
 }
 
 void Mesh::Draw()
 {
     Bind();
-    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);  //mesh
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);  
     UnBind();
 }
 
 void Mesh::UnBind()
 {
-    glBindVertexArray(0);  //mesh
+    glBindVertexArray(0);  
 }
 
 Mesh::~Mesh()

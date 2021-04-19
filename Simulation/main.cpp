@@ -15,9 +15,9 @@ int main()
     GRAPHICS->LoadShader("../shaders/basic.frag", "basicfrag", FRAGMENT);
     GRAPHICS->CompileShader("basicvertex", "basicfrag", "box");
 
-    GRAPHICS->LoadShader("../shaders/basic1.vert", "basicvertex1", VERTEX);
-    GRAPHICS->LoadShader("../shaders/basic1.frag", "basicfrag1", FRAGMENT);
-    GRAPHICS->CompileShader("basicvertex1", "basicfrag1", "box1");
+    GRAPHICS->LoadShader("../shaders/light.vert", "lightvertex", VERTEX);
+    GRAPHICS->LoadShader("../shaders/light.frag", "lightfrag", FRAGMENT);
+    GRAPHICS->CompileShader("lightvertex", "lightfrag", "light");
 
     GRAPHICS->LoadShader("../shaders/texture.vert", "texturevert", VERTEX);
     GRAPHICS->LoadShader("../shaders/texture.frag", "texturefrag", FRAGMENT);

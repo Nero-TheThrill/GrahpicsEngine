@@ -17,7 +17,6 @@ Object::Object()
 {
     id = 0;
     mesh.Init();
-    texture.Init();
     transform.Init();
     OBJECTMANAGER->RegisterObject(this);
 }

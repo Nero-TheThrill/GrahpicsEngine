@@ -24,14 +24,14 @@ void Transform::Translate(glm::vec3 input)
 
 void Transform::Rotate(float degree, glm::vec3 v)
 {
-    glm::mat4 tmp = glm::mat4(1.0f);
+    glm::mat4 tmp = glm::mat4(1.0f); 
     rotate = glm::rotate(tmp, glm::radians(degree),v);
 
 }
 
 void Transform::Scale(glm::vec3 input)
 {
-    glm::mat4 tmp = glm::mat4(1.0f);
+    glm::mat4 tmp = glm::mat4(10.0f);
     scale = glm::scale(tmp, input);
 }
 
