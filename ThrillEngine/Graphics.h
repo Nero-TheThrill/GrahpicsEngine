@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include "stb_image.h"
 #include "Camera.h"
-
+#include "Light.h"
 
 enum ShaderType
 {
@@ -35,6 +35,7 @@ public:
     void AddTexture(const std::string& texture_id, unsigned texture);
     void LoadTexture(const std::string& path, const std::string& texture_id, ImageType image_type);
     Camera camera;
+    Light light;
 private:
 
     std::unordered_map<std::string /*id*/, std::string /*shader*/> fragment_shaders;
@@ -43,7 +44,7 @@ private:
     std::unordered_map < std::string /*id*/, GLuint/*program handle*/> program_handles;
     std::unordered_map<std::string /*id*/, unsigned /*texture*/> textures;
 
-    unsigned int uboMatrices;
+    unsigned int uboMatrices=0, uboLight=0;
 
 };
 extern Graphics* GRAPHICS;

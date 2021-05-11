@@ -1,10 +1,8 @@
 #include "Object.h"
 #include "Input.h"
 #include "Material.h"
-#include <iostream>
-
 #include "ObjectManager.h"
-#include "stb_image.h"
+
 
 
 
@@ -36,13 +34,16 @@ void Object::SetColor(glm::vec4 color)
 void Object::draw()
 {
     material.Use();
-    material.set("model", transform.GetTransformMatrix());
-    material.SetColor(material.color);
+    material.shader.set("model", transform.GetTransformMatrix());
+    material.SetColor(glm::vec4(1.0));
     texture.Update();
     mesh.Draw();
     material.UnUse();
 }
 
+
+
+//should change pick_shader -> pick_material and should make materials in outside of engine.lib
 void Object::pick_shader(const std::string& name)
 {
     material.SetProgramHandle(name);

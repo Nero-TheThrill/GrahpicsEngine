@@ -10,10 +10,10 @@ public:
     void Move(glm::vec3 v);
     void MouseMoveUpdate();
     void MouseScrollUpdate();
-
+    glm::vec3 cam_position = glm::vec3(0.0f, 0.0f, 3.0f);
 private:
     glm::mat4 view = glm::mat4(1.0f), projection = glm::mat4(1.0f);
-    glm::vec3 cam_position = glm::vec3(0.0f, 0.0f, 3.0f);
+
     glm::vec3 cam_target = glm::vec3(0.0f, 0.0f, -1.0f);
     glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
     float fov = 45.f;

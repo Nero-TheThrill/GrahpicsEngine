@@ -18,9 +18,20 @@ void Graphics::Init()
     //should make a function to do these stuffs in main.cpp
  
 
+    light.SetLightColor(glm::vec4{ 1,1,1,0.1 });
+    light.SetLightPosition(glm::vec3{ 0,0 ,0});
+
+    //////////////////////////
+    glGenBuffers(1, &uboLight);
+    glBindBuffer(GL_UNIFORM_BUFFER, uboLight);
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::vec4)+ sizeof(glm::vec3), NULL, GL_STATIC_DRAW);
+    glBindBuffer(GL_UNIFORM_BUFFER, 1);
+    glBindBufferRange(GL_UNIFORM_BUFFER, 1, uboLight, 0, sizeof(glm::vec4) + sizeof(glm::vec3));
+
+
 
     camera.Projection(45, 0.1f, 1000.f); //should update every screen size changes.
-    camera.View(glm::vec3(0.0f, 0.0f, 100.f)); //should update every camera moves
+    camera.View(glm::vec3(0.0f, 0.0f, 100)); //should update every camera moves
     InitVPmatrices();
     UpdateVPmatrices();
 }
@@ -29,6 +40,20 @@ void Graphics::Update()
 {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    //////////////////////
+    glm::vec3 position = light.GetLightPosition();
+    glBindBuffer(GL_UNIFORM_BUFFER, uboLight);
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec3), glm::value_ptr(position));
+   // std::cout << "x: " << position.x << " y: " << position.y << " z: " << position.z << std::endl;
+    glm::vec4 color = light.GetLightColor();
+    glm::vec3 campos=camera.cam_position;
+    glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::vec3), sizeof(glm::vec4), glm::value_ptr(color));
+    glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::vec3)+ sizeof(glm::vec4), sizeof(glm::vec3), glm::value_ptr(campos));
+    glBindBuffer(GL_UNIFORM_BUFFER, 1);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 1, uboLight);
+    ///////////////////////
+
     UpdateVPmatrices();
     camera.MouseMoveUpdate();
     camera.MouseScrollUpdate();
@@ -82,7 +107,7 @@ void Graphics::CompileShader(const std::string& vertexshader_id, const std::stri
     glGetShaderiv(vertexshader_handle, GL_COMPILE_STATUS, &vertexshader_result);
     glCompileShader(fragmentshader_handle);
     glGetShaderiv(fragmentshader_handle, GL_COMPILE_STATUS, &fragmentshader_result);
-    if ((!vertexshader_handle) || (!fragmentshader_handle)) {
+    if ((!vertexshader_result) || (!fragmentshader_result)) {
         log_string = "shader compilation failed\n";
         GLint log_len;
         glGetShaderiv(vertexshader_handle, GL_INFO_LOG_LENGTH, &log_len);
