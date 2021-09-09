@@ -10,7 +10,7 @@ class Object
 public:
     Object();
     ~Object();
-    void SetColor(glm::vec4 color);
+    void SetColor(glm::vec4 inputcolor);
     void Update();
 
     void draw();
@@ -22,4 +22,5 @@ public:
     Transform transform;
     Mesh mesh;
     Texture texture;
+    glm::vec4 color{1.0};
 };

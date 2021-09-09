@@ -19,11 +19,11 @@ void LevelManager::Update()
 
 void LevelManager::ChangeLevel(LevelID levelid)
 {
-    if (current_level != nullptr)
-    {
-        delete current_level;
-        current_level = nullptr;
-    }
+    //if (current_level != nullptr)
+    //{
+    //    delete current_level;
+    //    current_level = nullptr;
+    //}
 
     current_level = levels[levelid];
     current_level->Init();

@@ -1,22 +1,21 @@
-#include "TestLevel.h"
-
+#include "TestLevel1.h"
 #include <iostream>
 #include "Graphics.h"
 #include "Input.h"
 #include "LevelManager.h"
 #include "ObjectManager.h"
 
-TestLevel::TestLevel()
+TestLevel1::TestLevel1()
 {
 }
 
-void TestLevel::Init()
+void TestLevel1::Init()
 {
     obj1 = new Object();
     obj1->pick_shader("texture");
     obj1->texture.SetTexture("face");
     obj1->SetColor(glm::vec4(1, 1, 1, 1));
-    obj1->transform.Translate(glm::vec3(15,15,0));
+    obj1->transform.Translate(glm::vec3(15, 15, 0));
     obj1->transform.Scale(glm::vec3(3, 3, 3));
 
 
@@ -26,14 +25,9 @@ void TestLevel::Init()
     obj2->SetColor(glm::vec4(0.1, 0.3, 0.8, 1));
     obj2->transform.Scale(glm::vec3(10, 10, 10));
 
-    obj3 = new Object();
-    obj3->pick_shader("texture");
-    obj3->texture.SetTexture("lol");
-    obj3->transform.Translate(glm::vec3(-15, -15, 15));
-    obj3->transform.Scale(glm::vec3(15, 15, 15));
 }
 
-void TestLevel::Update()
+void TestLevel1::Update()
 {
     if (Input::IsTriggered(GLFW_KEY_Z))
     {
@@ -65,9 +59,9 @@ void TestLevel::Update()
     {
         obj1->transform.Move(glm::vec3(0, 0, 0.1));
     }
-    if(obj1!=nullptr)
+    if (obj1 != nullptr)
         obj1->transform.Rotate(-(float)glfwGetTime() * 50.0f, glm::vec3(0.5f, 1.0f, 0.0f));
-    if(obj2!=nullptr)
+    if (obj2 != nullptr)
         obj2->transform.Rotate((float)glfwGetTime() * 150.0f, glm::vec3(0.5f, 1.0f, 0.0f));
     if (Input::IsPressed(GLFW_KEY_UP))
     {
@@ -96,15 +90,16 @@ void TestLevel::Update()
     if (Input::IsTriggered(GLFW_KEY_N))
     {
         Close();
-        LEVELMANAGER->ChangeLevel(2);
+        LEVELMANAGER->ChangeLevel(1);
     }
+
 }
 
-void TestLevel::Close()
+void TestLevel1::Close()
 {
     OBJECTMANAGER->DeleteAll();
 }
 
-TestLevel::~TestLevel()
+TestLevel1::~TestLevel1()
 {
 }

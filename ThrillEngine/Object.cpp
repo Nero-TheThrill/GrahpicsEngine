@@ -26,16 +26,16 @@ Object::~Object()
 }
 
 
-void Object::SetColor(glm::vec4 color)
+void Object::SetColor(glm::vec4 inputcolor)
 {
-    material.SetColor(color);
+    color = inputcolor;
 }
 
 void Object::draw()
 {
     material.Use();
     material.shader.set("model", transform.GetTransformMatrix());
-    material.SetColor(glm::vec4(1.0));
+    material.SetColor(color);
     texture.Update();
     mesh.Draw();
     material.UnUse();
@@ -43,7 +43,7 @@ void Object::draw()
 
 
 
-//should change pick_shader -> pick_material and should make materials in outside of engine.lib
+//should change pick_shader -> pick_material and should make materials outside of engine.lib
 void Object::pick_shader(const std::string& name)
 {
     material.SetProgramHandle(name);

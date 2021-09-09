@@ -3,8 +3,10 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TestLevel.cpp" />
+    <ClCompile Include="TestLevel1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TestLevel.h" />
+    <ClInclude Include="TestLevel1.h" />
   </ItemGroup>
 </Project>

@@ -46,9 +46,6 @@
     <Filter Include="Graphics\Material\Texture">
       <UniqueIdentifier>{0a9a97c2-3a11-4df1-9114-c28cd907a4fe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Graphics\Light">
-      <UniqueIdentifier>{bd464d86-5879-4042-93a1-26c34a6d04fe}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -94,9 +91,6 @@
     <ClCompile Include="Shader.cpp">
       <Filter>Graphics\Material\Shader</Filter>
     </ClCompile>
-    <ClCompile Include="Light.cpp">
-      <Filter>Graphics\Light</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -139,9 +133,6 @@
     <ClInclude Include="Texture.h">
       <Filter>Graphics\Material\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="Component.h">
-      <Filter>Object\Component</Filter>
-    </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>Object\Component\Mesh</Filter>
     </ClInclude>
@@ -151,8 +142,8 @@
     <ClInclude Include="Shader.h">
       <Filter>Graphics\Material\Shader</Filter>
     </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>Graphics\Light</Filter>
+    <ClInclude Include="Component.h">
+      <Filter>Object\Component</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
