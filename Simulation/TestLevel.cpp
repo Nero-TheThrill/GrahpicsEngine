@@ -14,11 +14,11 @@ TestLevel::TestLevel()
 void TestLevel::Init()
 {
     obj1 = new Object();
-    obj1->pick_material("MTexture");
-    obj1->texture.SetTexture("face");
+    obj1->pick_material("MTest");
+    //obj1->texture.SetTexture("face");
     obj1->SetColor(glm::vec3(1, 1, 1));
-    obj1->transform.Translate(glm::vec3(1.5,1.5,0));
-    obj1->transform.Scale(glm::vec3(1, 1, 1));
+    obj1->transform.Translate(glm::vec3(0,1,0));
+    obj1->transform.Scale(glm::vec3(0.25, 0.25, 0.25));
 
 
     obj2 = new Object();
@@ -28,15 +28,17 @@ void TestLevel::Init()
     obj2->transform.Scale(glm::vec3(1, 1, 1));
 
     obj3 = new Object();
-    obj3->pick_material("MTest");
-    //obj3->texture.SetTexture("lol");
-    obj3->transform.Translate(glm::vec3(-1.5, -1.5, 1.5));
-    obj3->transform.Scale(glm::vec3(1, 1, 1));
+    obj3->pick_material("MLight");
+    obj3->texture.SetTexture("lol");
+    obj2->transform.Translate(glm::vec3(-1.5, -1.5, 1.5));
+    obj3->transform.Scale(glm::vec3(2, 2, 2));
     obj3->SetColor(glm::vec3(1.0, 0.5, 0.31));
 }
 
 void TestLevel::Update()
 {
+    obj3->material->set("lightPosition", obj1->transform.position);
+    GRAPHICS->GetMaterial("MLight")->set("viewPosition", GRAPHICS->camera.cam_position);
     if (Input::IsTriggered(GLFW_KEY_Z))
     {
         OBJECTMANAGER->DeleteAll();
@@ -45,30 +47,28 @@ void TestLevel::Update()
     }
     if (Input::IsPressed(GLFW_KEY_W))
     {
-        obj1->transform.Move(glm::vec3(0, 1, 0));
+        obj1->transform.Move(glm::vec3(0, 3, 0));
     }
     if (Input::IsPressed(GLFW_KEY_S))
     {
-        obj1->transform.Move(glm::vec3(0, -1, 0));
+        obj1->transform.Move(glm::vec3(0, -3, 0));
     }
     if (Input::IsPressed(GLFW_KEY_A))
     {
-        obj1->transform.Move(glm::vec3(-1, 0, 0));
+        obj1->transform.Move(glm::vec3(-3, 0, 0));
     }
     if (Input::IsPressed(GLFW_KEY_D))
     {
-        obj1->transform.Move(glm::vec3(1, 0, 0));
+        obj1->transform.Move(glm::vec3(3, 0, 0));
     }
     if (Input::IsPressed(GLFW_KEY_Q))
     {
-        obj1->transform.Move(glm::vec3(0, 0, -1));
+        obj1->transform.Move(glm::vec3(0, 0, -3));
     }
     if (Input::IsPressed(GLFW_KEY_E))
     {
-        obj1->transform.Move(glm::vec3(0, 0, 1));
+        obj1->transform.Move(glm::vec3(0, 0, 3));
     }
-    if(obj1!=nullptr)
-        obj1->transform.Rotate(-TIMEMANAGER->currentFrame*50.0f, glm::vec3(0.5f, 1.0f, 0.0f));
     if(obj2!=nullptr)
         obj2->transform.Rotate(TIMEMANAGER->currentFrame * 150.0f, glm::vec3(0.5f, 1.0f, 0.0f));
     if (Input::IsPressed(GLFW_KEY_UP))

@@ -18,7 +18,7 @@ public:
     bool alive = true;
     unsigned id;
 
-    Material material;
+    Material* material;
     Transform transform;
     Mesh mesh;
     Texture texture;

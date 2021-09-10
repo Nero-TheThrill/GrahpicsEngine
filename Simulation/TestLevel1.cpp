@@ -21,7 +21,7 @@ void TestLevel1::Init()
 
 
     obj2 = new Object();
-    obj2->pick_material("MTest");
+    obj2->pick_material("MTexture");
     obj2->texture.SetTexture("container");
     obj2->SetColor(glm::vec3(0.1, 0.3, 0.8));
     obj2->transform.Scale(glm::vec3(1, 1, 1));
@@ -30,7 +30,7 @@ void TestLevel1::Init()
 
 void TestLevel1::Update()
 {
-    obj1->material.set("objectColor", glm::vec3{ 0.5 } + obj1->transform.position / 500.f);
+    obj1->material->set("objectColor", glm::vec3{ 0.5 } + obj1->transform.position / 500.f);
     if (Input::IsTriggered(GLFW_KEY_Z))
     {
         OBJECTMANAGER->DeleteAll();

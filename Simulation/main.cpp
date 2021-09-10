@@ -17,23 +17,32 @@ int main()
     GRAPHICS->LoadShader("../shaders/texture.frag", "texturefrag", FRAGMENT);
     GRAPHICS->CompileShader("texturevert", "texturefrag", "texture");
 
+    GRAPHICS->LoadShader("../shaders/light.vert", "lightvert", VERTEX);
+    GRAPHICS->LoadShader("../shaders/light.frag", "lightfrag", FRAGMENT);
+    GRAPHICS->CompileShader("lightvert", "lightfrag", "light");
+
+
 
     GRAPHICS->LoadTexture("../images/awesomeface.png", "face", RGBA);
     GRAPHICS->LoadTexture("../images/container.jpg", "container", RGB);
     GRAPHICS->LoadTexture("../images/lol.png", "lol", RGB);
 
-    Material MTest, MTexture;
-    MTest.PickShader("test");
-    MTexture.PickShader("texture");
 
-    MTest.set("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-    MTest.set("objectColor", glm::vec3(0.0f, 1.0f, 1.0f));
+
+    Material* MTest = new Material("MTest"), * MTexture = new Material("MTexture"), * MLight = new Material("MLight");
+    MTest->PickShader("test");
+    MTexture->PickShader("texture");
+    MLight->PickShader("light");
+
+    MTest->set("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
+    MTest->set("objectColor", glm::vec3(0.0f, 1.0f, 1.0f));
 
   //  MTexture.AddValue("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-    MTexture.set("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
+    MTexture->set("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
 
-    GRAPHICS->AddMaterial("MTest", MTest);
-    GRAPHICS->AddMaterial("MTexture", MTexture);
+    MLight->set("lightColor", glm::vec3(1.0, 1.0, 1.0));
+    MLight->set("objectColor", glm::vec3(0.0f, 0.7f, 0.9f));
+
 
     LevelStructure* testlevel = new TestLevel();
     LEVELMANAGER->InsertLevel(testlevel, 1);

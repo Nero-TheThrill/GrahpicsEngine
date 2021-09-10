@@ -11,7 +11,7 @@
 class Material
 {
 public:
-    Material();
+    Material(const std::string& id);
     ~Material();
 
     void Use();

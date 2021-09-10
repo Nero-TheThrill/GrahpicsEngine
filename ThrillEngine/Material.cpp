@@ -3,9 +3,9 @@
 #include "Graphics.h"
 
 
-Material::Material()
+Material::Material(const std::string& id)
 {
-    
+    GRAPHICS->AddMaterial(id,this);
 }
 
 Material::~Material()

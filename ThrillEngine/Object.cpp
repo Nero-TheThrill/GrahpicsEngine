@@ -35,12 +35,12 @@ void Object::SetColor(glm::vec3 inputcolor)
 
 void Object::draw()
 {
-    material.Use();
-    material.shader.set("model", transform.GetTransformMatrix());
-    material.Update();
+    material->Use();
+    material->shader.set("model", transform.GetTransformMatrix());
+    material->Update();
     texture.Update();
     mesh.Draw();
-    material.UnUse();
+    material->UnUse();
 }
 
 

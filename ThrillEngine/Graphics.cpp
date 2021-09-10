@@ -39,6 +39,11 @@ void Graphics::Update()
 
 Graphics::~Graphics()
 {
+    for(auto m:  materials)
+    {
+        delete m.second;
+        m.second = nullptr;
+    }
 }
 
 void Graphics::InitPVmatrices()
@@ -222,12 +227,12 @@ void Graphics::LoadTexture(const std::string& path, const std::string& texture_i
     }
 }
 
-void Graphics::AddMaterial(const std::string& material_id, Material material)
+void Graphics::AddMaterial(const std::string& material_id, Material* material)
 {
-    materials.insert(std::pair<std::string, Material>(material_id, material));
+    materials.insert(std::pair<std::string, Material*>(material_id, material));
 }
 
-Material Graphics::GetMaterial(const std::string& material_id)
+Material* Graphics::GetMaterial(const std::string& material_id)
 {
     if (materials.find(material_id) == materials.end())
     {
