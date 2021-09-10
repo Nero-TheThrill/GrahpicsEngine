@@ -26,11 +26,11 @@ int main()
     MTest.PickShader("test");
     MTexture.PickShader("texture");
 
-    MTest.AddValue("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-    MTest.AddValue("objectColor", glm::vec3(0.0f, 1.0f, 1.0f));
+    MTest.set("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
+    MTest.set("objectColor", glm::vec3(0.0f, 1.0f, 1.0f));
 
   //  MTexture.AddValue("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-    MTexture.AddValue("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
+    MTexture.set("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
 
     GRAPHICS->AddMaterial("MTest", MTest);
     GRAPHICS->AddMaterial("MTexture", MTexture);

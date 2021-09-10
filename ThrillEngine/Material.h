@@ -18,19 +18,14 @@ public:
     void UnUse();
     void Update();
     void PickShader(const std::string& input_program);
-    void AddValue(const std::string& value_id, glm::vec3 input);
-    void AddValue(const std::string& value_id, glm::vec4 input);
-    void AddValue(const std::string& value_id, float input);
-    void AddValue(const std::string& value_id, bool input);
-    void AddValue(const std::string& value_id, int input);
-    void AddValue(const std::string& value_id, glm::mat4 input);
+    void set(const std::string& value_id, glm::vec3 input);
+    void set(const std::string& value_id, glm::vec4 input);
+    void set(const std::string& value_id, float input);
+    void set(const std::string& value_id, bool input);
+    void set(const std::string& value_id, int input);
+    void set(const std::string& value_id, glm::mat4 input);
 
-    void ChangeValue(const std::string& value_id, glm::vec3 input);
-    void ChangeValue(const std::string& value_id, glm::vec4 input);
-    void ChangeValue(const std::string& value_id, float input);
-    void ChangeValue(const std::string& value_id, bool input);
-    void ChangeValue(const std::string& value_id, int input);
-    void ChangeValue(const std::string& value_id, glm::mat4 input);
+
 
     GLuint GetProgramHandle();
 

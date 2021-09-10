@@ -30,7 +30,7 @@ void TestLevel1::Init()
 
 void TestLevel1::Update()
 {
-    obj1->material.ChangeValue("objectColor",obj1->transform.position/300.f);
+    obj1->material.set("objectColor", glm::vec3{ 0.5 } + obj1->transform.position / 500.f);
     if (Input::IsTriggered(GLFW_KEY_Z))
     {
         OBJECTMANAGER->DeleteAll();

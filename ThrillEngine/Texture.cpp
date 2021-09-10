@@ -16,6 +16,7 @@ Texture::~Texture()
 
 void Texture::Update()
 {
+    glActiveTexture(texture);
     glBindTextureUnit(0, texture);
 }
 

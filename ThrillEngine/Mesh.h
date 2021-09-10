@@ -16,7 +16,7 @@ public:
 private:
     GLuint VAO;
     GLuint VBO;
-    GLuint EBO;
+   // GLuint EBO;
     int index_size;
     std::vector<glm::vec3> position;
     std::vector<glm::vec3> normal;
