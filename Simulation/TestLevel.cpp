@@ -5,6 +5,7 @@
 #include "Input.h"
 #include "LevelManager.h"
 #include "ObjectManager.h"
+#include "TimeManager.h"
 
 TestLevel::TestLevel()
 {
@@ -65,10 +66,10 @@ void TestLevel::Update()
     {
         obj1->transform.Move(glm::vec3(0, 0, 1));
     }
- /*   if(obj1!=nullptr)
-        obj1->transform.Rotate(-(float)glfwGetTime() * 50.0f, glm::vec3(0.5f, 1.0f, 0.0f));
+    if(obj1!=nullptr)
+        obj1->transform.Rotate(-TIMEMANAGER->currentFrame*50.0f, glm::vec3(0.5f, 1.0f, 0.0f));
     if(obj2!=nullptr)
-        obj2->transform.Rotate((float)glfwGetTime() * 150.0f, glm::vec3(0.5f, 1.0f, 0.0f));*/
+        obj2->transform.Rotate(TIMEMANAGER->currentFrame * 150.0f, glm::vec3(0.5f, 1.0f, 0.0f));
     if (Input::IsPressed(GLFW_KEY_UP))
     {
         GRAPHICS->camera.Move(glm::vec3(0, 1, 0));
