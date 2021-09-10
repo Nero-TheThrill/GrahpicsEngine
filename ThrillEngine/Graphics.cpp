@@ -11,9 +11,14 @@
 Graphics* GRAPHICS = nullptr;
 
 
-void Graphics::Init()
+Graphics::Graphics()
 {
     GRAPHICS = this;
+}
+
+void Graphics::Init()
+{
+ 
     
     camera.Projection(45, 0.1f, 100.f); //should update every screen size changes.
     camera.View(glm::vec3(0.0f, 0.0f, 10)); //should update every camera moves
@@ -214,6 +219,23 @@ void Graphics::LoadTexture(const std::string& path, const std::string& texture_i
         }
         stbi_image_free(data);
         GRAPHICS->AddTexture(texture_id, texture);
+    }
+}
+
+void Graphics::AddMaterial(const std::string& material_id, Material material)
+{
+    materials.insert(std::pair<std::string, Material>(material_id, material));
+}
+
+Material Graphics::GetMaterial(const std::string& material_id)
+{
+    if (materials.find(material_id) == materials.end())
+    {
+        assert(std::cout << "no material" << std::endl);
+    }
+    else
+    {
+        return materials[material_id];
     }
 }
 

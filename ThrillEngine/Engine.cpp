@@ -10,6 +10,12 @@
 Engine::Engine()
 {
     isgamerunning = true;
+
+    AddCore(new Application());
+    AddCore(new Graphics());
+    AddCore(new ObjectManager());
+    AddCore(new LevelManager());
+    AddCore(new TimeManager());
 }
 
 Engine::~Engine()
@@ -19,11 +25,6 @@ Engine::~Engine()
 void Engine::Init()
 {
 
-    AddCore(new Application());
-    AddCore(new Graphics());
-    AddCore(new ObjectManager());
-    AddCore(new LevelManager());
-    AddCore(new TimeManager());
     for (auto* e_core : enginecore)
         e_core->Init();
     Input::Init();

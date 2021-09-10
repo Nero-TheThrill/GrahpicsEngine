@@ -6,11 +6,20 @@
 #include "Graphics.h"
 
 
-void Shader::set(const std::string& value_name, glm::vec4 color) const
+void Shader::set(const std::string& value_name, glm::vec4 value) const
 {
     GLint loc = glGetUniformLocation(program_handle, value_name.c_str());
     if (loc >= 0)
-        glUniform4fv(loc, 1, &color.x);
+        glUniform4fv(loc, 1, &value.x);
+    else
+        std::cout << "Uniform variable " << value_name << " doesn't exist" << std::endl;
+}
+
+void Shader::set(const std::string& value_name, glm::vec3 value) const
+{
+    GLint loc = glGetUniformLocation(program_handle, value_name.c_str());
+    if (loc >= 0)
+        glUniform3fv(loc, 1, &value.x);
     else
         std::cout << "Uniform variable " << value_name << " doesn't exist" << std::endl;
 }

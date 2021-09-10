@@ -10,11 +10,11 @@ class Object
 public:
     Object();
     ~Object();
-    void SetColor(glm::vec4 inputcolor);
+    void SetColor(glm::vec3 inputcolor);
     void Update();
 
     void draw();
-    void pick_shader(const std::string& name);
+    void pick_material(const std::string& material_id);
     bool alive = true;
     unsigned id;
 
@@ -22,5 +22,5 @@ public:
     Transform transform;
     Mesh mesh;
     Texture texture;
-    glm::vec4 color{1.0};
+    glm::vec3 color{1.0};
 };

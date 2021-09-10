@@ -4,13 +4,18 @@
 
 TimeManager* TIMEMANAGER = nullptr;
 
-void TimeManager::Init()
+TimeManager::TimeManager()
 {
     TIMEMANAGER = this;
     std::cout << "TimeSystem Initialize" << std::endl;
     currentFrame = 0;
     deltaTime = 0;
     lastFrame = 0;
+}
+
+void TimeManager::Init()
+{
+
 }
 
 void TimeManager::Update()

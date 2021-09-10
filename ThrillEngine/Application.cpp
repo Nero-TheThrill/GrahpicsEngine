@@ -33,14 +33,7 @@ void window_size_callback(GLFWwindow* window, int w, int h)
 }
 Application* APPLICATION = nullptr;
 
-void Application::AppSet(int w, int h)
-{
-    width = w;
-    height = h;
-    glfwSetWindowSize(window,w, h);
-}
-
-void Application::Init()
+Application::Application()
 {
     APPLICATION = this;
     glfwInit();
@@ -74,6 +67,18 @@ void Application::Init()
     glfwSetScrollCallback(window, scroll_callback);
     glfwSetWindowSizeCallback(window, window_size_callback);
     std::cout << "Application Initialize" << std::endl;
+}
+
+void Application::AppSet(int w, int h)
+{
+    width = w;
+    height = h;
+    glfwSetWindowSize(window,w, h);
+}
+
+void Application::Init()
+{
+  
 }
 
 void Application::Update()

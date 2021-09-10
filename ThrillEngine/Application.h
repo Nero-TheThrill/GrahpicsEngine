@@ -6,7 +6,7 @@
 class Application : public EngineCore
 {
 public:
-    Application() = default;
+    Application();
     void AppSet(int w, int h);
     void Init() override;
     void Update() override;

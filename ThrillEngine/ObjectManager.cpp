@@ -2,10 +2,16 @@
 #include <iostream>
 
 ObjectManager* OBJECTMANAGER = nullptr;
-void ObjectManager::Init()
+
+ObjectManager::ObjectManager()
 {
     OBJECTMANAGER = this;
     genObjectsNum = 0;
+}
+
+void ObjectManager::Init()
+{
+ 
 }
 
 void ObjectManager::Update()

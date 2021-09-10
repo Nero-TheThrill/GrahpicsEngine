@@ -9,9 +9,6 @@ int main()
 {
     
     auto* ThrillEngine = new Engine();
-    ThrillEngine->Init();
-
-
     GRAPHICS->LoadShader("../shaders/test.vert", "testvert", VERTEX);
     GRAPHICS->LoadShader("../shaders/test.frag", "testfrag", FRAGMENT);
     GRAPHICS->CompileShader("testvert", "testfrag", "test");
@@ -25,11 +22,32 @@ int main()
     GRAPHICS->LoadTexture("../images/container.jpg", "container", RGB);
     GRAPHICS->LoadTexture("../images/lol.png", "lol", RGB);
 
+    Material MTest, MTexture;
+    MTest.PickShader("test");
+    MTexture.PickShader("texture");
+
+    MTest.AddValue("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
+    MTest.AddValue("objectColor", glm::vec3(0.0f, 1.0f, 1.0f));
+
+  //  MTexture.AddValue("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
+    MTexture.AddValue("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
+
+    GRAPHICS->AddMaterial("MTest", MTest);
+    GRAPHICS->AddMaterial("MTexture", MTexture);
+
     LevelStructure* testlevel = new TestLevel();
-    LEVELMANAGER->InsertLevel(testlevel,1);
+    LEVELMANAGER->InsertLevel(testlevel, 1);
     LEVELMANAGER->ChangeLevel(1);
     LevelStructure* testlevel1 = new TestLevel1();
     LEVELMANAGER->InsertLevel(testlevel1, 2);
+
+
+
+    ThrillEngine->Init();
+
+
+
+
 
     ThrillEngine->Loop();
     ThrillEngine->Quit();

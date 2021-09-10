@@ -4,6 +4,7 @@
 class TimeManager : public EngineCore
 {
 public:
+    TimeManager();
     void Init() override;
     void Update() override;
     ~TimeManager();

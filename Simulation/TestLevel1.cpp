@@ -4,6 +4,7 @@
 #include "Input.h"
 #include "LevelManager.h"
 #include "ObjectManager.h"
+#include "TimeManager.h"
 
 TestLevel1::TestLevel1()
 {
@@ -12,23 +13,24 @@ TestLevel1::TestLevel1()
 void TestLevel1::Init()
 {
     obj1 = new Object();
-    obj1->pick_shader("texture");
+    obj1->pick_material("MTest");
     obj1->texture.SetTexture("face");
-    obj1->SetColor(glm::vec4(1, 1, 1, 1));
-    obj1->transform.Translate(glm::vec3(15, 15, 0));
-    obj1->transform.Scale(glm::vec3(3, 3, 3));
+    obj1->SetColor(glm::vec3(1, 1, 1));
+    obj1->transform.Translate(glm::vec3(1.5, 1.5, 0));
+    obj1->transform.Scale(glm::vec3(1, 1, 1));
 
 
     obj2 = new Object();
-    obj2->pick_shader("texture");
+    obj2->pick_material("MTest");
     obj2->texture.SetTexture("container");
-    obj2->SetColor(glm::vec4(0.1, 0.3, 0.8, 1));
-    obj2->transform.Scale(glm::vec3(10, 10, 10));
+    obj2->SetColor(glm::vec3(0.1, 0.3, 0.8));
+    obj2->transform.Scale(glm::vec3(1, 1, 1));
 
 }
 
 void TestLevel1::Update()
 {
+    obj1->material.ChangeValue("objectColor",obj1->transform.position/300.f);
     if (Input::IsTriggered(GLFW_KEY_Z))
     {
         OBJECTMANAGER->DeleteAll();
@@ -37,27 +39,27 @@ void TestLevel1::Update()
     }
     if (Input::IsPressed(GLFW_KEY_W))
     {
-        obj1->transform.Move(glm::vec3(0, 0.1, 0));
+        obj1->transform.Move(glm::vec3(0, 1, 0));
     }
     if (Input::IsPressed(GLFW_KEY_S))
     {
-        obj1->transform.Move(glm::vec3(0, -0.1, 0));
+        obj1->transform.Move(glm::vec3(0, -1, 0));
     }
     if (Input::IsPressed(GLFW_KEY_A))
     {
-        obj1->transform.Move(glm::vec3(-0.1, 0, 0));
+        obj1->transform.Move(glm::vec3(-1, 0, 0));
     }
     if (Input::IsPressed(GLFW_KEY_D))
     {
-        obj1->transform.Move(glm::vec3(0.1, 0, 0));
+        obj1->transform.Move(glm::vec3(1, 0, 0));
     }
     if (Input::IsPressed(GLFW_KEY_Q))
     {
-        obj1->transform.Move(glm::vec3(0, 0, -0.1));
+        obj1->transform.Move(glm::vec3(0, 0, -1));
     }
     if (Input::IsPressed(GLFW_KEY_E))
     {
-        obj1->transform.Move(glm::vec3(0, 0, 0.1));
+        obj1->transform.Move(glm::vec3(0, 0, 1));
     }
     if (obj1 != nullptr)
         obj1->transform.Rotate(-(float)glfwGetTime() * 50.0f, glm::vec3(0.5f, 1.0f, 0.0f));

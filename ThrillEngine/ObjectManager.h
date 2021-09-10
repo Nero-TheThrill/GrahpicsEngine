@@ -5,6 +5,7 @@
 class ObjectManager : public EngineCore
 {
 public:
+    ObjectManager();
     void Init() override;
     void Update() override;
     ~ObjectManager();
