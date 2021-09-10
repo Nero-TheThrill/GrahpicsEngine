@@ -46,6 +46,9 @@
     <Filter Include="Graphics\Material\Texture">
       <UniqueIdentifier>{0a9a97c2-3a11-4df1-9114-c28cd907a4fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="EngineCore\Time">
+      <UniqueIdentifier>{1e86e41f-506d-41fa-8405-3e2fd46755c4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -90,6 +93,9 @@
     </ClCompile>
     <ClCompile Include="Shader.cpp">
       <Filter>Graphics\Material\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeManager.cpp">
+      <Filter>EngineCore\Time</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -144,6 +150,9 @@
     </ClInclude>
     <ClInclude Include="Component.h">
       <Filter>Object\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeManager.h">
+      <Filter>EngineCore\Time</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

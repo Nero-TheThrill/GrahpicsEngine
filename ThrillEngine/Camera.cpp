@@ -1,10 +1,8 @@
 #include "Camera.h"
-
 #include <glm/gtc/matrix_transform.hpp>
-
-
 #include "Application.h"
 #include "Input.h"
+#include "TimeManager.h"
 
 
 void Camera::View(glm::vec3 v)
@@ -34,7 +32,7 @@ glm::mat4 Camera::GetProjectionMatrix()
 
 void Camera::Move(glm::vec3 v)
 {
-    cam_position += v;
+    cam_position += v*TIMEMANAGER->deltaTime*2.5f;
     view = glm::lookAt(cam_position, cam_position+cam_target , up);
 }
 
@@ -88,5 +86,6 @@ void Camera::MouseScrollUpdate()
     if (fov > 45.0f)
         fov = 45.0f;
     glm::vec2 window_size = APPLICATION->GetWindowSize();
-    projection = glm::perspective(glm::radians(fov), window_size.x / window_size.y, near, far);
+    if(window_size.y!=0.0f)
+        projection = glm::perspective(glm::radians(fov), window_size.x / window_size.y, near, far);
 }

@@ -73,6 +73,7 @@ void Application::Init()
     glfwSetCursorPosCallback(window, cursor_pos_callback);
     glfwSetScrollCallback(window, scroll_callback);
     glfwSetWindowSizeCallback(window, window_size_callback);
+    std::cout << "Application Initialize" << std::endl;
 }
 
 void Application::Update()

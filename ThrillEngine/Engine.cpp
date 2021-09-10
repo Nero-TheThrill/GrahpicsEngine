@@ -5,6 +5,8 @@
 #include "Input.h"
 #include "ObjectManager.h"
 #include "LevelManager.h"
+#include "TimeManager.h"
+
 Engine::Engine()
 {
     isgamerunning = true;
@@ -16,13 +18,15 @@ Engine::~Engine()
 
 void Engine::Init()
 {
-    Input::Init();
+
     AddCore(new Application());
     AddCore(new Graphics());
     AddCore(new ObjectManager());
     AddCore(new LevelManager());
+    AddCore(new TimeManager());
     for (auto* e_core : enginecore)
         e_core->Init();
+    Input::Init();
     APPLICATION->AppSet(800, 600);
    // GRAPHICS->DrawTriangle();
 }

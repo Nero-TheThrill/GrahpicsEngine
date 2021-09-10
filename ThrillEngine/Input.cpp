@@ -6,8 +6,10 @@ std::bitset<GLFW_KEY_LAST> Input::key_pressed;
 std::bitset<GLFW_KEY_LAST> Input::key_triggered;
 glm::vec2 Input::mouse_position;
 float Input::mouse_scroll;
+
 void Input::Init()
 {
+	std::cout << "InputSystem Initialize" << std::endl;
 	key_pressed.reset();
 	key_triggered.reset();
 	mouse_position = glm::vec2{0,0};

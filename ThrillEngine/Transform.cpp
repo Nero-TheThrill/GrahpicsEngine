@@ -1,5 +1,7 @@
 #include "Transform.h"
 
+#include "TimeManager.h"
+
 void Transform::Init()
 {
     transform = glm::mat4(1.0f);
@@ -37,7 +39,7 @@ void Transform::Scale(glm::vec3 input)
 
 void Transform::Move(glm::vec3 input)
 {
-    translate = glm::translate(translate, input);
+    translate = glm::translate(translate, input*TIMEMANAGER->deltaTime);
     position += input;
 }
 

@@ -1,5 +1,7 @@
 #include "LevelManager.h"
 
+#include <iostream>
+
 LevelManager* LEVELMANAGER = nullptr;
 LevelManager::LevelManager()
 {
@@ -9,6 +11,7 @@ LevelManager::LevelManager()
 
 void LevelManager::Init()
 {
+    std::cout << "LevelManager Initialize" << std::endl;
 }
 
 void LevelManager::Update()
