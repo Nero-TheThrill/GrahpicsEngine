@@ -12,16 +12,18 @@ TestLevel1::TestLevel1()
 
 void TestLevel1::Init()
 {
-    obj1 = new Object("lv1obj1");
-    obj1->pick_material("MTest");
+    obj1 = new Object("object11");
+    obj1->SetMesh(GRAPHICS->GetMesh("cube"));
+    obj1->Pick_Material("MTest");
     obj1->texture.SetTexture("face");
     obj1->SetColor(glm::vec3(1, 1, 1));
-    obj1->transform.Translate(glm::vec3(1.5, 1.5, 0));
+    obj1->transform.Translate(glm::vec3(6, 1, 0));
     obj1->transform.Scale(glm::vec3(1, 1, 1));
 
 
-    obj2 = new Object("lv1obj2");
-    obj2->pick_material("MTexture");
+    obj2 = new Object("object22");
+    obj2->SetMesh(GRAPHICS->GetMesh("sphere"));
+    obj2->Pick_Material("MLight");
     obj2->texture.SetTexture("container");
     obj2->SetColor(glm::vec3(0.1, 0.3, 0.8));
     obj2->transform.Scale(glm::vec3(1, 1, 1));

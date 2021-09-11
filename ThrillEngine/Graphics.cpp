@@ -21,7 +21,7 @@ void Graphics::Init()
  
     
     camera.Projection(45, 0.1f, 100.f); //should update every screen size changes.
-    camera.View(glm::vec3(0.0f, 0.0f, 10)); //should update every camera moves
+    camera.View(glm::vec3(0.0f, 0.0f, 20)); //should update every camera moves
     InitPVmatrices();
     UpdatePVmatrices();
 }
@@ -227,10 +227,149 @@ void Graphics::LoadTexture(const std::string& path, const std::string& texture_i
     }
 }
 
+void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
+{
+    Mesh* mesh = new Mesh();
+    std::stringstream ss;
+    std::ifstream in_file(path);
+    std::string line = "";
+    
+    glm::vec3 tmp_vec3;
+    glm::vec2 tmp_vec2;
+    GLint tmp_glInt=0;
+    GLfloat tmp_glFloat = 0;
+
+
+    if (!in_file.is_open())
+    {
+        assert("load failed");
+    }
+
+
+    while (std::getline(in_file, line))
+    {
+        std::string prefix = "";
+        ss.clear();
+        ss.str(line);
+        ss >> prefix;
+        if (prefix == "#")
+        {
+
+        }
+        else if (prefix == "o") // 
+        {
+
+        }
+        else if (prefix == "s") // 
+        {
+
+        }
+        else if (prefix == "use_mtl")
+        {
+
+        }
+        else if (prefix == "v") // position
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                ss >> tmp_glFloat;
+                mesh->positions.push_back(tmp_glFloat);
+            }
+        }
+        else if (prefix == "vt") // texture
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                ss >> tmp_glFloat;
+                mesh->texcoords.push_back(tmp_glFloat);
+            }
+        }
+        else if (prefix == "vn") // normal
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                ss >> tmp_glFloat;
+                mesh->normals.push_back(tmp_glFloat);
+            }
+        }
+        else if (prefix == "f") // faces
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                ss >> tmp_glInt;
+                mesh->position_indices.push_back(tmp_glInt-1);
+            }
+        }
+        else
+        {
+
+        }
+    }
+    float min_val_x = mesh->positions[0];
+    float max_val_x = min_val_x;
+    float max_val_y = min_val_x, min_val_y = min_val_x;
+    float max_val_z = min_val_x, min_val_z = min_val_x;
+    int iterator = 0;
+    for(auto p:mesh->positions)
+    {
+        if (iterator % 3 == 0)
+        {
+            min_val_x = std::min(p, min_val_x);
+            max_val_x = std::max(p, max_val_x);
+        }
+        else if (iterator % 3 == 1)
+        {
+            min_val_y = std::min(p, min_val_y);
+            max_val_y = std::max(p, max_val_y);
+        }
+        else
+        {
+            min_val_z = std::min(p, min_val_z);
+            max_val_z = std::max(p, max_val_z);
+        }
+      
+
+        iterator++;
+    }
+    float denominator = std::max(std::max(max_val_x - min_val_x, max_val_y- min_val_y), max_val_z-min_val_z)/2.f;
+    float gap_x = max_val_x - min_val_x;
+    float gap_y = max_val_y - min_val_y;
+    float gap_z = max_val_z - min_val_z;
+    float subtract_x = gap_x / 2.f + min_val_x;
+    float subtract_y = gap_y / 2.f + min_val_y;
+    float subtract_z = gap_z / 2.f + min_val_z;
+    iterator = 0;
+    for (auto p : mesh->positions)
+    {
+        if(iterator%3==0)
+            mesh->positions[iterator] = (p - subtract_x) / denominator;
+        else if (iterator % 3 == 1)
+            mesh->positions[iterator] = (p - subtract_y) / denominator;
+        else
+            mesh->positions[iterator] = (p - subtract_z) / denominator;
+
+        iterator++;
+    }
+    meshes.insert(std::pair<std::string, Mesh*>(mesh_id, mesh));
+}
+
+Mesh* Graphics::GetMesh(const std::string& mesh_id)
+{
+    if (meshes.find(mesh_id) == meshes.end())
+    {
+        assert(std::cout << "no mesh" << std::endl);
+    }
+    else
+    {
+        return meshes[mesh_id];
+    }
+}
+
 void Graphics::AddMaterial(const std::string& material_id, Material* material)
 {
     materials.insert(std::pair<std::string, Material*>(material_id, material));
 }
+
 
 Material* Graphics::GetMaterial(const std::string& material_id)
 {

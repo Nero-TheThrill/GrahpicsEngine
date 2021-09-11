@@ -63,7 +63,7 @@ void imGUIManager::Update()
                     if (ImGui::Selectable(mat.second->name.c_str(), is_selected))
                     {
                         current_material = mat.second->name;
-                        current_item->pick_material(mat.second->name);
+                        current_item->Pick_Material(mat.second->name);
                     }
                     if (is_selected)
                         ImGui::SetItemDefaultFocus();

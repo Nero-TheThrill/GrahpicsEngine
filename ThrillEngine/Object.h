@@ -9,18 +9,20 @@ class Object
 {
 public:
     Object(std::string n);
+    Object(std::string n, Object* obj);
     ~Object();
     void SetColor(glm::vec3 inputcolor);
+    void SetMesh(Mesh* input);
     void Update();
 
-    void draw();
-    void pick_material(const std::string& material_id);
+    void Draw();
+    void Pick_Material(const std::string& material_id);
     bool alive = true;
     unsigned id;
 
     Material* material;
     Transform transform;
-    Mesh mesh;
+    Mesh* mesh;
     Texture texture;
     glm::vec3 color{1.0};
     std::string name;

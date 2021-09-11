@@ -9,6 +9,9 @@ int main()
 {
     
     auto* ThrillEngine = new Engine();
+
+
+
     GRAPHICS->LoadShader("../shaders/test.vert", "testvert", VERTEX);
     GRAPHICS->LoadShader("../shaders/test.frag", "testfrag", FRAGMENT);
     GRAPHICS->CompileShader("testvert", "testfrag", "test");
@@ -41,11 +44,14 @@ int main()
     MLight->set("lightColor", glm::vec3(1.0, 1.0, 1.0));
 
 
-
+    GRAPHICS->loadObject("../models/cube.obj", "cube");
+    GRAPHICS->loadObject("../models/sphere.obj", "sphere");
+    GRAPHICS->loadObject("../models/bunny.obj", "bunny");
+    GRAPHICS->loadObject("../models/4Sphere.obj", "4Sphere");
+    GRAPHICS->loadObject("../models/sphere_modified.obj", "sphere_modified");
     LEVELMANAGER->InsertLevel(new TestLevel(), 1);
     LEVELMANAGER->ChangeLevel(1);
     LEVELMANAGER->InsertLevel(new TestLevel1(), 2);
-
 
 
     ThrillEngine->Init();

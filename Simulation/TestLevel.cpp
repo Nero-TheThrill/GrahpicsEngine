@@ -14,7 +14,8 @@ TestLevel::TestLevel()
 void TestLevel::Init()
 {
     obj1 = new Object("object1");
-    obj1->pick_material("MTest");
+    obj1->SetMesh(GRAPHICS->GetMesh("cube"));
+    obj1->Pick_Material("MTest");
     obj1->texture.SetTexture("face");
     obj1->SetColor(glm::vec3(1, 1, 1));
     obj1->transform.Translate(glm::vec3(6,1,0));
@@ -22,22 +23,52 @@ void TestLevel::Init()
 
 
     obj2 = new Object("object2");
-    obj2->pick_material("MTexture");
+    obj2->SetMesh(GRAPHICS->GetMesh("sphere"));
+    obj2->Pick_Material("MTest");
     obj2->texture.SetTexture("container");
     obj2->SetColor(glm::vec3(0.1, 0.3, 0.8));
     obj2->transform.Scale(glm::vec3(1, 1, 1));
-    obj2->transform.Translate(glm::vec3(-1.5, -1.5, 1.5));
+    obj2->transform.Translate(glm::vec3(0, -7, 0));
 
     obj3 = new Object("object3");
-    obj3->pick_material("MLight");
+    obj3->SetMesh(GRAPHICS->GetMesh("bunny"));
+    obj3->Pick_Material("MTest");
     obj3->texture.SetTexture("lol");
     obj3->transform.Scale(glm::vec3(2, 2, 2));
-    obj3->SetColor(glm::vec3(1.0, 0.5, 0.31));
+    obj3->SetColor(glm::vec3(0.12, 0.08, 0.01));
+
+    c1 = new Object("circle1");
+    c1->SetMesh(GRAPHICS->GetMesh("sphere"));
+    c1->Pick_Material("MTest");
+    c1->SetColor(glm::vec3(0.3, 0.3, 0.1));
+    c1->transform.Translate(glm::vec3(7, -3, 0));
+    c1->transform.Scale(glm::vec3(0.1, 0.1, 0.1));
+
+    c2 = new Object("circle2",c1);
+    c2->SetColor(glm::vec3(0.4, 0.9, 0.1));
+
+    c3 = new Object("circle3",c1);
+    c3->SetColor(glm::vec3(0.8, 0.3, 0.8));
+
+    c4 = new Object("circle4", c1);
+    c4->SetColor(glm::vec3(0.9, 0.7, 0.8));
+
+    c5 = new Object("circle5", c1);
+    c5->SetColor(glm::vec3(0.8, 0.3, 0.8));
+
+    c6 = new Object("circle6", c1);
+    c6->SetColor(glm::vec3(0.9, 0.8, 0.6));
+
+    c7 = new Object("circle7", c1);
+    c7->SetColor(glm::vec3(0.9, 0.7, 0.8));
+
+    c8 = new Object("circle8", c1);
+    c8->SetColor(glm::vec3(0.5, 0.8, 0.3));
 }
 
 void TestLevel::Update()
 {
-    obj3->material->set("lightPosition", obj1->transform.position);
+    GRAPHICS->GetMaterial("MLight")->set("lightPosition", obj1->transform.position);
     GRAPHICS->GetMaterial("MLight")->set("viewPosition", GRAPHICS->camera.cam_position);
     if (Input::IsTriggered(GLFW_KEY_Z))
     {
@@ -69,8 +100,26 @@ void TestLevel::Update()
     {
         obj1->transform.Move(glm::vec3(0, 0, 3));
     }
-    if(obj2!=nullptr)
-        obj2->transform.Rotate(TIMEMANAGER->currentFrame * 150.0f, glm::vec3(0.5f, 1.0f, 0.0f));
+    if (obj2 != nullptr)
+        obj2->transform.Rotate(TIMEMANAGER->currentFrame * 150.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+    if (obj3 != nullptr)
+        obj3->transform.Rotate(TIMEMANAGER->currentFrame * 150.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+    if (c1 != nullptr)
+        c1->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame)*5,-3, sin(TIMEMANAGER->currentFrame) * 5));
+    if (c2 != nullptr)
+        c2->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + 0.76f) * 5, -3, sin(TIMEMANAGER->currentFrame + 0.76f) * 5));
+    if (c3 != nullptr)
+        c3->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + 2 * 0.76f) * 5, -3, sin(TIMEMANAGER->currentFrame + 2 * 0.76f) * 5));
+    if (c4 != nullptr)
+        c4->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + 3 * 0.76f) * 5, -3, sin(TIMEMANAGER->currentFrame + 3 * 0.76f) * 5));
+    if (c5 != nullptr)
+        c5->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + 4 * 0.76f) * 5, -3, sin(TIMEMANAGER->currentFrame + 4 * 0.76f) * 5));
+    if (c6 != nullptr)
+        c6->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + 5 * 0.76f) * 5, -3, sin(TIMEMANAGER->currentFrame + 5 * 0.76f) * 5));
+    if (c7 != nullptr)
+        c7->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + 6 * 0.76f) * 5, -3, sin(TIMEMANAGER->currentFrame + 6 * 0.76f) * 5));
+    if (c8 != nullptr)
+        c8->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + 7 * 0.76f) * 5, -3, sin(TIMEMANAGER->currentFrame + 7 * 0.76f) * 5));
     if (Input::IsPressed(GLFW_KEY_UP))
     {
         GRAPHICS->camera.Move(glm::vec3(0, 1, 0));

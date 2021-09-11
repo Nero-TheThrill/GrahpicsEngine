@@ -25,9 +25,6 @@
     <Filter Include="Object">
       <UniqueIdentifier>{9cbc66b7-e0de-4335-9b2d-eb709c536109}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Object\ObjectManager">
-      <UniqueIdentifier>{64d45c99-7700-429d-b0dc-da5fc81b3b87}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Object\Component">
       <UniqueIdentifier>{00653454-f75a-4c77-a1a6-ffa3664c9ef3}</UniqueIdentifier>
     </Filter>
@@ -55,6 +52,12 @@
     <Filter Include="Graphics\IMGUI\imGUI">
       <UniqueIdentifier>{e4537c18-897a-40e0-8784-e8649e735267}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\ObjectManager">
+      <UniqueIdentifier>{2fc1ec34-262b-463b-afa2-ff33234d8c0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Component\Mesh\Sphere">
+      <UniqueIdentifier>{729df902-7e21-45d1-af4b-59b95c6d8510}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -75,9 +78,6 @@
     </ClCompile>
     <ClCompile Include="Material.cpp">
       <Filter>Graphics\Material</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjectManager.cpp">
-      <Filter>Object\ObjectManager</Filter>
     </ClCompile>
     <ClCompile Include="LevelManager.cpp">
       <Filter>EngineCore\LevelManager</Filter>
@@ -127,6 +127,12 @@
     <ClCompile Include="imGUIManager.cpp">
       <Filter>Graphics\IMGUI</Filter>
     </ClCompile>
+    <ClCompile Include="ObjectManager.cpp">
+      <Filter>Object\ObjectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="SphereMesh.cpp">
+      <Filter>Object\Component\Mesh\Sphere</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -147,9 +153,6 @@
     </ClInclude>
     <ClInclude Include="Material.h">
       <Filter>Graphics\Material</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectManager.h">
-      <Filter>Object\ObjectManager</Filter>
     </ClInclude>
     <ClInclude Include="EngineCore.h">
       <Filter>EngineCore</Filter>
@@ -213,6 +216,12 @@
     </ClInclude>
     <ClInclude Include="imGUIManager.h">
       <Filter>Graphics\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager.h">
+      <Filter>Object\ObjectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="SphereMesh.h">
+      <Filter>Object\Component\Mesh\Sphere</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
