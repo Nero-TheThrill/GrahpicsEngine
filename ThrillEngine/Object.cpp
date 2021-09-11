@@ -13,12 +13,13 @@ void Object::Update()
     draw();
 }
 
-Object::Object()
+Object::Object(std::string n)
 {
     id = 0;
     mesh.Init();
     transform.Init();
     OBJECTMANAGER->RegisterObject(this);
+    name = n;
 }
 
 
@@ -38,6 +39,7 @@ void Object::draw()
     material->Use();
     material->shader.set("model", transform.GetTransformMatrix());
     material->Update();
+    material->shader.set("objectColor", color);
     texture.Update();
     mesh.Draw();
     material->UnUse();

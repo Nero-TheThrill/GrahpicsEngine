@@ -1,7 +1,5 @@
 #include "Application.h"
 #include <iostream>
-
-#include "Graphics.h"
 #include "Input.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -67,6 +65,8 @@ Application::Application()
     glfwSetScrollCallback(window, scroll_callback);
     glfwSetWindowSizeCallback(window, window_size_callback);
     std::cout << "Application Initialize" << std::endl;
+
+    imGUI_= new imGUIManager(window);
 }
 
 void Application::AppSet(int w, int h)
@@ -78,24 +78,28 @@ void Application::AppSet(int w, int h)
 
 void Application::Init()
 {
-  
+
 }
+
+
 
 void Application::Update()
 {
     
-
+    IMGUIMANAGER->Update();
     glfwSwapBuffers(window);
     glfwPollEvents();
     if (Input::IsTriggered(GLFW_KEY_ESCAPE))
         glfwSetWindowShouldClose(window, true);
     if (Input::IsTriggered(GLFW_KEY_F))
         SetFullScreen();
+
 }
 
 Application::~Application()
 {
     std::cout << "delete Application" << std::endl;
+
     glfwTerminate();
 }
 

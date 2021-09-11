@@ -53,6 +53,11 @@ void ObjectManager::DeleteAll()
     }
 }
 
+std::unordered_map<unsigned, Object*> ObjectManager::GetAllObjects()
+{
+    return  objects;
+}
+
 
 ObjectManager::~ObjectManager()
 {

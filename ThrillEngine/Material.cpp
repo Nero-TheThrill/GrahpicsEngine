@@ -6,6 +6,7 @@
 Material::Material(const std::string& id)
 {
     GRAPHICS->AddMaterial(id,this);
+    name = id;
 }
 
 Material::~Material()

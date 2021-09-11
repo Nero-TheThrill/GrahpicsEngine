@@ -13,24 +13,24 @@ TestLevel::TestLevel()
 
 void TestLevel::Init()
 {
-    obj1 = new Object();
+    obj1 = new Object("object1");
     obj1->pick_material("MTest");
-    //obj1->texture.SetTexture("face");
+    obj1->texture.SetTexture("face");
     obj1->SetColor(glm::vec3(1, 1, 1));
-    obj1->transform.Translate(glm::vec3(0,1,0));
+    obj1->transform.Translate(glm::vec3(6,1,0));
     obj1->transform.Scale(glm::vec3(0.25, 0.25, 0.25));
 
 
-    obj2 = new Object();
+    obj2 = new Object("object2");
     obj2->pick_material("MTexture");
     obj2->texture.SetTexture("container");
     obj2->SetColor(glm::vec3(0.1, 0.3, 0.8));
     obj2->transform.Scale(glm::vec3(1, 1, 1));
+    obj2->transform.Translate(glm::vec3(-1.5, -1.5, 1.5));
 
-    obj3 = new Object();
+    obj3 = new Object("object3");
     obj3->pick_material("MLight");
     obj3->texture.SetTexture("lol");
-    obj2->transform.Translate(glm::vec3(-1.5, -1.5, 1.5));
     obj3->transform.Scale(glm::vec3(2, 2, 2));
     obj3->SetColor(glm::vec3(1.0, 0.5, 0.31));
 }
@@ -105,6 +105,7 @@ void TestLevel::Update()
 void TestLevel::Close()
 {
     OBJECTMANAGER->DeleteAll();
+    
 }
 
 TestLevel::~TestLevel()

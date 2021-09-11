@@ -31,10 +31,8 @@ public:
 
     Texture texture;
     Shader shader;
-
+    std::string name;
 private:
-
-    glm::vec3 color = glm::vec4(1.0f);
     std::unordered_map<std::string, glm::vec3> set_values_v3;
     std::unordered_map<std::string, glm::vec4> set_values_v4;
     std::unordered_map<std::string, glm::mat4> set_values_m4;

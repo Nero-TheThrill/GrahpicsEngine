@@ -63,6 +63,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)includes\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;imgui.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -83,14 +84,23 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)includes\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;imgui.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\includes\source\glad\glad.c" />
+    <ClCompile Include="..\includes\source\imgui\imgui.cpp" />
+    <ClCompile Include="..\includes\source\imgui\imgui_demo.cpp" />
+    <ClCompile Include="..\includes\source\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\includes\source\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\includes\source\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="..\includes\source\imgui\imgui_tables.cpp" />
+    <ClCompile Include="..\includes\source\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="imGUIManager.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="Material.cpp" />
@@ -104,6 +114,15 @@
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\includes\source\imgui\imconfig.h" />
+    <ClInclude Include="..\includes\source\imgui\imgui.h" />
+    <ClInclude Include="..\includes\source\imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="..\includes\source\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="..\includes\source\imgui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="..\includes\source\imgui\imgui_internal.h" />
+    <ClInclude Include="..\includes\source\imgui\imstb_rectpack.h" />
+    <ClInclude Include="..\includes\source\imgui\imstb_textedit.h" />
+    <ClInclude Include="..\includes\source\imgui\imstb_truetype.h" />
     <ClInclude Include="..\includes\source\stb_image.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="Camera.h" />
@@ -112,6 +131,7 @@
     <ClInclude Include="EngineCore.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="headers.h" />
+    <ClInclude Include="imGUIManager.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="LevelManager.h" />
     <ClInclude Include="LevelStructure.h" />

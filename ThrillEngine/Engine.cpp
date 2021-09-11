@@ -13,8 +13,8 @@ Engine::Engine()
 
     AddCore(new Application());
     AddCore(new Graphics());
-    AddCore(new ObjectManager());
     AddCore(new LevelManager());
+    AddCore(new ObjectManager());
     AddCore(new TimeManager());
 }
 

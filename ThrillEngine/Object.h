@@ -8,7 +8,7 @@
 class Object
 {
 public:
-    Object();
+    Object(std::string n);
     ~Object();
     void SetColor(glm::vec3 inputcolor);
     void Update();
@@ -23,4 +23,5 @@ public:
     Mesh mesh;
     Texture texture;
     glm::vec3 color{1.0};
+    std::string name;
 };

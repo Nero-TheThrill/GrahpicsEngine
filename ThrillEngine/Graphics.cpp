@@ -33,7 +33,7 @@ void Graphics::Update()
 
 
     UpdatePVmatrices();
-    camera.MouseMoveUpdate();
+ //   camera.MouseMoveUpdate();
     camera.MouseScrollUpdate();
 }
 
@@ -242,5 +242,10 @@ Material* Graphics::GetMaterial(const std::string& material_id)
     {
         return materials[material_id];
     }
+}
+
+std::unordered_map<std::string, Material*> Graphics::GetAllMaterial()
+{
+    return materials;
 }
 

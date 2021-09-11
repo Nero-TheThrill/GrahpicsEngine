@@ -11,6 +11,7 @@ public:
     ~ObjectManager();
     void RegisterObject(Object* obj);
     void DeleteAll();
+    std::unordered_map<unsigned, Object*> GetAllObjects();
 private:
     unsigned int genObjectsNum=0;
     std::unordered_map<unsigned, Object*> objects;

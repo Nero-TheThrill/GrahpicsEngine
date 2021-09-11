@@ -35,6 +35,7 @@ public:
     void LoadTexture(const std::string& path, const std::string& texture_id, ImageType image_type);
     void AddMaterial(const std::string& material_id, Material* material);
     Material* GetMaterial(const std::string& material_id);
+    std::unordered_map<std::string /*id*/, Material* /*material*/> GetAllMaterial();
     Camera camera;
 private:
     std::unordered_map<std::string /*id*/, Material* /*material*/> materials;

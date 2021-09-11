@@ -35,20 +35,16 @@ int main()
     MLight->PickShader("light");
 
     MTest->set("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-    MTest->set("objectColor", glm::vec3(0.0f, 1.0f, 1.0f));
 
-  //  MTexture.AddValue("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-    MTexture->set("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
+
 
     MLight->set("lightColor", glm::vec3(1.0, 1.0, 1.0));
-    MLight->set("objectColor", glm::vec3(0.0f, 0.7f, 0.9f));
 
 
-    LevelStructure* testlevel = new TestLevel();
-    LEVELMANAGER->InsertLevel(testlevel, 1);
+
+    LEVELMANAGER->InsertLevel(new TestLevel(), 1);
     LEVELMANAGER->ChangeLevel(1);
-    LevelStructure* testlevel1 = new TestLevel1();
-    LEVELMANAGER->InsertLevel(testlevel1, 2);
+    LEVELMANAGER->InsertLevel(new TestLevel1(), 2);
 
 
 
