@@ -23,23 +23,31 @@ void TestLevel::Init()
 
 
     obj2 = new Object("object2");
-    obj2->SetMesh(GRAPHICS->GetMesh("sphere"));
-    obj2->Pick_Material("MTest");
-    obj2->texture.SetTexture("container");
+    obj2->SetMesh(GRAPHICS->GetMesh("cube"));
+    obj2->Pick_Material("MLight");
     obj2->SetColor(glm::vec3(0.1, 0.3, 0.8));
     obj2->transform.Scale(glm::vec3(1, 1, 1));
-    obj2->transform.Translate(glm::vec3(0, -7, 0));
+    obj2->transform.Translate(glm::vec3(-4, 0, 0));
 
     obj3 = new Object("object3");
     obj3->SetMesh(GRAPHICS->GetMesh("bunny"));
-    obj3->Pick_Material("MTest");
-    obj3->texture.SetTexture("lol");
+    obj3->Pick_Material("MLight");
     obj3->transform.Scale(glm::vec3(2, 2, 2));
-    obj3->SetColor(glm::vec3(0.12, 0.08, 0.01));
+    obj3->SetColor(glm::vec3(0.812, 0.508, 0.501));
+
+    obj4 = new Object("object4",obj3);
+    obj4->SetMesh(GRAPHICS->GetMesh("sphere"));
+    obj4->SetColor(glm::vec3(0.512, 0.508, 0.501));
+    obj4->transform.Translate(glm::vec3(4, 0, 0));
+
+    obj5 = new Object("object5", obj3);
+    obj5->SetMesh(GRAPHICS->GetMesh("lucy_princeton"));
+    obj5->SetColor(glm::vec3(0.512, 0.908, 0.501));
+    obj5->transform.Translate(glm::vec3(0, -4, 0));
 
     c1 = new Object("circle1");
     c1->SetMesh(GRAPHICS->GetMesh("sphere"));
-    c1->Pick_Material("MTest");
+    c1->Pick_Material("MLight");
     c1->SetColor(glm::vec3(0.3, 0.3, 0.1));
     c1->transform.Translate(glm::vec3(7, -3, 0));
     c1->transform.Scale(glm::vec3(0.1, 0.1, 0.1));
@@ -100,10 +108,10 @@ void TestLevel::Update()
     {
         obj1->transform.Move(glm::vec3(0, 0, 3));
     }
-    if (obj2 != nullptr)
+  /*  if (obj2 != nullptr)
         obj2->transform.Rotate(TIMEMANAGER->currentFrame * 150.0f, glm::vec3(0.0f, 0.0f, 1.0f));
     if (obj3 != nullptr)
-        obj3->transform.Rotate(TIMEMANAGER->currentFrame * 150.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+        obj3->transform.Rotate(TIMEMANAGER->currentFrame * 150.0f, glm::vec3(0.0f, 1.0f, 0.0f));*/
     if (c1 != nullptr)
         c1->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame)*5,-3, sin(TIMEMANAGER->currentFrame) * 5));
     if (c2 != nullptr)

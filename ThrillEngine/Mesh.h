@@ -22,9 +22,11 @@ public:
     std::vector<GLint> texcoord_indices;
     std::vector<GLint> normal_indices;
 
+    std::vector<GLfloat> positions_;
+
 private:
     GLuint VAO;
-    GLuint VBO;
+    GLuint VBO_positions,VBO_normals;
     GLuint EBO;
     int index_size;
 

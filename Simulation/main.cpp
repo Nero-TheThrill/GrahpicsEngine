@@ -39,9 +39,7 @@ int main()
 
     MTest->set("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
 
-
-
-    MLight->set("lightColor", glm::vec3(1.0, 1.0, 1.0));
+    MLight->set("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
 
 
     GRAPHICS->loadObject("../models/cube.obj", "cube");
@@ -49,6 +47,8 @@ int main()
     GRAPHICS->loadObject("../models/bunny.obj", "bunny");
     GRAPHICS->loadObject("../models/4Sphere.obj", "4Sphere");
     GRAPHICS->loadObject("../models/sphere_modified.obj", "sphere_modified");
+    GRAPHICS->loadObject("../models/lucy_princeton.obj", "lucy_princeton");
+
     LEVELMANAGER->InsertLevel(new TestLevel(), 1);
     LEVELMANAGER->ChangeLevel(1);
     LEVELMANAGER->InsertLevel(new TestLevel1(), 2);
