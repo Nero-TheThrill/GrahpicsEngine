@@ -14,7 +14,7 @@ TestLevel::TestLevel()
 void TestLevel::Init()
 {
     obj1 = new Object("light");
-    obj1->SetMesh(GRAPHICS->GetMesh("cube"));
+    obj1->SetMesh(GRAPHICS->GetMesh("customsphere"));
     obj1->Pick_Material("MTest");
     obj1->texture.SetTexture("face");
     obj1->SetColor(glm::vec3(1, 1, 1));
@@ -32,7 +32,7 @@ void TestLevel::Init()
     obj3 = new Object("object3");
     obj3->SetMesh(GRAPHICS->GetMesh("bunny"));
     obj3->Pick_Material("MLight");
-    obj3->transform.Scale(glm::vec3(2, 2, 2));
+    obj3->transform.Scale(glm::vec3(1, 1, 1));
     obj3->SetColor(glm::vec3(0.812, 0.508, 0.501));
 
     obj4 = new Object("object4", obj3);
