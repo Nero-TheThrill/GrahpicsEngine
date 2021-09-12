@@ -13,7 +13,7 @@ TestLevel::TestLevel()
 
 void TestLevel::Init()
 {
-    obj1 = new Object("object1");
+    obj1 = new Object("light");
     obj1->SetMesh(GRAPHICS->GetMesh("cube"));
     obj1->Pick_Material("MTest");
     obj1->texture.SetTexture("face");
@@ -78,12 +78,13 @@ void TestLevel::Update()
 {
     GRAPHICS->GetMaterial("MLight")->set("lightPosition", obj1->transform.position);
     GRAPHICS->GetMaterial("MLight")->set("viewPosition", GRAPHICS->camera.cam_position);
-    if (Input::IsTriggered(GLFW_KEY_Z))
-    {
-        OBJECTMANAGER->DeleteAll();
-        obj1 = nullptr;
-        obj2 = nullptr;
-    }
+    //if (Input::IsTriggered(GLFW_KEY_Z))
+    //{
+    //    OBJECTMANAGER->DeleteAll();
+    //    obj1 = nullptr;
+    //    obj2 = nullptr;
+
+    //}
     if (Input::IsPressed(GLFW_KEY_W))
     {
         obj1->transform.Move(glm::vec3(0, 3, 0));
@@ -108,10 +109,10 @@ void TestLevel::Update()
     {
         obj1->transform.Move(glm::vec3(0, 0, 3));
     }
-    /*  if (obj2 != nullptr)
-          obj2->transform.Rotate(TIMEMANAGER->currentFrame * 150.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+      if (obj2 != nullptr)
+          obj2->transform.Rotate(TIMEMANAGER->currentFrame * 50.0f, glm::vec3(1.0f, 0.0f, 1.0f));
       if (obj3 != nullptr)
-          obj3->transform.Rotate(TIMEMANAGER->currentFrame * 150.0f, glm::vec3(0.0f, 1.0f, 0.0f));*/
+          obj3->transform.Rotate(TIMEMANAGER->currentFrame * 50.0f, glm::vec3(0.0f, 1.0f, 0.0f));
     if (c1 != nullptr)
         c1->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame) * 5, -3, sin(TIMEMANAGER->currentFrame) * 5));
     if (c2 != nullptr)

@@ -55,6 +55,9 @@
     <Filter Include="Graphics\imGUIManager">
       <UniqueIdentifier>{601d7275-6fe1-4092-8bc0-64ec3415e3da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\Component\Mesh\Sphere">
+      <UniqueIdentifier>{124ab32d-acbe-49d3-aff1-9018fc432236}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -126,6 +129,9 @@
     </ClCompile>
     <ClCompile Include="imGUIManager.cpp">
       <Filter>Graphics\imGUIManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Sphere.cpp">
+      <Filter>Object\Component\Mesh\Sphere</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -210,6 +216,9 @@
     </ClInclude>
     <ClInclude Include="imGUIManager.h">
       <Filter>Graphics\imGUIManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Sphere.h">
+      <Filter>Object\Component\Mesh\Sphere</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

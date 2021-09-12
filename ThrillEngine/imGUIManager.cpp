@@ -11,8 +11,7 @@ imGUIManager::imGUIManager(GLFWwindow* window)
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
-    ImGui::StyleColorsLight();
-
+    ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 450");
 
@@ -27,7 +26,6 @@ void imGUIManager::Update()
 
     {
         ImGui::Begin("GraphicsEngine GUI");
-
 
 
         std::unordered_map<unsigned, Object*> objects = OBJECTMANAGER->GetAllObjects();
@@ -58,7 +56,7 @@ void imGUIManager::Update()
 
             if (ImGui::BeginCombo("select_material", current_material.c_str()))
             {
-                for (auto mat : materials)
+                 for (auto mat : materials)
                 {
                     bool is_selected = (current_material == mat.second->name);
                     if (ImGui::Selectable(mat.second->name.c_str(), is_selected))
