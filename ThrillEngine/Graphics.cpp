@@ -7,6 +7,7 @@
 #include "Input.h"
 
 
+#define PI 3.1415926535
 
 Graphics* GRAPHICS = nullptr;
 
@@ -295,7 +296,7 @@ void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
         else if (prefix == "f") // faces
         {
             int stride = 0;
-            while(ss>>tmp_glInt)
+            while (ss >> tmp_glInt)
             {
                 mesh->position_indices.push_back(tmp_glInt - 1);
                 stride++;
@@ -309,6 +310,7 @@ void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
     }
 
     mesh->name = mesh_id;
+    mesh->drawmode = DrawMode::MODEL;
     mesh->Init();
     meshes.insert(std::pair<std::string, Mesh*>(mesh_id, mesh));
 }
@@ -323,6 +325,78 @@ Mesh* Graphics::GetMesh(const std::string& mesh_id)
     {
         return meshes[mesh_id];
     }
+}
+
+void Graphics::AddSphereMesh()
+{
+    Mesh* sphere = new Mesh;
+    float x, y, z, xy;
+    float s, t;
+    float sectorCount = 72;
+    float stackCount = 24;
+    float sectorStep = 2 * PI / sectorCount;
+    float stackStep = PI / stackCount;
+    float sectorAngle, stackAngle;
+
+    for (int i = 0; i <= stackCount; ++i)
+    {
+        stackAngle = PI / 2 - i * stackStep;
+        xy = cosf(stackAngle);
+        z = sinf(stackAngle);
+
+
+        for (int j = 0; j <= sectorCount; ++j)
+        {
+            sectorAngle = j * sectorStep;
+
+            x = xy * cosf(sectorAngle);
+            y = xy * sinf(sectorAngle);
+            sphere->positions_normals_use_indices.push_back(x);
+            sphere->positions_normals_use_indices.push_back(y);
+            sphere->positions_normals_use_indices.push_back(z);
+
+            s = (float)j / sectorCount;
+            t = (float)i / stackCount;
+            sphere->texcoords.push_back(s);
+            sphere->texcoords.push_back(t);
+        }
+    }
+    int k1, k2;
+    for (int i = 0; i < stackCount; ++i)
+    {
+        k1 = i * (sectorCount + 1);
+        k2 = k1 + sectorCount + 1;
+
+        for (int j = 0; j < sectorCount; ++j, ++k1, ++k2)
+        {
+            if (i != 0)
+            {
+                sphere->position_indices.push_back(k1);
+                sphere->position_indices.push_back(k2);
+                sphere->position_indices.push_back(k1 + 1);
+            }
+
+            if (i != (stackCount - 1))
+            {
+                sphere->position_indices.push_back(k1 + 1);
+                sphere->position_indices.push_back(k2);
+                sphere->position_indices.push_back(k2 + 1);
+            }
+
+            //lineIndices.push_back(k1);
+            //lineIndices.push_back(k2);
+            //if (i != 0) 
+            //{
+            //    lineIndices.push_back(k1);
+            //    lineIndices.push_back(k1 + 1);
+            //}
+        }
+
+
+    }
+    sphere->drawmode = DrawMode::SPHERE;
+    sphere->Init();
+    meshes.insert(std::pair<std::string, Mesh*>("customsphere", sphere));
 }
 
 void Graphics::AddMaterial(const std::string& material_id, Material* material)

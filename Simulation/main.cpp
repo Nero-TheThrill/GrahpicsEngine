@@ -51,6 +51,8 @@ int main()
     GRAPHICS->loadObject("../models/bunny_high_poly.obj", "bunny_high_poly");
     GRAPHICS->loadObject("../models/quad.obj", "quad");
     GRAPHICS->loadObject("../models/cube2.obj", "cube2");
+    GRAPHICS->AddSphereMesh();
+
     LEVELMANAGER->InsertLevel(new TestLevel(), 1);
     LEVELMANAGER->ChangeLevel(1);
     LEVELMANAGER->InsertLevel(new TestLevel1(), 2);

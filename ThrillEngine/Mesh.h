@@ -5,21 +5,14 @@
 #include <glm/glm.hpp>
 #include "Component.h"
 
-enum DrawType
+
+
+
+enum class DrawMode
 {
-    DRAWELEMENT,
-    DRAWARRAY
+    MODEL,
+    SPHERE
 };
-
-enum DrawMode
-{
-    TRIANGLES,
-    LINES,
-    TRIANGLSTRIP
-};
-
-
-
 class Mesh : public Component
 {
 public:
@@ -39,14 +32,17 @@ public:
     std::vector<GLint> normal_indices;
 
     std::vector<GLfloat> positions;
+
+    std::vector<GLfloat> positions_normals_use_indices;;
     int face_stride=0;
     std::string name;
+
+    DrawMode drawmode;
 private:
     GLuint VAO;
     GLuint VBO_positions, VBO_normals;
     GLuint EBO;
     int index_size;
-
 
 };
 

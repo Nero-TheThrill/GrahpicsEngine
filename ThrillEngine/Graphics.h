@@ -41,7 +41,7 @@ public:
     void LoadTexture(const std::string& path, const std::string& texture_id, ImageType image_type);
     void loadObject(const std::string& path, const std::string& mesh_id);
     Mesh* GetMesh(const std::string& mesh_id);
-
+    void AddSphereMesh();
 
     std::unordered_map<std::string, Material* > GetAllMaterial();
     std::unordered_map<std::string , Mesh*> GetAllMeshes();
