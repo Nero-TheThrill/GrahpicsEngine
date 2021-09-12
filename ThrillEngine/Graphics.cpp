@@ -273,7 +273,7 @@ void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
             for (int i = 0; i < 3; i++)
             {
                 ss >> tmp_glFloat;
-                mesh->positions.push_back(tmp_glFloat);
+                mesh->positions_use_indices.push_back(tmp_glFloat);
             }
         }
         else if (prefix == "vt") // texture
@@ -294,62 +294,22 @@ void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
         }
         else if (prefix == "f") // faces
         {
-            for (int i = 0; i < 3; i++)
+            int stride = 0;
+            while(ss>>tmp_glInt)
             {
-                ss >> tmp_glInt;
                 mesh->position_indices.push_back(tmp_glInt - 1);
+                stride++;
             }
+            mesh->face_stride = stride;
         }
         else
         {
 
         }
     }
-    float min_val_x = mesh->positions[0];
-    float max_val_x = min_val_x;
-    float max_val_y = min_val_x, min_val_y = min_val_x;
-    float max_val_z = min_val_x, min_val_z = min_val_x;
-    int iterator = 0;
-    for (auto p : mesh->positions)
-    {
-        if (iterator % 3 == 0)
-        {
-            min_val_x = std::min(p, min_val_x);
-            max_val_x = std::max(p, max_val_x);
-        }
-        else if (iterator % 3 == 1)
-        {
-            min_val_y = std::min(p, min_val_y);
-            max_val_y = std::max(p, max_val_y);
-        }
-        else
-        {
-            min_val_z = std::min(p, min_val_z);
-            max_val_z = std::max(p, max_val_z);
-        }
 
-
-        iterator++;
-    }
-    float denominator = std::max(std::max(max_val_x - min_val_x, max_val_y - min_val_y), max_val_z - min_val_z) / 2.f;
-    float gap_x = max_val_x - min_val_x;
-    float gap_y = max_val_y - min_val_y;
-    float gap_z = max_val_z - min_val_z;
-    float subtract_x = gap_x / 2.f + min_val_x;
-    float subtract_y = gap_y / 2.f + min_val_y;
-    float subtract_z = gap_z / 2.f + min_val_z;
-    iterator = 0;
-    for (auto p : mesh->positions)
-    {
-        if (iterator % 3 == 0)
-            mesh->positions[iterator] = (p - subtract_x) / denominator;
-        else if (iterator % 3 == 1)
-            mesh->positions[iterator] = (p - subtract_y) / denominator;
-        else
-            mesh->positions[iterator] = (p - subtract_z) / denominator;
-
-        iterator++;
-    }
+    mesh->name = mesh_id;
+    mesh->Init();
     meshes.insert(std::pair<std::string, Mesh*>(mesh_id, mesh));
 }
 
@@ -375,7 +335,7 @@ Material* Graphics::GetMaterial(const std::string& material_id)
 {
     if (materials.find(material_id) == materials.end())
     {
-        assert(std::cout << "no material" << std::endl);
+        return nullptr;
     }
     else
     {
@@ -386,5 +346,10 @@ Material* Graphics::GetMaterial(const std::string& material_id)
 std::unordered_map<std::string, Material*> Graphics::GetAllMaterial()
 {
     return materials;
+}
+
+std::unordered_map<std::string, Mesh*> Graphics::GetAllMeshes()
+{
+    return meshes;
 }
 

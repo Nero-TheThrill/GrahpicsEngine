@@ -16,9 +16,9 @@ int main()
     GRAPHICS->LoadShader("../shaders/test.frag", "testfrag", FRAGMENT);
     GRAPHICS->CompileShader("testvert", "testfrag", "test");
 
-    GRAPHICS->LoadShader("../shaders/texture.vert", "texturevert", VERTEX);
-    GRAPHICS->LoadShader("../shaders/texture.frag", "texturefrag", FRAGMENT);
-    GRAPHICS->CompileShader("texturevert", "texturefrag", "texture");
+    //GRAPHICS->LoadShader("../shaders/texture.vert", "texturevert", VERTEX);
+    //GRAPHICS->LoadShader("../shaders/texture.frag", "texturefrag", FRAGMENT);
+    //GRAPHICS->CompileShader("texturevert", "texturefrag", "texture");
 
     GRAPHICS->LoadShader("../shaders/light.vert", "lightvert", VERTEX);
     GRAPHICS->LoadShader("../shaders/light.frag", "lightfrag", FRAGMENT);
@@ -32,9 +32,9 @@ int main()
 
 
 
-    Material* MTest = new Material("MTest"), * MTexture = new Material("MTexture"), * MLight = new Material("MLight");
+    Material* MTest = new Material("MTest"), * MLight = new Material("MLight");// , * MTexture = new Material("MTexture");
     MTest->PickShader("test");
-    MTexture->PickShader("texture");
+    //MTexture->PickShader("texture");
     MLight->PickShader("light");
 
     MTest->set("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
@@ -48,7 +48,9 @@ int main()
     GRAPHICS->loadObject("../models/4Sphere.obj", "4Sphere");
     GRAPHICS->loadObject("../models/sphere_modified.obj", "sphere_modified");
     GRAPHICS->loadObject("../models/lucy_princeton.obj", "lucy_princeton");
-
+    GRAPHICS->loadObject("../models/bunny_high_poly.obj", "bunny_high_poly");
+    GRAPHICS->loadObject("../models/quad.obj", "quad");
+    GRAPHICS->loadObject("../models/cube2.obj", "cube2");
     LEVELMANAGER->InsertLevel(new TestLevel(), 1);
     LEVELMANAGER->ChangeLevel(1);
     LEVELMANAGER->InsertLevel(new TestLevel1(), 2);

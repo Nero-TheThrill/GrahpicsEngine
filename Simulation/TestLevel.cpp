@@ -109,10 +109,8 @@ void TestLevel::Update()
     {
         obj1->transform.Move(glm::vec3(0, 0, 3));
     }
-      if (obj2 != nullptr)
-          obj2->transform.Rotate(TIMEMANAGER->currentFrame * 50.0f, glm::vec3(1.0f, 0.0f, 1.0f));
-      if (obj3 != nullptr)
-          obj3->transform.Rotate(TIMEMANAGER->currentFrame * 50.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+      if (obj5 != nullptr)
+          obj5->transform.Rotate(TIMEMANAGER->currentFrame * 20.0f, glm::vec3(0.0f, 1.0f, 0.0f));
     if (c1 != nullptr)
         c1->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame) * 5, -3, sin(TIMEMANAGER->currentFrame) * 5));
     if (c2 != nullptr)

@@ -47,7 +47,6 @@ void Object::SetColor(glm::vec3 inputcolor)
 void Object::SetMesh(Mesh* input)
 {
     mesh = input;
-    mesh->Init();
 }
 
 void Object::Draw()

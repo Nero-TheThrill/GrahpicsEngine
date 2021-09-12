@@ -43,7 +43,8 @@ public:
     Mesh* GetMesh(const std::string& mesh_id);
 
 
-    std::unordered_map<std::string /*id*/, Material* /*material*/> GetAllMaterial();
+    std::unordered_map<std::string, Material* > GetAllMaterial();
+    std::unordered_map<std::string , Mesh*> GetAllMeshes();
     Camera camera;
 private:
     std::unordered_map<std::string /*id*/, Material* /*material*/> materials;

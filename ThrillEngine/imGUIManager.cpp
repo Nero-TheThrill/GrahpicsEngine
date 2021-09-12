@@ -50,6 +50,15 @@ void imGUIManager::Update()
             ImGui::SliderFloat3("translation", glm::value_ptr(pos), -10, 10);
             current_item->transform.Translate(pos);
 
+            glm::vec3 scale = current_item->transform.current_scale;
+            ImGui::SliderFloat3("scale", glm::value_ptr(scale), -10, 10);
+            current_item->transform.Scale(scale);
+
+            glm::vec3 rotate = current_item->transform.current_rotate_axis;
+            float degree = current_item->transform.current_rotate_degree;
+            ImGui::SliderFloat3("rotate axis", glm::value_ptr(rotate), 0, 1);
+            ImGui::DragFloat("degree", &degree);
+            current_item->transform.Rotate(degree, rotate);
 
             std::unordered_map<std::string, Material*> materials = GRAPHICS->GetAllMaterial();
             std::string current_material = current_item->material->name;
@@ -69,6 +78,24 @@ void imGUIManager::Update()
                 }
                 ImGui::EndCombo();
             }
+            std::unordered_map<std::string, Mesh*> meshes = GRAPHICS->GetAllMeshes();
+            std::string current_mesh = current_item->mesh->name;
+            if (ImGui::BeginCombo("select_mesh", current_mesh.c_str()))
+            {
+                for (auto mesh : meshes)
+                {
+                    bool is_selected = (current_mesh == mesh.second->name);
+                    if (ImGui::Selectable(mesh.second->name.c_str(), is_selected))
+                    {
+                        current_mesh = mesh.second->name;
+                        current_item->SetMesh(mesh.second);
+                    }
+                    if (is_selected)
+                        ImGui::SetItemDefaultFocus();
+                }
+                ImGui::EndCombo();
+            }
+         
         }
 
         ImGui::End();
