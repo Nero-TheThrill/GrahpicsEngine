@@ -26,8 +26,8 @@ void Transform::Translate(glm::vec3 input)
 
 void Transform::Rotate(float degree, glm::vec3 v)
 {
-    glm::mat4 tmp = glm::mat4(1.0f); 
-    rotate = glm::rotate(tmp, glm::radians(degree),v);
+    glm::mat4 tmp = glm::mat4(1.0f);
+    rotate = glm::rotate(tmp, glm::radians(degree), v);
 
 }
 
@@ -39,7 +39,7 @@ void Transform::Scale(glm::vec3 input)
 
 void Transform::Move(glm::vec3 input)
 {
-    translate = glm::translate(translate, input*TIMEMANAGER->deltaTime);
+    translate = glm::translate(translate, input * TIMEMANAGER->deltaTime);
     position += input * TIMEMANAGER->deltaTime;
 }
 

@@ -18,8 +18,8 @@ Graphics::Graphics()
 
 void Graphics::Init()
 {
- 
-    
+
+
     camera.Projection(45, 0.1f, 100.f); //should update every screen size changes.
     camera.View(glm::vec3(0.0f, 0.0f, 20)); //should update every camera moves
     InitPVmatrices();
@@ -33,13 +33,13 @@ void Graphics::Update()
 
 
     UpdatePVmatrices();
- //  camera.MouseMoveUpdate();
+    //  camera.MouseMoveUpdate();
     camera.MouseScrollUpdate();
 }
 
 Graphics::~Graphics()
 {
-    for(auto m:  materials)
+    for (auto m : materials)
     {
         delete m.second;
         m.second = nullptr;
@@ -48,7 +48,7 @@ Graphics::~Graphics()
 
 void Graphics::InitPVmatrices()
 {
-    
+
     glGenBuffers(1, &uboMatrices);
     glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
     glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), NULL, GL_STATIC_DRAW);
@@ -57,13 +57,13 @@ void Graphics::InitPVmatrices()
     glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboMatrices, 0, 2 * sizeof(glm::mat4));
 
     // store the projection matrix (we only do this once now) (note: we're not using zoom anymore by changing the FoV)
-  
+
 
 }
 
 void Graphics::UpdatePVmatrices()
 {
-    glm::mat4 projection =  camera.GetProjectionMatrix();
+    glm::mat4 projection = camera.GetProjectionMatrix();
     glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projection));
     glm::mat4 view = camera.GetViewMatrix();
@@ -169,12 +169,12 @@ void Graphics::LoadShader(const std::string& path, const std::string& id, Shader
         std::cout << "wrong type" << std::endl;
         break;
     }
- 
+
 }
 
 unsigned Graphics::GetTexture(const std::string& texture_id)
 {
-    if(textures.find(texture_id)==textures.end())
+    if (textures.find(texture_id) == textures.end())
     {
         return 0;
     }
@@ -211,9 +211,9 @@ void Graphics::LoadTexture(const std::string& path, const std::string& texture_i
         data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
         if (data)
         {
-            if(image_type==RGBA)
+            if (image_type == RGBA)
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-            else if(image_type==RGB)
+            else if (image_type == RGB)
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
             glGenerateMipmap(GL_TEXTURE_2D);
         }
@@ -233,10 +233,10 @@ void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
     std::stringstream ss;
     std::ifstream in_file(path);
     std::string line = "";
-    
+
     glm::vec3 tmp_vec3;
     glm::vec2 tmp_vec2;
-    GLint tmp_glInt=0;
+    GLint tmp_glInt = 0;
     GLfloat tmp_glFloat = 0;
 
 
@@ -297,7 +297,7 @@ void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
             for (int i = 0; i < 3; i++)
             {
                 ss >> tmp_glInt;
-                mesh->position_indices.push_back(tmp_glInt-1);
+                mesh->position_indices.push_back(tmp_glInt - 1);
             }
         }
         else
@@ -310,7 +310,7 @@ void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
     float max_val_y = min_val_x, min_val_y = min_val_x;
     float max_val_z = min_val_x, min_val_z = min_val_x;
     int iterator = 0;
-    for(auto p:mesh->positions)
+    for (auto p : mesh->positions)
     {
         if (iterator % 3 == 0)
         {
@@ -327,11 +327,11 @@ void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
             min_val_z = std::min(p, min_val_z);
             max_val_z = std::max(p, max_val_z);
         }
-      
+
 
         iterator++;
     }
-    float denominator = std::max(std::max(max_val_x - min_val_x, max_val_y- min_val_y), max_val_z-min_val_z)/2.f;
+    float denominator = std::max(std::max(max_val_x - min_val_x, max_val_y - min_val_y), max_val_z - min_val_z) / 2.f;
     float gap_x = max_val_x - min_val_x;
     float gap_y = max_val_y - min_val_y;
     float gap_z = max_val_z - min_val_z;
@@ -341,7 +341,7 @@ void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
     iterator = 0;
     for (auto p : mesh->positions)
     {
-        if(iterator%3==0)
+        if (iterator % 3 == 0)
             mesh->positions[iterator] = (p - subtract_x) / denominator;
         else if (iterator % 3 == 1)
             mesh->positions[iterator] = (p - subtract_y) / denominator;

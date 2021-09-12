@@ -13,7 +13,7 @@ public:
     void DeleteAll();
     std::unordered_map<unsigned, Object*> GetAllObjects();
 private:
-    unsigned int genObjectsNum=0;
+    unsigned int genObjectsNum = 0;
     std::unordered_map<unsigned, Object*> objects;
     std::vector<decltype(objects)::key_type> need_to_be_erased;
 };

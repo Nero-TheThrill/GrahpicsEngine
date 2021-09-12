@@ -24,6 +24,6 @@ public:
     Transform transform;
     Mesh* mesh;
     Texture texture;
-    glm::vec3 color{1.0};
+    glm::vec3 color{ 1.0 };
     std::string name;
 };

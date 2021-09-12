@@ -22,11 +22,11 @@ public:
 private:
     GLFWwindow* window;
     GLFWmonitor* monitor;
-    int width=800, height=600, prevwidth, prevheight;
+    int width = 800, height = 600, prevwidth, prevheight;
     int xpos, ypos;
     bool IsFullScreen;
-    bool show_demo_window=false, show_another_window = false;
-    glm::vec3 clear_color=glm::vec3{1.0};
+    bool show_demo_window = false, show_another_window = false;
+    glm::vec3 clear_color = glm::vec3{ 1.0 };
     int counter = 0;
     imGUIManager* imGUI_;
 

@@ -66,14 +66,14 @@ Application::Application()
     glfwSetWindowSizeCallback(window, window_size_callback);
     std::cout << "Application Initialize" << std::endl;
 
-    imGUI_= new imGUIManager(window);
+    imGUI_ = new imGUIManager(window);
 }
 
 void Application::AppSet(int w, int h)
 {
     width = w;
     height = h;
-    glfwSetWindowSize(window,w, h);
+    glfwSetWindowSize(window, w, h);
 }
 
 void Application::Init()
@@ -85,7 +85,7 @@ void Application::Init()
 
 void Application::Update()
 {
-    
+
     IMGUIMANAGER->Update();
     glfwSwapBuffers(window);
     glfwPollEvents();
@@ -121,7 +121,7 @@ void Application::SetWindowSize(int w, int h)
 
 void Application::SetFullScreen()
 {
-    if(!IsFullScreen)
+    if (!IsFullScreen)
     {
         glfwGetWindowPos(window, &xpos, &ypos);
         glfwGetWindowSize(window, &prevwidth, &prevheight);

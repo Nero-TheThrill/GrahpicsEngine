@@ -11,7 +11,7 @@ ObjectManager::ObjectManager()
 
 void ObjectManager::Init()
 {
- 
+
 }
 
 void ObjectManager::Update()
@@ -39,8 +39,8 @@ void ObjectManager::Update()
 
 void ObjectManager::RegisterObject(Object* obj)
 {
-   // std::cout<<genObjectsNum<<std::endl;
-    genObjectsNum+=1;
+    // std::cout<<genObjectsNum<<std::endl;
+    genObjectsNum += 1;
     objects[genObjectsNum] = obj;
     obj->id = genObjectsNum;
 }

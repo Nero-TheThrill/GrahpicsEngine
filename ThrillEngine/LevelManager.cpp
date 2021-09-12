@@ -18,7 +18,7 @@ void LevelManager::Init()
 
 void LevelManager::Update()
 {
-    if(current_level!=nullptr)
+    if (current_level != nullptr)
         current_level->Update();
 }
 

@@ -17,7 +17,7 @@ void Camera::Projection(float degree, float input_near, float input_far)
     near = input_near;
     far = input_far;
     fov = degree;
-    projection=glm::perspective(glm::radians(degree), window_size.x / window_size.y, near, far);
+    projection = glm::perspective(glm::radians(degree), window_size.x / window_size.y, near, far);
 }
 
 glm::mat4 Camera::GetViewMatrix()
@@ -32,8 +32,8 @@ glm::mat4 Camera::GetProjectionMatrix()
 
 void Camera::Move(glm::vec3 v)
 {
-    cam_position += v*TIMEMANAGER->deltaTime*2.5f;
-    view = glm::lookAt(cam_position, cam_position+cam_target , up);
+    cam_position += v * TIMEMANAGER->deltaTime * 2.5f;
+    view = glm::lookAt(cam_position, cam_position + cam_target, up);
 }
 
 void Camera::MouseMoveUpdate()
@@ -79,13 +79,13 @@ void Camera::MouseMoveUpdate()
 
 void Camera::MouseScrollUpdate()
 {
-    float scroll=Input::GetScroll();
+    float scroll = Input::GetScroll();
     fov -= scroll;
     if (fov < 1.0f)
         fov = 1.0f;
     if (fov > 45.0f)
         fov = 45.0f;
     glm::vec2 window_size = APPLICATION->GetWindowSize();
-    if(window_size.y!=0.0f)
+    if (window_size.y != 0.0f)
         projection = glm::perspective(glm::radians(fov), window_size.x / window_size.y, near, far);
 }

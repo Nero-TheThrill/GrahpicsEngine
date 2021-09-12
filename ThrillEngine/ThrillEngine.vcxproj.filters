@@ -25,6 +25,9 @@
     <Filter Include="Object">
       <UniqueIdentifier>{9cbc66b7-e0de-4335-9b2d-eb709c536109}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\ObjectManager">
+      <UniqueIdentifier>{64d45c99-7700-429d-b0dc-da5fc81b3b87}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Object\Component">
       <UniqueIdentifier>{00653454-f75a-4c77-a1a6-ffa3664c9ef3}</UniqueIdentifier>
     </Filter>
@@ -46,17 +49,11 @@
     <Filter Include="EngineCore\Time">
       <UniqueIdentifier>{1e86e41f-506d-41fa-8405-3e2fd46755c4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Graphics\IMGUI">
-      <UniqueIdentifier>{665bda67-571f-4716-b68f-0f79fc1fd87f}</UniqueIdentifier>
+    <Filter Include="IMGUI">
+      <UniqueIdentifier>{320604a7-a086-4982-9077-c9ec5bb5c666}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Graphics\IMGUI\imGUI">
-      <UniqueIdentifier>{e4537c18-897a-40e0-8784-e8649e735267}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Object\ObjectManager">
-      <UniqueIdentifier>{2fc1ec34-262b-463b-afa2-ff33234d8c0a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Object\Component\Mesh\Sphere">
-      <UniqueIdentifier>{729df902-7e21-45d1-af4b-59b95c6d8510}</UniqueIdentifier>
+    <Filter Include="Graphics\imGUIManager">
+      <UniqueIdentifier>{601d7275-6fe1-4092-8bc0-64ec3415e3da}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -78,6 +75,9 @@
     </ClCompile>
     <ClCompile Include="Material.cpp">
       <Filter>Graphics\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectManager.cpp">
+      <Filter>Object\ObjectManager</Filter>
     </ClCompile>
     <ClCompile Include="LevelManager.cpp">
       <Filter>EngineCore\LevelManager</Filter>
@@ -104,34 +104,28 @@
       <Filter>EngineCore\Time</Filter>
     </ClCompile>
     <ClCompile Include="..\includes\source\imgui\imgui.cpp">
-      <Filter>Graphics\IMGUI\imGUI</Filter>
+      <Filter>IMGUI</Filter>
     </ClCompile>
     <ClCompile Include="..\includes\source\imgui\imgui_demo.cpp">
-      <Filter>Graphics\IMGUI\imGUI</Filter>
+      <Filter>IMGUI</Filter>
     </ClCompile>
     <ClCompile Include="..\includes\source\imgui\imgui_draw.cpp">
-      <Filter>Graphics\IMGUI\imGUI</Filter>
+      <Filter>IMGUI</Filter>
     </ClCompile>
     <ClCompile Include="..\includes\source\imgui\imgui_impl_glfw.cpp">
-      <Filter>Graphics\IMGUI\imGUI</Filter>
+      <Filter>IMGUI</Filter>
     </ClCompile>
     <ClCompile Include="..\includes\source\imgui\imgui_impl_opengl3.cpp">
-      <Filter>Graphics\IMGUI\imGUI</Filter>
+      <Filter>IMGUI</Filter>
     </ClCompile>
     <ClCompile Include="..\includes\source\imgui\imgui_tables.cpp">
-      <Filter>Graphics\IMGUI\imGUI</Filter>
+      <Filter>IMGUI</Filter>
     </ClCompile>
     <ClCompile Include="..\includes\source\imgui\imgui_widgets.cpp">
-      <Filter>Graphics\IMGUI\imGUI</Filter>
+      <Filter>IMGUI</Filter>
     </ClCompile>
     <ClCompile Include="imGUIManager.cpp">
-      <Filter>Graphics\IMGUI</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjectManager.cpp">
-      <Filter>Object\ObjectManager</Filter>
-    </ClCompile>
-    <ClCompile Include="SphereMesh.cpp">
-      <Filter>Object\Component\Mesh\Sphere</Filter>
+      <Filter>Graphics\imGUIManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -153,6 +147,9 @@
     </ClInclude>
     <ClInclude Include="Material.h">
       <Filter>Graphics\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager.h">
+      <Filter>Object\ObjectManager</Filter>
     </ClInclude>
     <ClInclude Include="EngineCore.h">
       <Filter>EngineCore</Filter>
@@ -188,40 +185,31 @@
       <Filter>EngineCore\Time</Filter>
     </ClInclude>
     <ClInclude Include="..\includes\source\imgui\imconfig.h">
-      <Filter>Graphics\IMGUI\imGUI</Filter>
+      <Filter>IMGUI</Filter>
     </ClInclude>
     <ClInclude Include="..\includes\source\imgui\imgui.h">
-      <Filter>Graphics\IMGUI\imGUI</Filter>
+      <Filter>IMGUI</Filter>
     </ClInclude>
     <ClInclude Include="..\includes\source\imgui\imgui_impl_glfw.h">
-      <Filter>Graphics\IMGUI\imGUI</Filter>
+      <Filter>IMGUI</Filter>
     </ClInclude>
     <ClInclude Include="..\includes\source\imgui\imgui_impl_opengl3.h">
-      <Filter>Graphics\IMGUI\imGUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\includes\source\imgui\imgui_impl_opengl3_loader.h">
-      <Filter>Graphics\IMGUI\imGUI</Filter>
+      <Filter>IMGUI</Filter>
     </ClInclude>
     <ClInclude Include="..\includes\source\imgui\imgui_internal.h">
-      <Filter>Graphics\IMGUI\imGUI</Filter>
+      <Filter>IMGUI</Filter>
     </ClInclude>
     <ClInclude Include="..\includes\source\imgui\imstb_rectpack.h">
-      <Filter>Graphics\IMGUI\imGUI</Filter>
+      <Filter>IMGUI</Filter>
     </ClInclude>
     <ClInclude Include="..\includes\source\imgui\imstb_textedit.h">
-      <Filter>Graphics\IMGUI\imGUI</Filter>
+      <Filter>IMGUI</Filter>
     </ClInclude>
     <ClInclude Include="..\includes\source\imgui\imstb_truetype.h">
-      <Filter>Graphics\IMGUI\imGUI</Filter>
+      <Filter>IMGUI</Filter>
     </ClInclude>
     <ClInclude Include="imGUIManager.h">
-      <Filter>Graphics\IMGUI</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectManager.h">
-      <Filter>Object\ObjectManager</Filter>
-    </ClInclude>
-    <ClInclude Include="SphereMesh.h">
-      <Filter>Object\Component\Mesh\Sphere</Filter>
+      <Filter>Graphics\imGUIManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

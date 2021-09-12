@@ -54,7 +54,7 @@ private:
     std::unordered_map < std::string /*id*/, GLuint/*program handle*/> program_handles;
     std::unordered_map<std::string /*id*/, unsigned /*texture*/> textures;
 
-    unsigned int uboMatrices=0, uboLight=0;
+    unsigned int uboMatrices = 0, uboLight = 0;
 
 };
 extern Graphics* GRAPHICS;

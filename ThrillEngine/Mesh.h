@@ -26,10 +26,10 @@ public:
 
 private:
     GLuint VAO;
-    GLuint VBO_positions,VBO_normals;
+    GLuint VBO_positions, VBO_normals;
     GLuint EBO;
     int index_size;
 
-   
+
 };
 

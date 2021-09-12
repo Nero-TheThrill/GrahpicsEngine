@@ -18,7 +18,7 @@ void TestLevel::Init()
     obj1->Pick_Material("MTest");
     obj1->texture.SetTexture("face");
     obj1->SetColor(glm::vec3(1, 1, 1));
-    obj1->transform.Translate(glm::vec3(6,1,0));
+    obj1->transform.Translate(glm::vec3(6, 1, 0));
     obj1->transform.Scale(glm::vec3(0.25, 0.25, 0.25));
 
 
@@ -35,7 +35,7 @@ void TestLevel::Init()
     obj3->transform.Scale(glm::vec3(2, 2, 2));
     obj3->SetColor(glm::vec3(0.812, 0.508, 0.501));
 
-    obj4 = new Object("object4",obj3);
+    obj4 = new Object("object4", obj3);
     obj4->SetMesh(GRAPHICS->GetMesh("sphere"));
     obj4->SetColor(glm::vec3(0.512, 0.508, 0.501));
     obj4->transform.Translate(glm::vec3(4, 0, 0));
@@ -52,10 +52,10 @@ void TestLevel::Init()
     c1->transform.Translate(glm::vec3(7, -3, 0));
     c1->transform.Scale(glm::vec3(0.1, 0.1, 0.1));
 
-    c2 = new Object("circle2",c1);
+    c2 = new Object("circle2", c1);
     c2->SetColor(glm::vec3(0.4, 0.9, 0.1));
 
-    c3 = new Object("circle3",c1);
+    c3 = new Object("circle3", c1);
     c3->SetColor(glm::vec3(0.8, 0.3, 0.8));
 
     c4 = new Object("circle4", c1);
@@ -108,12 +108,12 @@ void TestLevel::Update()
     {
         obj1->transform.Move(glm::vec3(0, 0, 3));
     }
-  /*  if (obj2 != nullptr)
-        obj2->transform.Rotate(TIMEMANAGER->currentFrame * 150.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-    if (obj3 != nullptr)
-        obj3->transform.Rotate(TIMEMANAGER->currentFrame * 150.0f, glm::vec3(0.0f, 1.0f, 0.0f));*/
+    /*  if (obj2 != nullptr)
+          obj2->transform.Rotate(TIMEMANAGER->currentFrame * 150.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+      if (obj3 != nullptr)
+          obj3->transform.Rotate(TIMEMANAGER->currentFrame * 150.0f, glm::vec3(0.0f, 1.0f, 0.0f));*/
     if (c1 != nullptr)
-        c1->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame)*5,-3, sin(TIMEMANAGER->currentFrame) * 5));
+        c1->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame) * 5, -3, sin(TIMEMANAGER->currentFrame) * 5));
     if (c2 != nullptr)
         c2->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + 0.76f) * 5, -3, sin(TIMEMANAGER->currentFrame + 0.76f) * 5));
     if (c3 != nullptr)
@@ -162,7 +162,7 @@ void TestLevel::Update()
 void TestLevel::Close()
 {
     OBJECTMANAGER->DeleteAll();
-    
+
 }
 
 TestLevel::~TestLevel()

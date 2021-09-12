@@ -63,7 +63,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)includes\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;imgui.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -84,7 +83,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)includes\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;imgui.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -108,7 +106,6 @@
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="SphereMesh.cpp" />
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TimeManager.cpp" />
@@ -119,7 +116,6 @@
     <ClInclude Include="..\includes\source\imgui\imgui.h" />
     <ClInclude Include="..\includes\source\imgui\imgui_impl_glfw.h" />
     <ClInclude Include="..\includes\source\imgui\imgui_impl_opengl3.h" />
-    <ClInclude Include="..\includes\source\imgui\imgui_impl_opengl3_loader.h" />
     <ClInclude Include="..\includes\source\imgui\imgui_internal.h" />
     <ClInclude Include="..\includes\source\imgui\imstb_rectpack.h" />
     <ClInclude Include="..\includes\source\imgui\imstb_textedit.h" />
@@ -141,7 +137,6 @@
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Shader.h" />
-    <ClInclude Include="SphereMesh.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TimeManager.h" />
     <ClInclude Include="Transform.h" />
