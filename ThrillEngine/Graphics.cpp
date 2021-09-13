@@ -29,7 +29,7 @@ void Graphics::Init()
 
 void Graphics::Update()
 {
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClearColor(0.001f, 0.289f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
@@ -237,8 +237,8 @@ void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
 
     glm::vec3 tmp_vec3;
     glm::vec2 tmp_vec2;
-    GLint tmp_glInt = 0;
-    GLfloat tmp_glFloat = 0;
+    int tmp_glInt = 0;
+    float tmp_glFloat = 0;
 
 
     if (!in_file.is_open())
@@ -249,6 +249,7 @@ void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
 
     while (std::getline(in_file, line))
     {
+        std::vector<int> tmp_indices;
         std::string prefix = "";
         ss.clear();
         ss.str(line);
@@ -299,9 +300,24 @@ void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
             while (ss >> tmp_glInt)
             {
                 mesh->position_indices.push_back(tmp_glInt - 1);
+                tmp_indices.push_back(tmp_glInt - 1);
                 stride++;
             }
             mesh->face_stride = stride;
+
+            //for (int i = 0; i < stride-2; i++)
+            //{
+            //    glm::vec3 v1 = glm::vec3(mesh->positions_use_indices[tmp_indices[0] * 3], mesh->positions_use_indices[tmp_indices[0] * 3 + 1], mesh->positions_use_indices[tmp_indices[0] * 3 + 2]),
+            //        v2 = glm::vec3(mesh->positions_use_indices[tmp_indices[i + 1] * 3], mesh->positions_use_indices[tmp_indices[i + 1] * 3 + 1], mesh->positions_use_indices[tmp_indices[i + 1] * 3 + 2]),
+            //        v3 = glm::vec3(mesh->positions_use_indices[tmp_indices[i + 2] * 3], mesh->positions_use_indices[tmp_indices[i + 2] * 3 + 1], mesh->positions_use_indices[tmp_indices[i + 2] * 3 + 2]);
+            //    glm::vec3 cross_result = glm::cross(v2 - v1, v3 - v1);
+            //    for (int i = 0; i < stride; i++)
+            //    {
+            //        mesh->normals.push_back(cross_result.x);
+            //        mesh->normals.push_back(cross_result.y);
+            //        mesh->normals.push_back(cross_result.z);
+            //    }
+            //}
         }
         else
         {

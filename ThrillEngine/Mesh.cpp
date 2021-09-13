@@ -42,10 +42,11 @@ void Mesh::Init()
 
             iterator++;
         }
-        float denominator = std::max(std::max(max_val_x - min_val_x, max_val_y - min_val_y), max_val_z - min_val_z) / 2.f;
         float gap_x = max_val_x - min_val_x;
         float gap_y = max_val_y - min_val_y;
         float gap_z = max_val_z - min_val_z;
+        float denominator = std::max(std::max(gap_x, gap_y), gap_z) / 2.f;
+
         float subtract_x = gap_x / 2.f + min_val_x;
         float subtract_y = gap_y / 2.f + min_val_y;
         float subtract_z = gap_z / 2.f + min_val_z;
@@ -114,6 +115,11 @@ void Mesh::Init()
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
+        glGenBuffers(1, &VBO_normals);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO_normals);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * texcoords.size(), &texcoords[0], GL_STATIC_DRAW);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+        glEnableVertexAttribArray(2);
 
 
         glGenBuffers(1, &EBO);

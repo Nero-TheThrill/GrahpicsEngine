@@ -58,6 +58,7 @@ Application::Application()
     glViewport(0, 0, 800, 600);
     glEnable(GL_DEPTH_TEST);
 
+    
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetKeyCallback(window, key_callback);
     glfwSetMouseButtonCallback(window, mouse_button_callback);

@@ -10,7 +10,8 @@ public:
     glm::mat4 GetTransformMatrix();
     ~Transform();
     void Translate(glm::vec3 input);
-    void Rotate(float rad, glm::vec3 v);
+    void Rotate(float degree, glm::vec3 v);
+    void RotateMove(float degree, glm::vec3 v);
     void Scale(glm::vec3 input);
     void Move(glm::vec3 input);
     glm::vec3 position = glm::vec3(0.0f);

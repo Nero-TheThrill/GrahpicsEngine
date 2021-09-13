@@ -32,6 +32,12 @@ void Transform::Rotate(float degree, glm::vec3 v)
     current_rotate_axis = v;
 }
 
+void Transform::RotateMove(float degree, glm::vec3 v)
+{
+    glm::mat4 tmp = glm::mat4(1.0f);
+    rotate *= glm::rotate(tmp, glm::radians(degree), v);
+}
+
 void Transform::Scale(glm::vec3 input)
 {
     glm::mat4 tmp = glm::mat4(1.0f);
