@@ -67,7 +67,7 @@ void Mesh::Init()
             positions.push_back(positions_use_indices[position_indices[i] * 3 + 1]);
             positions.push_back(positions_use_indices[position_indices[i] * 3 + 2]);
         }
-        for (int i = 0; i < positions.size(); i += 9)
+        for (int i = 0; i < positions.size(); i += 3*face_stride)
         {
             glm::vec3 v1 = glm::vec3(positions[i], positions[i + 1], positions[i + 2]),
                 v2 = glm::vec3(positions[i + 3], positions[i + 4], positions[i + 5]),
@@ -86,19 +86,16 @@ void Mesh::Init()
         // position attribute
         glGenBuffers(1, &VBO_positions);
         glBindBuffer(GL_ARRAY_BUFFER, VBO_positions);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * positions.size(), &positions[0], GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * positions.size(), &positions[0], GL_STATIC_DRAW);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
         glEnableVertexAttribArray(0);
 
         glGenBuffers(1, &VBO_normals);
         glBindBuffer(GL_ARRAY_BUFFER, VBO_normals);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * normals.size(), &normals[0], GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * normals.size(), &normals[0], GL_STATIC_DRAW);
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
         glEnableVertexAttribArray(1);
 
-        glGenBuffers(1, &EBO);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLint) * position_indices.size(), &position_indices[0], GL_STATIC_DRAW);
 
         //// texture coord attribute
         //glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
@@ -109,10 +106,10 @@ void Mesh::Init()
         glGenVertexArrays(1, &VAO);
         glBindVertexArray(VAO);
 
-        // position attribute
+
         glGenBuffers(1, &VBO_positions);
         glBindBuffer(GL_ARRAY_BUFFER, VBO_positions);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * positions_normals_use_indices.size(), &positions_normals_use_indices[0], GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * positions_normals_use_indices.size(), &positions_normals_use_indices[0], GL_STATIC_DRAW);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
         glEnableVertexAttribArray(0);
@@ -121,7 +118,7 @@ void Mesh::Init()
 
         glGenBuffers(1, &EBO);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLint) * position_indices.size(), &position_indices[0], GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * position_indices.size(), &position_indices[0], GL_STATIC_DRAW);
 
     }
 }
@@ -135,7 +132,13 @@ void Mesh::Draw()
 {
     Bind();
     if(drawmode== DrawMode::MODEL)
-        glDrawArrays(GL_TRIANGLES, 0, (GLsizei)positions.size());
+    {
+        if (face_stride == 3)
+            glDrawArrays(GL_TRIANGLES, 0, (GLsizei)positions.size());
+        else if (face_stride > 3)
+            glDrawArrays(GL_TRIANGLE_FAN, 0, (GLsizei)positions.size());
+    }
+
     else if(drawmode== DrawMode::SPHERE)
         glDrawElements(GL_TRIANGLES,(GLsizei)position_indices.size(), GL_UNSIGNED_INT, (void*)0);
     UnBind();

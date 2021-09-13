@@ -23,17 +23,17 @@ public:
     void UnBind();
     ~Mesh();
 
-    std::vector<GLfloat> positions_use_indices;
-    std::vector<GLfloat> texcoords;
-    std::vector<GLfloat> normals;
+    std::vector<float> positions_use_indices;
+    std::vector<float> texcoords;
+    std::vector<float> normals;
 
-    std::vector<GLint> position_indices;
-    std::vector<GLint> texcoord_indices;
-    std::vector<GLint> normal_indices;
+    std::vector<int> position_indices;
+    std::vector<int> texcoord_indices;
+    std::vector<int> normal_indices;
 
-    std::vector<GLfloat> positions;
+    std::vector<float> positions;
 
-    std::vector<GLfloat> positions_normals_use_indices;;
+    std::vector<float> positions_normals_use_indices;;
     int face_stride=0;
     std::string name;
 

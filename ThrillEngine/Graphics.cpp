@@ -334,13 +334,13 @@ void Graphics::AddSphereMesh()
     float s, t;
     float sectorCount = 72;
     float stackCount = 24;
-    float sectorStep = 2 * PI / sectorCount;
+    float sectorStep = 2.f * PI / sectorCount;
     float stackStep = PI / stackCount;
     float sectorAngle, stackAngle;
 
     for (int i = 0; i <= stackCount; ++i)
     {
-        stackAngle = PI / 2 - i * stackStep;
+        stackAngle = PI / 2.f - i * stackStep;
         xy = cosf(stackAngle);
         z = sinf(stackAngle);
 
@@ -394,6 +394,7 @@ void Graphics::AddSphereMesh()
 
 
     }
+    sphere->name = "customsphere";
     sphere->drawmode = DrawMode::SPHERE;
     sphere->Init();
     meshes.insert(std::pair<std::string, Mesh*>("customsphere", sphere));
