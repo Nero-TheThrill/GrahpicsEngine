@@ -34,6 +34,15 @@ Application* APPLICATION = nullptr;
 Application::Application()
 {
     APPLICATION = this;
+    monitor = nullptr;
+    imGUI_ = nullptr;
+    prevheight = 600;
+    prevwidth = 800;
+    xpos = 0;
+    ypos = 0;
+    IsFullScreen = false;
+
+
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);

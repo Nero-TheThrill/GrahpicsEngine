@@ -11,7 +11,8 @@
 enum class DrawMode
 {
     MODEL,
-    SPHERE
+    SPHERE,
+    DEFAULT
 };
 class Mesh : public Component
 {
@@ -22,6 +23,9 @@ public:
     void Draw();
     void UnBind();
     ~Mesh();
+
+    void InitModel();
+    void InitSphere();
 
     std::vector<float> positions_use_indices;
     std::vector<float> texcoords;

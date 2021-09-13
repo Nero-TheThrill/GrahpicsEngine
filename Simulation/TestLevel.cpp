@@ -9,6 +9,19 @@
 
 TestLevel::TestLevel()
 {
+    obj1 = nullptr;
+    obj2 = nullptr;
+    obj3 = nullptr;
+    obj4 = nullptr;
+    obj5 = nullptr;
+    c1 = nullptr;
+    c2 = nullptr;
+    c3 = nullptr;
+    c4 = nullptr;
+    c5 = nullptr;
+    c6 = nullptr;
+    c7 = nullptr;
+    c8 = nullptr;
 }
 
 void TestLevel::Init()

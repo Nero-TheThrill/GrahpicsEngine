@@ -20,7 +20,7 @@ void TimeManager::Init()
 
 void TimeManager::Update()
 {
-    currentFrame = glfwGetTime();
+    currentFrame = static_cast<float>(glfwGetTime());
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
 }

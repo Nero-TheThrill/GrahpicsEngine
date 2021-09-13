@@ -12,25 +12,25 @@ int main()
 
 
 
-    GRAPHICS->LoadShader("../shaders/test.vert", "testvert", VERTEX);
-    GRAPHICS->LoadShader("../shaders/test.frag", "testfrag", FRAGMENT);
+    GRAPHICS->LoadShader("../shaders/test.vert", "testvert", ShaderType::VERTEX);
+    GRAPHICS->LoadShader("../shaders/test.frag", "testfrag", ShaderType::FRAGMENT);
     GRAPHICS->CompileShader("testvert", "testfrag", "test");
 
-    GRAPHICS->LoadShader("../shaders/texture.vert", "texturevert", VERTEX);
-    GRAPHICS->LoadShader("../shaders/texture.frag", "texturefrag", FRAGMENT);
+    GRAPHICS->LoadShader("../shaders/texture.vert", "texturevert", ShaderType::VERTEX);
+    GRAPHICS->LoadShader("../shaders/texture.frag", "texturefrag", ShaderType::FRAGMENT);
     GRAPHICS->CompileShader("texturevert", "texturefrag", "texture");
 
-    GRAPHICS->LoadShader("../shaders/light.vert", "lightvert", VERTEX);
-    GRAPHICS->LoadShader("../shaders/light.frag", "lightfrag", FRAGMENT);
+    GRAPHICS->LoadShader("../shaders/light.vert", "lightvert", ShaderType::VERTEX);
+    GRAPHICS->LoadShader("../shaders/light.frag", "lightfrag", ShaderType::FRAGMENT);
     GRAPHICS->CompileShader("lightvert", "lightfrag", "light");
 
 
 
-    GRAPHICS->LoadTexture("../images/awesomeface.png", "face", RGBA);
-    GRAPHICS->LoadTexture("../images/container.jpg", "container", RGB);
-    GRAPHICS->LoadTexture("../images/lol.png", "lol", RGB);
-    GRAPHICS->LoadTexture("../images/earth.bmp", "earth", RGB);
-    GRAPHICS->LoadTexture("../images/moon.bmp", "moon", RGB);
+    GRAPHICS->LoadTexture("../images/awesomeface.png", "face", ImageType::RGBA);
+    GRAPHICS->LoadTexture("../images/container.jpg", "container", ImageType::RGB);
+    GRAPHICS->LoadTexture("../images/lol.png", "lol", ImageType::RGB);
+    GRAPHICS->LoadTexture("../images/earth.bmp", "earth", ImageType::RGB);
+    GRAPHICS->LoadTexture("../images/moon.bmp", "moon", ImageType::RGB);
 
     Material* MTest = new Material("MTest"), * MLight = new Material("MLight"), * MTexture = new Material("MTexture");
     MTest->PickShader("test");

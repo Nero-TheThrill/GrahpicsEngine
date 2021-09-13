@@ -7,7 +7,6 @@
 #include "Input.h"
 
 
-#define PI 3.1415926535
 
 Graphics* GRAPHICS = nullptr;
 
@@ -158,11 +157,11 @@ void Graphics::LoadShader(const std::string& path, const std::string& id, Shader
     shader_file.close();
     switch (type)
     {
-    case FRAGMENT:
+    case ShaderType::FRAGMENT:
         fragment_shaders.insert(std::pair<std::string, std::string>(id, buffer.str()));
         break;
 
-    case VERTEX:
+    case ShaderType::VERTEX:
         vertex_shaders.insert(std::pair<std::string, std::string>(id, buffer.str()));
         break;
 
@@ -212,9 +211,9 @@ void Graphics::LoadTexture(const std::string& path, const std::string& texture_i
         data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
         if (data)
         {
-            if (image_type == RGBA)
+            if (image_type == ImageType::RGBA)
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-            else if (image_type == RGB)
+            else if (image_type == ImageType::RGB)
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
             glGenerateMipmap(GL_TEXTURE_2D);
         }
@@ -235,8 +234,6 @@ void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
     std::ifstream in_file(path);
     std::string line = "";
 
-    glm::vec3 tmp_vec3;
-    glm::vec2 tmp_vec2;
     int tmp_glInt = 0;
     float tmp_glFloat = 0;
 
@@ -335,7 +332,7 @@ Mesh* Graphics::GetMesh(const std::string& mesh_id)
 {
     if (meshes.find(mesh_id) == meshes.end())
     {
-        assert(std::cout << "no mesh" << std::endl);
+        return nullptr;
     }
     else
     {
@@ -345,18 +342,19 @@ Mesh* Graphics::GetMesh(const std::string& mesh_id)
 
 void Graphics::AddSphereMesh()
 {
+    float PI = 3.141596535f;
     Mesh* sphere = new Mesh;
     float x, y, z, xy;
     float s, t;
-    float sectorCount = 72;
-    float stackCount = 24;
+    float sectorCount = 100;
+    float stackCount = 100;
     float sectorStep = 2.f * PI / sectorCount;
     float stackStep = PI / stackCount;
     float sectorAngle, stackAngle;
 
     for (int i = 0; i <= stackCount; ++i)
     {
-        stackAngle = PI / 2.f - i * stackStep;
+        stackAngle = PI / 2.f - (float)i * stackStep;
         xy = cosf(stackAngle);
         z = sinf(stackAngle);
 
@@ -380,8 +378,8 @@ void Graphics::AddSphereMesh()
     int k1, k2;
     for (int i = 0; i < stackCount; ++i)
     {
-        k1 = i * (sectorCount + 1);
-        k2 = k1 + sectorCount + 1;
+        k1 = i * ((int)sectorCount + 1);
+        k2 = k1 + (int)sectorCount + 1;
 
         for (int j = 0; j < sectorCount; ++j, ++k1, ++k2)
         {

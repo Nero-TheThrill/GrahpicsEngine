@@ -46,7 +46,7 @@ void Shader::set(const std::string& value_name, float value) const
 {
     GLint loc = glGetUniformLocation(program_handle, value_name.c_str());
     if (loc >= 0)
-        glUniform1i(loc, value);
+        glUniform1f(loc, value);
     else
         std::cout << "Uniform variable " << value_name << " doesn't exist" << std::endl;
 }

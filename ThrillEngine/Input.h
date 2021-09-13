@@ -4,7 +4,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
-enum KEY_STATE
+enum class KEY_STATE
 {
     UP,
     TRIGGERED,

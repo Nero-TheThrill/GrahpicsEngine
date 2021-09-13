@@ -25,14 +25,14 @@ void Input::SetKeyboard(KEY_STATE keystate, int key)
 {
 	switch (keystate)
 	{
-	case UP:
+	case KEY_STATE::UP:
 		key_pressed[key] = false;
 		break;
-	case TRIGGERED:
+	case KEY_STATE::TRIGGERED:
 		key_triggered[key] = true;
 		key_pressed[key] = true;
 		break;
-	case DOWN:
+	case KEY_STATE::DOWN:
 		key_pressed[key] = true;
 		break;
 	}
