@@ -5,7 +5,8 @@
 #include <iostream>
 
 #include "Input.h"
-
+#include "ModelMesh.h"
+#include "SphereMesh.h"
 
 
 Graphics* GRAPHICS = nullptr;
@@ -26,7 +27,7 @@ void Graphics::Init()
 
 void Graphics::Update()
 {
-    glClearColor(0.001f, 0.289f, 0.3f, 1.0f);
+    glClearColor(0.01f, 0.01f, 0.02f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
@@ -217,7 +218,7 @@ void Graphics::LoadTexture(const std::string& path, const std::string& texture_i
         }
         else
         {
-            std::cout << "Failed to load texture" << std::endl;
+            std::cout << "Failed to load texture" << path <<std::endl;
             return;
         }
         stbi_image_free(data);
@@ -227,7 +228,7 @@ void Graphics::LoadTexture(const std::string& path, const std::string& texture_i
 
 void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
 {
-    Mesh* mesh = new Mesh();
+    ModelMesh* mesh = new ModelMesh();
     std::stringstream ss;
     std::ifstream in_file(path);
     std::string line = "";
@@ -238,14 +239,16 @@ void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
 
     if (!in_file.is_open())
     {
-        assert("load failed");
+        std::cout << "failed to load file : " << path << std::endl;
     }
 
 
     while (std::getline(in_file, line))
     {
-        std::vector<int> tmp_indices;
+
         std::string prefix = "";
+        glm::vec3 tmp_vec3;
+        glm::vec2 tmp_vec2;
         ss.clear();
         ss.str(line);
         ss >> prefix;
@@ -267,35 +270,25 @@ void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
         }
         else if (prefix == "v") // position
         {
-            for (int i = 0; i < 3; i++)
-            {
-                ss >> tmp_glFloat;
-                mesh->positions_use_indices.push_back(tmp_glFloat);
-            }
+            ss >> tmp_vec3.x >> tmp_vec3.y >> tmp_vec3.z;
+            mesh->positions_use_indices.push_back(tmp_vec3);
         }
         else if (prefix == "vt") // texture
         {
-            for (int i = 0; i < 2; i++)
-            {
-                ss >> tmp_glFloat;
-                mesh->texcoords.push_back(tmp_glFloat);
-            }
+            ss >> tmp_vec2.x >> tmp_vec2.y;
+            mesh->texcoords.push_back(tmp_vec2);
         }
         else if (prefix == "vn") // normal
         {
-            for (int i = 0; i < 3; i++)
-            {
-                ss >> tmp_glFloat;
-                mesh->normals.push_back(tmp_glFloat);
-            }
+            ss >> tmp_vec3.x >> tmp_vec3.y >> tmp_vec3.z;
+            mesh->face_normals.push_back(tmp_vec3);
         }
         else if (prefix == "f") // faces
         {
             int stride = 0;
             while (ss >> tmp_glInt)
             {
-                mesh->position_indices.push_back(tmp_glInt - 1);
-                tmp_indices.push_back(tmp_glInt - 1);
+                mesh->indices.push_back(tmp_glInt - 1);
                 stride++;
             }
             mesh->face_stride = stride;
@@ -321,7 +314,6 @@ void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
     }
 
     mesh->name = mesh_id;
-    mesh->drawmode = DrawMode::MODEL;
     mesh->Init();
     meshes.insert(std::pair<std::string, Mesh*>(mesh_id, mesh));
 }
@@ -341,58 +333,56 @@ Mesh* Graphics::GetMesh(const std::string& mesh_id)
 void Graphics::AddSphereMesh()
 {
     float PI = 3.141596535f;
-    Mesh* sphere = new Mesh;
+    SphereMesh* sphere = new SphereMesh();
     float x, y, z, xy;
     float s, t;
-    float sectorCount = 100;
-    float stackCount = 100;
-    float sectorStep = 2.f * PI / sectorCount;
-    float stackStep = PI / stackCount;
+    int sectorCount = 100;
+    int stackCount = 100;
+    float sectorStep = 2.f * PI / static_cast<float>(sectorCount);
+    float stackStep = PI / static_cast<float>(stackCount);
     float sectorAngle, stackAngle;
 
     for (int i = 0; i <= stackCount; ++i)
     {
-        stackAngle = PI / 2.f - (float)i * stackStep;
+        stackAngle = PI / 2.f - static_cast<float>(i) * stackStep;
         xy = cosf(stackAngle);
         z = sinf(stackAngle);
 
 
         for (int j = 0; j <= sectorCount; ++j)
         {
-            sectorAngle = j * sectorStep;
+            sectorAngle = static_cast<float>(j) * sectorStep;
 
             x = xy * cosf(sectorAngle);
             y = xy * sinf(sectorAngle);
-            sphere->positions_normals_use_indices.push_back(x);
-            sphere->positions_normals_use_indices.push_back(y);
-            sphere->positions_normals_use_indices.push_back(z);
-
-            s = (float)j / sectorCount;
-            t = (float)i / stackCount;
-            sphere->texcoords.push_back(s);
-            sphere->texcoords.push_back(t);
+            sphere->positions_normals.push_back(glm::vec3(x,y,z));
+            
+            sphere->vertex_normals.push_back(glm::vec3(x, y, z));
+            s = static_cast<float>(j) / static_cast<float>(sectorCount);
+            t = static_cast<float>(i) / static_cast<float>(stackCount);
+            sphere->texcoords.push_back(glm::vec2(s, t));
         }
     }
     int k1, k2;
     for (int i = 0; i < stackCount; ++i)
     {
-        k1 = i * ((int)sectorCount + 1);
-        k2 = k1 + (int)sectorCount + 1;
+        k1 = i * (sectorCount + 1);
+        k2 = k1 + sectorCount + 1;
 
         for (int j = 0; j < sectorCount; ++j, ++k1, ++k2)
         {
             if (i != 0)
             {
-                sphere->position_indices.push_back(k1);
-                sphere->position_indices.push_back(k2);
-                sphere->position_indices.push_back(k1 + 1);
+                sphere->indices.push_back(k1);
+                sphere->indices.push_back(k2);
+                sphere->indices.push_back(k1 + 1);
             }
 
             if (i != (stackCount - 1))
             {
-                sphere->position_indices.push_back(k1 + 1);
-                sphere->position_indices.push_back(k2);
-                sphere->position_indices.push_back(k2 + 1);
+                sphere->indices.push_back(k1 + 1);
+                sphere->indices.push_back(k2);
+                sphere->indices.push_back(k2 + 1);
             }
 
             //lineIndices.push_back(k1);
@@ -407,7 +397,6 @@ void Graphics::AddSphereMesh()
 
     }
     sphere->name = "customsphere";
-    sphere->drawmode = DrawMode::SPHERE;
     sphere->Init();
     meshes.insert(std::pair<std::string, Mesh*>("customsphere", sphere));
 }

@@ -22,6 +22,6 @@ private:
     float pitch = 0.0f;
     float lastX = 800.0f / 2.0;
     float lastY = 600.0 / 2.0;
-    float near, far;
+    float near=0.1f, far=100;
 };
 

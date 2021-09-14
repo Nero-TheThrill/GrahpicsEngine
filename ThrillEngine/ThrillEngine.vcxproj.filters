@@ -55,6 +55,15 @@
     <Filter Include="Graphics\imGUIManager">
       <UniqueIdentifier>{601d7275-6fe1-4092-8bc0-64ec3415e3da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\Component\Mesh\SphereMesh">
+      <UniqueIdentifier>{bc1afe3a-ca3f-48c2-b874-8afb8e2c4d50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Component\Mesh\ModelMesh">
+      <UniqueIdentifier>{4f86f282-ce10-4560-88be-9c2dc9fbc593}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Component\Mesh\LineMesh">
+      <UniqueIdentifier>{131cd1cc-ac5f-44b2-88d4-6a8539a89d6f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -91,9 +100,6 @@
     <ClCompile Include="Texture.cpp">
       <Filter>Graphics\Material\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="Mesh.cpp">
-      <Filter>Object\Component\Mesh</Filter>
-    </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Graphics\Camera</Filter>
     </ClCompile>
@@ -126,6 +132,15 @@
     </ClCompile>
     <ClCompile Include="imGUIManager.cpp">
       <Filter>Graphics\imGUIManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelMesh.cpp">
+      <Filter>Object\Component\Mesh\ModelMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="SphereMesh.cpp">
+      <Filter>Object\Component\Mesh\SphereMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="LineMesh.cpp">
+      <Filter>Object\Component\Mesh\LineMesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -210,6 +225,15 @@
     </ClInclude>
     <ClInclude Include="imGUIManager.h">
       <Filter>Graphics\imGUIManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelMesh.h">
+      <Filter>Object\Component\Mesh\ModelMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="SphereMesh.h">
+      <Filter>Object\Component\Mesh\SphereMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="LineMesh.h">
+      <Filter>Object\Component\Mesh\LineMesh</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

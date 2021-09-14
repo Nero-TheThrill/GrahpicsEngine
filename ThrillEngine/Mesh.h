@@ -5,48 +5,41 @@
 #include <glm/glm.hpp>
 #include "Component.h"
 
-
-
-
-enum class DrawMode
-{
-    MODEL,
-    SPHERE,
-    DEFAULT
-};
 class Mesh : public Component
 {
 public:
-    Mesh();
-    void Init();
-    void Bind();
-    void Draw();
-    void UnBind();
-    ~Mesh();
+    virtual void Init()=0;
+    virtual void Bind()=0;
+    virtual void Draw()=0;
+    virtual void UnBind()=0;
+    virtual ~Mesh();
 
-    void InitModel();
-    void InitSphere();
 
-    std::vector<float> positions_use_indices;
-    std::vector<float> texcoords;
-    std::vector<float> normals;
+    std::vector<glm::vec3> positions_use_indices;
+    std::vector<glm::vec2> texcoords;
+    std::vector<glm::vec3> face_normals;
+    std::vector<glm::vec3> vertex_normals;
 
-    std::vector<int> position_indices;
-    std::vector<int> texcoord_indices;
-    std::vector<int> normal_indices;
+    std::vector<int> indices;
 
-    std::vector<float> positions;
+    std::vector<glm::vec3> positions;
 
-    std::vector<float> positions_normals_use_indices;;
+    std::vector<glm::vec3> positions_normals;//use indices
     int face_stride=0;
     std::string name;
 
-    DrawMode drawmode;
-private:
-    GLuint VAO;
-    GLuint VBO_positions, VBO_normals;
-    GLuint EBO;
-    int index_size;
-
 };
+
+inline Mesh::~Mesh()
+{
+    positions_use_indices.clear();
+    texcoords.clear();
+    vertex_normals.clear();
+    face_normals.clear();
+    indices.clear();
+
+    positions.clear();
+
+    positions_normals.clear();
+}
 
