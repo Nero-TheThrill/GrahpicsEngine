@@ -36,7 +36,7 @@ void TestLevel::Init()
 
 
     obj2 = new Object("object2");
-    obj2->SetMesh(GRAPHICS->GetMesh("bunny"));
+    obj2->SetMesh(GRAPHICS->GetMesh("lucy_princeton"));
     obj2->Pick_Material("MLight");
     obj2->SetColor(glm::vec3(0.1, 0.3, 0.8));
     obj2->transform.Scale(glm::vec3(1, 1, 1));

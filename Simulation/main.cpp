@@ -46,7 +46,6 @@ int main()
     GRAPHICS->loadObject("../models/bunny_high_poly.obj", "bunny_high_poly");
     GRAPHICS->loadObject("../models/cube.obj", "cube");
     GRAPHICS->loadObject("../models/sphere.obj", "sphere");
-
     GRAPHICS->loadObject("../models/4Sphere.obj", "4Sphere");
     GRAPHICS->loadObject("../models/sphere_modified.obj", "sphere_modified");
     GRAPHICS->loadObject("../models/lucy_princeton.obj", "lucy_princeton");

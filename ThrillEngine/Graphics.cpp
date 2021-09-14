@@ -18,8 +18,6 @@ Graphics::Graphics()
 
 void Graphics::Init()
 {
-
-
     camera.Projection(45, 0.1f, 100.f); //should update every screen size changes.
     camera.View(glm::vec3(0.0f, 0.0f, 20)); //should update every camera moves
     InitPVmatrices();

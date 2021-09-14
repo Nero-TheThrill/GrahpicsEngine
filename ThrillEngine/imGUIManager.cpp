@@ -23,7 +23,6 @@ void imGUIManager::Update()
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-
     {
         ImGui::Begin("GraphicsEngine GUI");
 
@@ -47,16 +46,16 @@ void imGUIManager::Update()
         if (current_item != nullptr)
         {
             glm::vec3 pos = current_item->transform.position;
-            ImGui::SliderFloat3("translation", glm::value_ptr(pos), -10, 10);
+            ImGui::DragFloat3("translation", glm::value_ptr(pos), 0.1f, -FLT_MAX, FLT_MAX);
             current_item->transform.Translate(pos);
 
             glm::vec3 scale = current_item->transform.current_scale;
-            ImGui::SliderFloat3("scale", glm::value_ptr(scale), -10, 10);
+            ImGui::DragFloat3("scale", glm::value_ptr(scale),0.1f, -FLT_MAX, FLT_MAX);
             current_item->transform.Scale(scale);
 
             glm::vec3 rotate = current_item->transform.current_rotate_axis;
             float degree = current_item->transform.current_rotate_degree;
-            ImGui::SliderFloat3("rotate axis", glm::value_ptr(rotate), 0, 1);
+            ImGui::DragFloat3("rotate axis", glm::value_ptr(rotate), 0.01f, -1,1);
             ImGui::DragFloat("degree", &degree);
             current_item->transform.Rotate(degree, rotate);
 

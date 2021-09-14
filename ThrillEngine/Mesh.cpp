@@ -107,17 +107,17 @@ void Mesh::InitModel()
 
         iterator++;
     }
-    for (int i = 0; i < position_indices.size(); i++)
+    for (int i = 0; i < static_cast<int>(position_indices.size()); i++)
     {
-        positions.push_back(positions_use_indices[position_indices[i] * (int)3]);
-        positions.push_back(positions_use_indices[position_indices[i] * (int)3 + 1]);
-        positions.push_back(positions_use_indices[position_indices[i] * (int)3 + 2]);
+        positions.push_back(positions_use_indices[position_indices[i] * 3]);
+        positions.push_back(positions_use_indices[position_indices[i] * 3 + 1]);
+        positions.push_back(positions_use_indices[position_indices[i] * 3 + 2]);
     }
-    for (int i = 0; i < positions.size(); i += 3 * face_stride)
+    for (int i = 0; i < static_cast<int>(positions.size()); i += 3 * face_stride)
     {
-        glm::vec3 v1 = glm::vec3(positions[i], positions[i + (int)1], positions[i + (int)2]),
-            v2 = glm::vec3(positions[i + (int)3], positions[i + (int)4], positions[i + (int)5]),
-            v3 = glm::vec3(positions[i + (int)6], positions[i + (int)7], positions[i + (int)8]);
+        glm::vec3 v1 = glm::vec3(positions[i], positions[i + 1], positions[i + 2]),
+            v2 = glm::vec3(positions[i + 3], positions[i + 4], positions[i + 5]),
+            v3 = glm::vec3(positions[i + 6], positions[i + 7], positions[i + 8]);
         glm::vec3 cross_result = glm::cross(v2 - v1, v3 - v1);
         for (int j = 0; j < face_stride; j++)
         {
