@@ -22,6 +22,7 @@ void imGUIManager::Update()
 {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
+  //  ImGui::ShowDemoWindow();
     ImGui::NewFrame();
     {
         ImGui::Begin("GraphicsEngine GUI");

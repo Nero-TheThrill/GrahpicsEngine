@@ -304,19 +304,6 @@ void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
             }
             mesh->face_stride = stride;
 
-            //for (int i = 0; i < stride-2; i++)
-            //{
-            //    glm::vec3 v1 = glm::vec3(mesh->positions_use_indices[tmp_indices[0] * 3], mesh->positions_use_indices[tmp_indices[0] * 3 + 1], mesh->positions_use_indices[tmp_indices[0] * 3 + 2]),
-            //        v2 = glm::vec3(mesh->positions_use_indices[tmp_indices[i + 1] * 3], mesh->positions_use_indices[tmp_indices[i + 1] * 3 + 1], mesh->positions_use_indices[tmp_indices[i + 1] * 3 + 2]),
-            //        v3 = glm::vec3(mesh->positions_use_indices[tmp_indices[i + 2] * 3], mesh->positions_use_indices[tmp_indices[i + 2] * 3 + 1], mesh->positions_use_indices[tmp_indices[i + 2] * 3 + 2]);
-            //    glm::vec3 cross_result = glm::cross(v2 - v1, v3 - v1);
-            //    for (int i = 0; i < stride; i++)
-            //    {
-            //        mesh->normals.push_back(cross_result.x);
-            //        mesh->normals.push_back(cross_result.y);
-            //        mesh->normals.push_back(cross_result.z);
-            //    }
-            //}
         }
         else
         {
@@ -379,7 +366,7 @@ void Graphics::AddSphereMesh()
 
             x = xy * cosf(sectorAngle);
             y = xy * sinf(sectorAngle);
-            sphere->positions_normals.push_back(glm::vec3(x,y,z));
+            sphere->positions.push_back(glm::vec3(x,y,z));
             
             sphere->vertex_normals.push_back(glm::vec3(x, y, z));
             s = static_cast<float>(j) / static_cast<float>(sectorCount);
@@ -393,7 +380,7 @@ void Graphics::AddSphereMesh()
         k1 = i * (sectorCount + 1);
         k2 = k1 + sectorCount + 1;
 
-        for (int j = 0; j < sectorCount; ++j, ++k1, ++k2)
+        for (int j = 0; j < sectorCount; j++, k1++, k2++)
         {
             if (i != 0)
             {
@@ -408,14 +395,6 @@ void Graphics::AddSphereMesh()
                 sphere->indices.push_back(k2);
                 sphere->indices.push_back(k2 + 1);
             }
-
-            //lineIndices.push_back(k1);
-            //lineIndices.push_back(k2);
-            //if (i != 0) 
-            //{
-            //    lineIndices.push_back(k1);
-            //    lineIndices.push_back(k1 + 1);
-            //}
         }
 
 

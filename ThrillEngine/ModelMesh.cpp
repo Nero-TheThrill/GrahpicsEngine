@@ -1,5 +1,7 @@
 #include "ModelMesh.h"
-#include <unordered_map>
+#include <unordered_set>
+#define GLM_ENABLE_EXPERIMENTAL
+#include "glm/gtx/string_cast.hpp"
 
 ModelMesh::ModelMesh()
 {
@@ -8,6 +10,7 @@ ModelMesh::ModelMesh()
     VBO_normals = 0;
     EBO = 0;
     index_size = 0;
+
 }
 
 void ModelMesh::Init()
@@ -35,6 +38,31 @@ void ModelMesh::Init()
     //// texture coord attribute
     //glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
     //glEnableVertexAttribArray(2);
+
+
+
+        /*  vertex normals
+
+    glGenBuffers(1, &VBO_positions);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO_positions);
+    glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 3 * positions_use_indices.size()), &positions_use_indices[0], GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+    glEnableVertexAttribArray(0);
+
+    glGenBuffers(1, &VBO_normals);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO_normals);
+    glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float)* 3 * vertex_normals.size()), &vertex_normals[0], GL_STATIC_DRAW);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+    glEnableVertexAttribArray(1);
+
+    glGenBuffers(1, &EBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(int) * indices.size()), &indices[0], GL_STATIC_DRAW);
+
+
+    ////
+        glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()*3),GL_UNSIGNED_INT,(void*)0 );
+     */
 }
 
 void ModelMesh::Bind()
@@ -78,6 +106,10 @@ void ModelMesh::AdjustVerticesScale()
 
 void ModelMesh::GenerateFaceNormals()
 {
+    glm::vec3 v;
+    std::unordered_set <std::string> hvec;
+    for (auto p : positions_use_indices)
+        vertex_normals.push_back(glm::vec3(0));
     for (int i = 0; i < static_cast<int>(positions.size()); i +=face_stride)
     {
         glm::vec3 v1 = positions[i],
@@ -87,23 +119,17 @@ void ModelMesh::GenerateFaceNormals()
         for (int j = 0; j < face_stride; j++)
         {
             face_normals.push_back(cross_result);
+            std::string vstring = std::to_string(indices[i] + j) + "/" + glm::to_string(cross_result);
+            if (hvec.find(vstring)== hvec.end())
+            {
+                hvec.insert(vstring);
+                vertex_normals[indices[i+j]] += cross_result;
+            }
         }
     }
 }
 
 void ModelMesh::GenerateVertexNormals()
 {
-    //int iterator = 0,iterator_iner=0;
-    //for (auto v : positions_use_indices)
-    //{
-    //    for (auto i : indices)
-    //    {
-    //        //if(i==iterator&&sum.find(face_normals[i])!=sum.end())
-    //        //{
-    //        //    sum.insert(std::pair<glm::vec3,int>(face_normals[i], iterator));
-    //        //}
-    //        iterator_iner++;
-    //    }
-    //    iterator++;
-    //}
+
 }

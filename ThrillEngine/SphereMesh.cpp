@@ -19,7 +19,7 @@ void SphereMesh::Init()
     glGenBuffers(1, &VBO_positions);
     glBindBuffer(GL_ARRAY_BUFFER, VBO_positions);
 
-    glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float)*3 * positions_normals.size()), &positions_normals[0], GL_STATIC_DRAW); 
+    glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float)*3 * positions.size()), &positions[0], GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
     glGenBuffers(1, &VBO_normals);
