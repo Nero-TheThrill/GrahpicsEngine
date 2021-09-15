@@ -8,7 +8,6 @@
 #include "ModelMesh.h"
 #include "SphereMesh.h"
 
-
 Graphics* GRAPHICS = nullptr;
 
 
@@ -287,7 +286,7 @@ void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
         else if (prefix == "vt") // texture
         {
             ss >> tmp_vec2.x >> tmp_vec2.y;
-            mesh->texcoords.push_back(tmp_vec2);
+            mesh->texcoords_use_indices.push_back(tmp_vec2);
         }
         else if (prefix == "vn") // normal
         {
@@ -343,12 +342,12 @@ Mesh* Graphics::GetMesh(const std::string& mesh_id)
 
 void Graphics::AddSphereMesh()
 {
-    float PI = 3.141596535f;
+    float PI = 3.141592f;
     SphereMesh* sphere = new SphereMesh();
     float x, y, z, xy;
     float s, t;
-    int sectorCount = 50;
-    int stackCount = 50;
+    int sectorCount = 100;
+    int stackCount = 100;
     float sectorStep = 2.f * PI / static_cast<float>(sectorCount);
     float stackStep = PI / static_cast<float>(stackCount);
     float sectorAngle, stackAngle;
@@ -356,22 +355,21 @@ void Graphics::AddSphereMesh()
     for (int i = 0; i <= stackCount; ++i)
     {
         stackAngle = PI / 2.f - static_cast<float>(i) * stackStep;
-        xy = cosf(stackAngle);
-        z = sinf(stackAngle);
+        xy = cos(stackAngle);
+        z = sin(stackAngle);
 
 
         for (int j = 0; j <= sectorCount; ++j)
         {
             sectorAngle = static_cast<float>(j) * sectorStep;
 
-            x = xy * cosf(sectorAngle);
-            y = xy * sinf(sectorAngle);
-            sphere->positions.push_back(glm::vec3(x,y,z));
-            
+            x = xy * cos(sectorAngle);
+            y = xy * sin(sectorAngle);
+            sphere->positions_use_indices.push_back(glm::vec3(x,y,z));
             sphere->vertex_normals.push_back(glm::vec3(x, y, z));
             s = static_cast<float>(j) / static_cast<float>(sectorCount);
             t = static_cast<float>(i) / static_cast<float>(stackCount);
-            sphere->texcoords.push_back(glm::vec2(s, t));
+            sphere->texcoords_use_indices.push_back(glm::vec2(s, t));
         }
     }
     int k1, k2;

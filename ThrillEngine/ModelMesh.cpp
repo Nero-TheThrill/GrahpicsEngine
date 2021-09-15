@@ -42,7 +42,10 @@ void ModelMesh::Draw()
     }
     else if(n_mode==1)
     {
-         glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size() * 3), GL_UNSIGNED_INT, (void*)0);
+         if (face_stride == 3)
+             glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size() * 3), GL_UNSIGNED_INT, (void*)0);
+         else if (face_stride > 3)
+             glDrawElements(GL_TRIANGLE_FAN, static_cast<GLsizei>(indices.size() * 3), GL_UNSIGNED_INT, (void*)0);
     }
     UnBind();
 }
