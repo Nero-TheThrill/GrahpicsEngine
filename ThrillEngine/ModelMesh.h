@@ -10,9 +10,11 @@ public:
     void UnBind() override;
     void Draw() override;
     ~ModelMesh() override;
-    void AdjustVerticesScale();
-    void GenerateFaceNormals();
-    void GenerateVertexNormals();
+    void GeneratePositionsWithIndices();
+    void GenerateNormals();
+    void BindData();
+    void UnBindData();
+    void ChangeMode(int mode) override;
 
 private:
     GLuint VAO;

@@ -31,7 +31,7 @@ void SphereMesh::Init()
     glGenBuffers(1, &VBO_texcoords);
     glBindBuffer(GL_ARRAY_BUFFER, VBO_texcoords);
 
-    glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 3 * texcoords.size()), &texcoords[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * texcoords.size()), &texcoords[0], GL_STATIC_DRAW);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 

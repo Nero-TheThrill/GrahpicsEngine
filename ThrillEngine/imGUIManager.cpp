@@ -22,9 +22,9 @@ void imGUIManager::Update()
 {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
-  //  ImGui::ShowDemoWindow();
+
     ImGui::NewFrame();
-    {
+    {    ImGui::ShowDemoWindow();
         ImGui::Begin("GraphicsEngine GUI");
 
 
@@ -78,6 +78,7 @@ void imGUIManager::Update()
                 }
                 ImGui::EndCombo();
             }
+
             std::unordered_map<std::string, Mesh*> meshes = GRAPHICS->GetAllMeshes();
             std::string current_mesh = current_item->mesh->name;
             if (ImGui::BeginCombo("select_mesh", current_mesh.c_str()))
@@ -95,6 +96,10 @@ void imGUIManager::Update()
                 }
                 ImGui::EndCombo();
             }
+            int e = current_item->mesh->n_mode;
+            ImGui::RadioButton("face normal", &e, 0); ImGui::SameLine();
+            ImGui::RadioButton("vertex normal", &e, 1);
+            current_item->mesh->ChangeMode(e);
          
         }
 
