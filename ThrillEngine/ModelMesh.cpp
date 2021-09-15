@@ -1,6 +1,4 @@
-#define GLM_ENABLE_EXPERIMENTAL
 #include "ModelMesh.h"
-#include "glm/gtx/hash.hpp"
 #include <unordered_map>
 
 ModelMesh::ModelMesh()
@@ -16,6 +14,7 @@ void ModelMesh::Init()
 {
     AdjustVerticesScale();
     GenerateFaceNormals();
+    GenerateVertexNormals();
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
 
@@ -68,43 +67,13 @@ ModelMesh::~ModelMesh()
 
 void ModelMesh::AdjustVerticesScale()
 {
-    float min_val_x = positions_use_indices[0].x;
-    float max_val_x = min_val_x;
-    float max_val_y = min_val_x, min_val_y = min_val_x;
-    float max_val_z = min_val_x, min_val_z = min_val_x;
-    int iterator = 0;
-    for (auto p : positions_use_indices)
-    {
 
-        min_val_x = std::min(p.x, min_val_x);
-        max_val_x = std::max(p.x, max_val_x);
 
-        min_val_y = std::min(p.y, min_val_y);
-        max_val_y = std::max(p.y, max_val_y);
-
-        min_val_z = std::min(p.z, min_val_z);
-        max_val_z = std::max(p.z, max_val_z);
-
-        iterator++;
-    }
-    float gap_x = max_val_x - min_val_x;
-    float gap_y = max_val_y - min_val_y;
-    float gap_z = max_val_z - min_val_z;
-    float denominator = std::max(std::max(gap_x, gap_y), gap_z) / 2.f;
-
-    float subtract_x = gap_x / 2.f + min_val_x;
-    float subtract_y = gap_y / 2.f + min_val_y;
-    float subtract_z = gap_z / 2.f + min_val_z;
-    iterator = 0;
-    for (auto p : positions_use_indices)
-    {
-        positions_use_indices[iterator] = glm::vec3((p.x - subtract_x) / denominator,(p.y - subtract_y) / denominator,(p.z - subtract_z) / denominator);
-        iterator++;
-    }
     for (int i = 0; i < static_cast<int>(indices.size()); i++)
     {
         positions.push_back(positions_use_indices[indices[i]]);
     }
+
 }
 
 void ModelMesh::GenerateFaceNormals()
@@ -114,7 +83,7 @@ void ModelMesh::GenerateFaceNormals()
         glm::vec3 v1 = positions[i],
             v2 = positions[i+1],
             v3 = positions[i+2];
-        glm::vec3 cross_result = glm::cross(v2 - v1, v3 - v1);
+        glm::vec3 cross_result = glm::normalize(glm::cross(v2 - v1, v3 - v1));
         for (int j = 0; j < face_stride; j++)
         {
             face_normals.push_back(cross_result);
@@ -124,6 +93,17 @@ void ModelMesh::GenerateFaceNormals()
 
 void ModelMesh::GenerateVertexNormals()
 {
-    std::unordered_map<glm::vec3, int> check_already_added;
-    check_already_added.clear();
+    //int iterator = 0,iterator_iner=0;
+    //for (auto v : positions_use_indices)
+    //{
+    //    for (auto i : indices)
+    //    {
+    //        //if(i==iterator&&sum.find(face_normals[i])!=sum.end())
+    //        //{
+    //        //    sum.insert(std::pair<glm::vec3,int>(face_normals[i], iterator));
+    //        //}
+    //        iterator_iner++;
+    //    }
+    //    iterator++;
+    //}
 }

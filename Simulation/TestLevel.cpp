@@ -45,7 +45,7 @@ void TestLevel::Init()
     obj3 = new Object("rabbit");
     obj3->SetMesh(GRAPHICS->GetMesh("bunny_high_poly"));
     obj3->Pick_Material("MLight");
-    obj3->transform.Translate(glm::vec3(-0.2f, 0.3f, -0.3f));
+    obj3->transform.Translate(glm::vec3(-0.2f, 0.8f, 0.0f));
     obj3->SetColor(glm::vec3(0.812, 0.508, 0.501));
 
     obj4 = new Object("sphere loaded from file", obj3);

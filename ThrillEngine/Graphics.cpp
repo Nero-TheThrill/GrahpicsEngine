@@ -242,7 +242,10 @@ void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
         std::cout << "failed to load file : " << path << std::endl;
     }
 
-
+    float min_val_x = FLT_MAX;
+    float max_val_x = FLT_MIN;
+    float max_val_y = max_val_x, min_val_y = min_val_x;
+    float max_val_z = max_val_x, min_val_z = min_val_x;
     while (std::getline(in_file, line))
     {
 
@@ -272,6 +275,14 @@ void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
         {
             ss >> tmp_vec3.x >> tmp_vec3.y >> tmp_vec3.z;
             mesh->positions_use_indices.push_back(tmp_vec3);
+            min_val_x = std::min(tmp_vec3.x, min_val_x);
+            max_val_x = std::max(tmp_vec3.x, max_val_x);
+
+            min_val_y = std::min(tmp_vec3.y, min_val_y);
+            max_val_y = std::max(tmp_vec3.y, max_val_y);
+
+            min_val_z = std::min(tmp_vec3.z, min_val_z);
+            max_val_z = std::max(tmp_vec3.z, max_val_z);
         }
         else if (prefix == "vt") // texture
         {
@@ -312,7 +323,20 @@ void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
 
         }
     }
+    float gap_x = max_val_x - min_val_x;
+    float gap_y = max_val_y - min_val_y;
+    float gap_z = max_val_z - min_val_z;
+    float denominator = std::max(std::max(gap_x, gap_y), gap_z) / 2.f;
 
+    float subtract_x = gap_x / 2.f + min_val_x;
+    float subtract_y = gap_y / 2.f + min_val_y;
+    float subtract_z = gap_z / 2.f + min_val_z;
+    int iterator = 0;
+    for (auto p : mesh->positions_use_indices)
+    {
+        mesh->positions_use_indices[iterator] = glm::vec3((p.x - subtract_x) / denominator, (p.y - subtract_y) / denominator, (p.z - subtract_z) / denominator);
+        iterator++;
+    }
     mesh->name = mesh_id;
     mesh->Init();
     meshes.insert(std::pair<std::string, Mesh*>(mesh_id, mesh));
