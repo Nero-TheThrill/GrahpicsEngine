@@ -24,7 +24,7 @@ void imGUIManager::Update()
     ImGui_ImplGlfw_NewFrame();
 
     ImGui::NewFrame();
-    {    ImGui::ShowDemoWindow();
+    { 
         ImGui::Begin("GraphicsEngine GUI");
 
 
@@ -96,11 +96,13 @@ void imGUIManager::Update()
                 }
                 ImGui::EndCombo();
             }
-            int e = current_item->mesh->n_mode;
-            ImGui::RadioButton("face normal", &e, 0); ImGui::SameLine();
-            ImGui::RadioButton("vertex normal", &e, 1);
-            current_item->mesh->ChangeMode(e);
-         
+            int mode = current_item->mesh->n_mode;
+            ImGui::RadioButton("face normal", &mode, 0); ImGui::SameLine();
+            ImGui::RadioButton("vertex normal", &mode, 1);
+            current_item->mesh->ChangeMode(mode);
+            bool drawnormal = current_item->mesh->shouldDrawNormals;
+            ImGui::Checkbox("draw normals", &drawnormal);
+            current_item->mesh->shouldDrawNormals=drawnormal;
         }
 
         ImGui::End();

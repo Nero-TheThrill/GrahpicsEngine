@@ -40,7 +40,7 @@ int main()
     MTest->set("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
     MTexture->set("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
     MLight->set("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-
+    GRAPHICS->loadObject("../models/cube2.obj", "cube2");
     GRAPHICS->loadObject("../models/cube.obj", "cube");
     GRAPHICS->loadObject("../models/bunny.obj", "bunny");
     GRAPHICS->loadObject("../models/bunny_high_poly.obj", "bunny_high_poly");
@@ -51,16 +51,19 @@ int main()
     GRAPHICS->loadObject("../models/lucy_princeton.obj", "lucy_princeton");
 
     GRAPHICS->loadObject("../models/quad.obj", "quad");
-    GRAPHICS->loadObject("../models/cube2.obj", "cube2");
+
     GRAPHICS->loadObject("../models/triangle.obj", "triangle");
     GRAPHICS->AddSphereMesh();
+
+
+    ThrillEngine->Init();
+
 
     LEVELMANAGER->InsertLevel(new TestLevel(), 1);
     LEVELMANAGER->ChangeLevel(1);
     LEVELMANAGER->InsertLevel(new TestLevel1(), 2);
 
 
-    ThrillEngine->Init();
 
 
 

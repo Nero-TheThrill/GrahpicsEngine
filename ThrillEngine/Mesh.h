@@ -25,11 +25,14 @@ public:
     std::vector<glm::vec3> positions;
     std::vector<glm::vec2> texcoords;
 
+    std::vector<glm::vec3> face_normal_lines;
+    std::vector<glm::vec3> vertex_normal_lines;
+
     std::vector<glm::vec3> positions_normals;//use indices
     int face_stride=0;
     std::string name;
     int n_mode = 1; // 0 : face  1 : vertex
-
+    bool shouldDrawNormals = false;
 };
 
 inline Mesh::~Mesh()
@@ -39,10 +42,10 @@ inline Mesh::~Mesh()
     texcoords.clear();
     vertex_normals.clear();
     face_normals.clear();
+    vertex_normal_lines.clear();
+    face_normal_lines.clear();
     indices.clear();
-
     positions.clear();
-
     positions_normals.clear();
 }
 

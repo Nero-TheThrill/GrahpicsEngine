@@ -21,6 +21,7 @@ void SphereMesh::Init()
         texcoords.push_back(texcoords_use_indices[indices[i]]);
     }
     GenerateNormals();
+    GenerateNormalLines();
     BindData();   
 }
 
@@ -42,13 +43,42 @@ void SphereMesh::Draw()
     else if( n_mode==1)
         glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()*3), GL_UNSIGNED_INT, (void*)0);
     UnBind();
+    if (shouldDrawNormals)
+    {
+        UnBindData();
+        if (n_mode == 0)
+        {
+            glGenVertexArrays(1, &VAO);
+            glBindVertexArray(VAO);
+
+            glGenBuffers(1, &VBO_positions);
+            glBindBuffer(GL_ARRAY_BUFFER, VBO_positions);
+            glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 3 * face_normal_lines.size()), &face_normal_lines[0], GL_STATIC_DRAW);
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+            glEnableVertexAttribArray(0);
+
+            glDrawArrays(GL_LINES, 0, static_cast<GLsizei>(vertex_normal_lines.size() * 3));
+        }
+        else if (n_mode == 1)
+        {
+            glGenVertexArrays(1, &VAO);
+            glBindVertexArray(VAO);
+
+            glGenBuffers(1, &VBO_positions);
+            glBindBuffer(GL_ARRAY_BUFFER, VBO_positions);
+            glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 3 * vertex_normal_lines.size()), &vertex_normal_lines[0], GL_STATIC_DRAW);
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+            glEnableVertexAttribArray(0);
+
+            glDrawArrays(GL_LINES, 0, static_cast<GLsizei>(vertex_normal_lines.size() * 3));
+        }
+        UnBindData();
+        BindData();
+    }
 }
 
 void SphereMesh::GenerateNormals()
 {
-    //std::unordered_set<std::string> hvec;
-    //for (auto p : positions_use_indices)
-    //    vertex_normals.push_back(glm::vec3(0));
     for (int i = 0; i < static_cast<int>(positions.size()); i += 3)
     {
         glm::vec3 v1 = positions[i],
@@ -58,13 +88,28 @@ void SphereMesh::GenerateNormals()
         for (int j = 0; j < 3; j++)
         {
             face_normals.push_back(cross_result);
-            //std::string vstring = std::to_string(indices[i] + j) + "/" + glm::to_string(cross_result);
-            //if (hvec.find(vstring) == hvec.end())
-            //{
-            //    hvec.insert(vstring);
-            //    vertex_normals[indices[i + j]] += cross_result;
-            //}
         }
+    }
+}
+
+void SphereMesh::GenerateNormalLines()
+{
+    for (int i = 0; i < static_cast<int>(positions_use_indices.size()); i++)
+    {
+        vertex_normal_lines.push_back(positions_use_indices[i]);
+        vertex_normal_lines.push_back(positions_use_indices[i] + vertex_normals[i]);
+    }
+    for (int i = 0; i < static_cast<int>(positions.size()); i += 3)
+    {
+        glm::vec3 midpoint = glm::vec3(0);
+        for (int j = 0; j < 3; j++)
+        {
+            midpoint += positions[i + j];
+        }
+        midpoint /= 3;
+
+        face_normal_lines.push_back(midpoint);
+        face_normal_lines.push_back(midpoint + face_normals[i]);
     }
 }
 
@@ -127,7 +172,6 @@ void SphereMesh::BindData()
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
         glEnableVertexAttribArray(2);
-
     }
     else if (n_mode == 1)
     {

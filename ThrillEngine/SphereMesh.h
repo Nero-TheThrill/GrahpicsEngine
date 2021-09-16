@@ -10,6 +10,7 @@ public:
     void UnBind() override;
     void Draw() override;
     void GenerateNormals();
+    void GenerateNormalLines();
     ~SphereMesh() override;
     void ChangeMode(int mode) override;
     void UnBindData();

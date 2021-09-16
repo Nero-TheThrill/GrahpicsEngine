@@ -26,6 +26,13 @@ TestLevel::TestLevel()
 
 void TestLevel::Init()
 {
+    orbit = new Object("orbit");
+    orbit->SetMesh(GRAPHICS->GetMesh("line"));
+    orbit->Pick_Material("MTest");
+    orbit->SetColor(glm::vec3(1, 1, 1));
+    orbit->transform.Translate(glm::vec3(0, -3, 0));
+    orbit->transform.Scale(glm::vec3(9,9,9));
+
     obj1 = new Object("light");
     obj1->SetMesh(GRAPHICS->GetMesh("customsphere"));
     obj1->Pick_Material("MTest");

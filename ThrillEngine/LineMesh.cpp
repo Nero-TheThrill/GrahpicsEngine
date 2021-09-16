@@ -11,27 +11,26 @@ LineMesh::LineMesh()
 
 void LineMesh::Init()
 {
+    for(int i=0;i<1000;i++)
+    {
+        glm::vec3 input1 = glm::vec3(cos(static_cast<float>(i) / 50.f), 0, sin(static_cast<float>(i) / 50.f));
+        glm::vec3 input2 = glm::vec3(cos(static_cast<float>(i+1) / 50.f), 0, sin(static_cast<float>(i+1) / 50.f));
+        positions.push_back(input1);
+        positions.push_back(input2);
+    }
+
+
+
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
 
 
     glGenBuffers(1, &VBO_positions);
     glBindBuffer(GL_ARRAY_BUFFER, VBO_positions);
-    glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * positions_normals.size()), &positions_normals[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * positions.size()), &positions[0], GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
     glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
-    glGenBuffers(1, &VBO_normals);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO_normals);
-    glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * texcoords.size()), &texcoords[0], GL_STATIC_DRAW);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
-    glEnableVertexAttribArray(2);
 
-
-    glGenBuffers(1, &EBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(int) * indices.size()), &indices[0], GL_STATIC_DRAW);
 }
 
 void LineMesh::Bind()
@@ -47,7 +46,7 @@ void LineMesh::UnBind()
 void LineMesh::Draw()
 {
     Bind();
-    glDrawElements(GL_LINES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, (void*)0);
+    glDrawArrays(GL_LINES,0, static_cast<GLsizei>(positions.size()));
     UnBind();
 }
 

@@ -12,6 +12,7 @@ public:
     ~ModelMesh() override;
     void GeneratePositionsWithIndices();
     void GenerateNormals();
+    void GenerateNormalLines();
     void BindData();
     void UnBindData();
     void ChangeMode(int mode) override;

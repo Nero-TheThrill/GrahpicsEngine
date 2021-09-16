@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "Input.h"
+#include "LineMesh.h"
 #include "ModelMesh.h"
 #include "SphereMesh.h"
 
@@ -22,6 +23,10 @@ void Graphics::Init()
     camera.View(glm::vec3(0.0f, 0.0f, 20)); //should update every camera moves
     InitPVmatrices();
     UpdatePVmatrices();
+    LineMesh* linemesh = new LineMesh();
+    linemesh->name = "linemesh";
+     linemesh->Init();
+    meshes.insert(std::pair<std::string, Mesh*>("line", linemesh));
 }
 
 void Graphics::Update()
@@ -342,12 +347,12 @@ Mesh* Graphics::GetMesh(const std::string& mesh_id)
 
 void Graphics::AddSphereMesh()
 {
-    float PI = 3.141592f;
+    float PI = 22.f/7.f;
     SphereMesh* sphere = new SphereMesh();
     float x, y, z, xy;
     float s, t;
-    int sectorCount = 100;
-    int stackCount = 100;
+    int sectorCount = 50;
+    int stackCount = 50;
     float sectorStep = 2.f * PI / static_cast<float>(sectorCount);
     float stackStep = PI / static_cast<float>(stackCount);
     float sectorAngle, stackAngle;
