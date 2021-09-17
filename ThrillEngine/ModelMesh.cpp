@@ -20,6 +20,7 @@ void ModelMesh::Init()
     GenerateNormals();
     GenerateNormalLines();
     BindData();
+    std::cout << "ModelMesh <" << name << "> Initialized" << std::endl;
 }
 
 void ModelMesh::Bind()
@@ -90,6 +91,7 @@ ModelMesh::~ModelMesh()
     glDeleteBuffers(1, &VBO_positions);
     glDeleteBuffers(1, &VBO_normals);
     glDeleteBuffers(1, &EBO);
+    std::cout << "ModelMesh <" << name << "> Destructor Called" << std::endl;
 }
 
 void ModelMesh::GeneratePositionsWithIndices()

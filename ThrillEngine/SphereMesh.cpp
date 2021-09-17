@@ -22,7 +22,8 @@ void SphereMesh::Init()
     }
     GenerateNormals();
     GenerateNormalLines();
-    BindData();   
+    BindData();
+    std::cout << "SphereMesh <" << name << "> Initialized" << std::endl;
 }
 
 void SphereMesh::Bind()
@@ -46,11 +47,10 @@ void SphereMesh::Draw()
     if (shouldDrawNormals)
     {
         UnBindData();
+        glGenVertexArrays(1, &VAO);
+        glBindVertexArray(VAO);
         if (n_mode == 0)
         {
-            glGenVertexArrays(1, &VAO);
-            glBindVertexArray(VAO);
-
             glGenBuffers(1, &VBO_positions);
             glBindBuffer(GL_ARRAY_BUFFER, VBO_positions);
             glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 3 * face_normal_lines.size()), &face_normal_lines[0], GL_STATIC_DRAW);
@@ -61,9 +61,6 @@ void SphereMesh::Draw()
         }
         else if (n_mode == 1)
         {
-            glGenVertexArrays(1, &VAO);
-            glBindVertexArray(VAO);
-
             glGenBuffers(1, &VBO_positions);
             glBindBuffer(GL_ARRAY_BUFFER, VBO_positions);
             glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 3 * vertex_normal_lines.size()), &vertex_normal_lines[0], GL_STATIC_DRAW);
@@ -73,6 +70,7 @@ void SphereMesh::Draw()
             glDrawArrays(GL_LINES, 0, static_cast<GLsizei>(vertex_normal_lines.size() * 3));
         }
         UnBindData();
+
         BindData();
     }
 }
@@ -120,6 +118,7 @@ SphereMesh::~SphereMesh()
     glDeleteBuffers(1, &VBO_normals);
     glDeleteBuffers(1, &VBO_texcoords);
     glDeleteBuffers(1, &EBO);
+    std::cout << "SphereMesh <" << name << "> Destructor Called" << std::endl;
 }
 
 void SphereMesh::ChangeMode(int mode)

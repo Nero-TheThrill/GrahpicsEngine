@@ -1,4 +1,7 @@
 #include "Texture.h"
+
+#include <iostream>
+
 #include "Graphics.h"
 
 

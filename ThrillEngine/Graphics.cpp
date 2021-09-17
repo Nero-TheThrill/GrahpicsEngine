@@ -27,6 +27,7 @@ void Graphics::Init()
     linemesh->name = "linemesh";
      linemesh->Init();
     meshes.insert(std::pair<std::string, Mesh*>("line", linemesh));
+    std::cout << "Initialize Graphics" << std::endl;
 }
 
 void Graphics::Update()
@@ -47,6 +48,16 @@ Graphics::~Graphics()
         delete m.second;
         m.second = nullptr;
     }
+    for (auto m : meshes)
+    {
+        delete m.second;
+        m.second = nullptr;
+    }
+    for (auto handle : program_handles)
+    {
+        glDeleteProgram(handle.second);
+    }
+    std::cout << "Graphics Destructor Called" << std::endl;
 }
 
 void Graphics::InitPVmatrices()

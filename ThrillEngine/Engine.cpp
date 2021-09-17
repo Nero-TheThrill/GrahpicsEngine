@@ -29,7 +29,6 @@ void Engine::Init()
         e_core->Init();
     Input::Init();
     APPLICATION->AppSet(800, 600);
-   // GRAPHICS->DrawTriangle();
 }
 
 void Engine::Loop()

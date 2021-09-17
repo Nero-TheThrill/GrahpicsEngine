@@ -117,4 +117,5 @@ imGUIManager::~imGUIManager()
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
+    std::cout << "imGUIManager Destructor Called" << std::endl;
 }

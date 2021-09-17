@@ -27,4 +27,5 @@ void TimeManager::Update()
 
 TimeManager::~TimeManager()
 {
+    std::cout << "TimeManager Destructor Called" << std::endl;
 }

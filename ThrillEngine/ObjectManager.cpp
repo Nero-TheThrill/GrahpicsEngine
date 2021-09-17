@@ -7,6 +7,7 @@ ObjectManager::ObjectManager()
 {
     OBJECTMANAGER = this;
     genObjectsNum = 0;
+    std::cout << "Object Manager Constructor Called" << std::endl;
 }
 
 void ObjectManager::Init()
@@ -61,5 +62,10 @@ std::unordered_map<unsigned, Object*> ObjectManager::GetAllObjects()
 
 ObjectManager::~ObjectManager()
 {
+    for (auto obj : objects)
+    {
+        delete obj.second;
+    }
+    std::cout << "ObjectManager Destructor Called" << std::endl;
 }
 

@@ -1,5 +1,7 @@
 #include "Material.h"
 
+#include <iostream>
+
 #include "Graphics.h"
 
 
@@ -7,11 +9,12 @@ Material::Material(const std::string& id)
 {
     GRAPHICS->AddMaterial(id,this);
     name = id;
+    std::cout << "Material<" << name << "> Constructor Called" << std::endl;
 }
 
 Material::~Material()
 {
-    //need to delete all shader programs.
+    std::cout << "Material<"<<name<<"> Destructor Called" << std::endl;
 }
 
 void Material::Use()

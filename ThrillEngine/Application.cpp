@@ -108,9 +108,8 @@ void Application::Update()
 
 Application::~Application()
 {
-    std::cout << "delete Application" << std::endl;
-
     glfwTerminate();
+    std::cout << "delete Application" << std::endl;
 }
 
 bool Application::shouldClose() const

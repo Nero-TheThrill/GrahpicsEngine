@@ -44,4 +44,10 @@ void LevelManager::InsertLevel(LevelStructure* pLevel, LevelID levelid)
 
 LevelManager::~LevelManager()
 {
+    for(auto level:levels)
+    {
+        delete level.second;        
+    }
+    levels.clear();
+    std::cout << "LevelManager Destructor Called" << std::endl;
 }

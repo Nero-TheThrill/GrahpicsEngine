@@ -40,6 +40,7 @@ int main()
     MTest->set("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
     MTexture->set("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
     MLight->set("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
+
     GRAPHICS->loadObject("../models/cube2.obj", "cube2");
     GRAPHICS->loadObject("../models/cube.obj", "cube");
     GRAPHICS->loadObject("../models/bunny.obj", "bunny");

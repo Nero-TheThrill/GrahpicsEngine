@@ -197,4 +197,5 @@ void TestLevel::Close()
 
 TestLevel::~TestLevel()
 {
+    std::cout << "TestLevel Destructor Called" << std::endl;
 }
