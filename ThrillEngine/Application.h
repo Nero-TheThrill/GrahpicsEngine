@@ -1,5 +1,7 @@
 #pragma once
-#include "headers.h"
+#include<glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 #include "EngineCore.h"
 #include "imGUIManager.h"
 

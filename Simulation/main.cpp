@@ -41,12 +41,11 @@ int main()
     MTexture->set("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
     MLight->set("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
 
+    GRAPHICS->loadObject("../models/sphere.obj", "sphere");
     GRAPHICS->loadObject("../models/cube2.obj", "cube2");
     GRAPHICS->loadObject("../models/cube.obj", "cube");
     GRAPHICS->loadObject("../models/bunny.obj", "bunny");
     GRAPHICS->loadObject("../models/bunny_high_poly.obj", "bunny_high_poly");
-
-    GRAPHICS->loadObject("../models/sphere.obj", "sphere");
     GRAPHICS->loadObject("../models/4Sphere.obj", "4Sphere");
     GRAPHICS->loadObject("../models/sphere_modified.obj", "sphere_modified");
     GRAPHICS->loadObject("../models/lucy_princeton.obj", "lucy_princeton");

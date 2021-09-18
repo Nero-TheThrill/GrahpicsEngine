@@ -1,5 +1,4 @@
 #include "TestLevel.h"
-
 #include <iostream>
 #include "Graphics.h"
 #include "Input.h"

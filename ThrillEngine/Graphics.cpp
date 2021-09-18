@@ -32,7 +32,7 @@ void Graphics::Init()
 
 void Graphics::Update()
 {
-    glClearColor(0.01f, 0.01f, 0.02f, 1.0f);
+    glClearColor(0.61f, 0.61f, 0.9f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
