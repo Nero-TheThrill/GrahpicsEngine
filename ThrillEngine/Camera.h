@@ -8,6 +8,10 @@ public:
     glm::mat4 GetViewMatrix();
     glm::mat4 GetProjectionMatrix();
     void Move(glm::vec3 v);
+    void RotateYaxis(float degree);
+    void RotateXaxis(float degree);
+    void MoveForward(float amount);
+    void MoveSide(float amount);
     void MouseMoveUpdate();
     void MouseScrollUpdate();
     glm::vec3 cam_position = glm::vec3(0.0f, 0.0f, 3.0f);

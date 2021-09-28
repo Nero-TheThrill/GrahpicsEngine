@@ -1,8 +1,5 @@
 #include "Shader.h"
-
 #include <iostream>
-
-
 #include "Graphics.h"
 
 

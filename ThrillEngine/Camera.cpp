@@ -32,7 +32,46 @@ glm::mat4 Camera::GetProjectionMatrix()
 
 void Camera::Move(glm::vec3 v)
 {
-    cam_position += v * TIMEMANAGER->deltaTime * 2.5f;
+    cam_position += v* TIMEMANAGER->deltaTime * 2.5f;
+    view = glm::lookAt(cam_position, cam_position + cam_target, up);
+}
+
+void Camera::RotateYaxis(float degree)
+{
+    yaw += degree;
+    glm::vec3 direction;
+    direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    direction.y = sin(glm::radians(pitch));
+    direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    cam_target = glm::normalize(direction);
+    view = glm::lookAt(cam_position, cam_position + cam_target, up);
+}
+
+void Camera::RotateXaxis(float degree)
+{
+    pitch -= degree;
+    if (pitch > 89.0f)
+        pitch = 89.0f;
+    if (pitch < -89.0f)
+        pitch = -89.0f;
+
+    glm::vec3 direction;
+    direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    direction.y = sin(glm::radians(pitch));
+    direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    cam_target = glm::normalize(direction);
+    view = glm::lookAt(cam_position, cam_position + cam_target, up);
+}
+
+void Camera::MoveForward(float amount)
+{
+    cam_position += (cam_target)*amount * TIMEMANAGER->deltaTime * 2.5f;
+    view = glm::lookAt(cam_position, cam_position + cam_target, up);
+}
+
+void Camera::MoveSide(float amount)
+{
+    cam_position += -glm::cross(up,cam_target)*amount * TIMEMANAGER->deltaTime * 2.5f;
     view = glm::lookAt(cam_position, cam_position + cam_target, up);
 }
 

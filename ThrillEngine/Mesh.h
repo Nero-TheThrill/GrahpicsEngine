@@ -15,13 +15,15 @@ public:
     virtual void UnBind()=0;
     virtual ~Mesh();
     virtual void ChangeMode(int mode);
-
+    virtual void DrawNormals();
     std::vector<glm::vec3> positions_use_indices;
     std::vector<glm::vec2> texcoords_use_indices;
     std::vector<glm::vec3> face_normals;
     std::vector<glm::vec3> vertex_normals;
 
     std::vector<int> indices;
+    std::vector<int> normal_indices;
+    std::vector<int> texture_indices;
 
     std::vector<glm::vec3> positions;
     std::vector<glm::vec2> texcoords;
@@ -32,8 +34,7 @@ public:
     std::vector<glm::vec3> positions_normals;//use indices
     int face_stride=0;
     std::string name;
-    int n_mode = 1; // 0 : face  1 : vertex
-    bool shouldDrawNormals = false;
+    int n_mode = 0; // 0 : face  1 : vertex
 };
 
 inline Mesh::~Mesh()
@@ -51,6 +52,10 @@ inline Mesh::~Mesh()
 }
 
 inline void Mesh::ChangeMode(int mode)
+{
+}
+
+inline void Mesh::DrawNormals()
 {
 }
 

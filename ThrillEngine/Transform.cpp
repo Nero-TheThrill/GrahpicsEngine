@@ -1,5 +1,4 @@
 #include "Transform.h"
-
 #include "TimeManager.h"
 
 void Transform::Init()

@@ -44,7 +44,8 @@ public:
 
     void AddSphereMesh();
 
-
+    void SetBackgroundColor(glm::vec4 bgcolor);
+    glm::vec4 background_color = glm::vec4(0.61f, 0.61f, 0.9f, 1.0f);
     std::unordered_map<std::string, Material* > GetAllMaterial();
     std::unordered_map<std::string , Mesh*> GetAllMeshes();
     Camera camera;
@@ -58,6 +59,7 @@ private:
     std::unordered_map<std::string /*id*/, unsigned /*texture*/> textures;
 
     unsigned int uboMatrices = 0, uboLight = 0;
+
 
 };
 extern Graphics* GRAPHICS;

@@ -1,7 +1,5 @@
 #include "Material.h"
-
 #include <iostream>
-
 #include "Graphics.h"
 
 

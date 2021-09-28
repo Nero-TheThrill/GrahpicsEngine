@@ -19,7 +19,8 @@ public:
     void Pick_Material(const std::string& material_id);
     bool alive = true;
     unsigned id;
-
+    int drawmode = 0;// 0: facenormal 1: vertexnormal
+    bool shouldDrawNormals = false;
     Material* material;
     Transform transform;
     Mesh* mesh;

@@ -31,6 +31,8 @@ Object::Object(std::string n, Object* obj)
     texture = obj->texture;
     material = obj->material;
     mesh = obj->mesh;
+    drawmode = obj->drawmode;
+    shouldDrawNormals = obj->shouldDrawNormals;
 }
 
 
@@ -51,6 +53,7 @@ void Object::SetMesh(Mesh* input)
 
 void Object::Draw()
 {
+    mesh->ChangeMode(drawmode);
     material->Use();
     material->shader.set("model", transform.GetTransformMatrix());
     material->Update();
@@ -58,6 +61,14 @@ void Object::Draw()
     texture.Update();
     mesh->Draw();
     material->UnUse();
+    if(shouldDrawNormals)
+    {
+        GRAPHICS->GetMaterial("MTest")->Use();
+        GRAPHICS->GetMaterial("MTest")->shader.set("model", transform.GetTransformMatrix());
+        GRAPHICS->GetMaterial("MTest")->shader.set("objectColor", glm::vec3(1));
+        mesh->DrawNormals();
+        GRAPHICS->GetMaterial("MTest")->UnUse();
+    }
 }
 
 

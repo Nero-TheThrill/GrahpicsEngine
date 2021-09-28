@@ -19,7 +19,7 @@ Graphics::Graphics()
 
 void Graphics::Init()
 {
-    camera.Projection(45, 0.1f, 100.f); //should update every screen size changes.
+    camera.Projection(45, 0.1f, 200.f); //should update every screen size changes.
     camera.View(glm::vec3(0.0f, 0.0f, 20)); //should update every camera moves
     InitPVmatrices();
     UpdatePVmatrices();
@@ -32,12 +32,12 @@ void Graphics::Init()
 
 void Graphics::Update()
 {
-    glClearColor(0.61f, 0.61f, 0.9f, 1.0f);
+    glClearColor(background_color.x,background_color.y,background_color.z,background_color.w);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
     UpdatePVmatrices();
-    //  camera.MouseMoveUpdate();
+    //camera.MouseMoveUpdate();
     camera.MouseScrollUpdate();
 }
 
@@ -65,12 +65,10 @@ void Graphics::InitPVmatrices()
 
     glGenBuffers(1, &uboMatrices);
     glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
-    glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), NULL, GL_STATIC_DRAW);
+    glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
-    // define the range of the buffer that links to a uniform binding point
     glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboMatrices, 0, 2 * sizeof(glm::mat4));
 
-    // store the projection matrix (we only do this once now) (note: we're not using zoom anymore by changing the FoV)
 
 
 }
@@ -247,9 +245,14 @@ void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
     std::stringstream ss;
     std::ifstream in_file(path);
     std::string line = "";
-
+    std::vector<int> tmp_normal_indices;
+    std::vector<int> tmp_texture_indices;
+    std::vector<glm::vec3> tmp_normals;
+    std::vector<glm::vec2> tmp_texcoords;
+    std::vector<int> tmp_vertex_indices;
     int tmp_glInt = 0;
     float tmp_glFloat = 0;
+    int tmp_glInt_1 = 0, tmp_glInt_2=0, tmp_glInt_3=0;
 
 
     if (!in_file.is_open())
@@ -260,13 +263,13 @@ void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
     float min_val_x = FLT_MAX;
     float max_val_x = FLT_MIN;
     float max_val_y = max_val_x, min_val_y = min_val_x;
-    float max_val_z = max_val_x, min_val_z = min_val_x;
+    float max_val_z = max_val_x, min_val_z  = min_val_x;
     while (std::getline(in_file, line))
     {
-
         std::string prefix = "";
         glm::vec3 tmp_vec3;
         glm::vec2 tmp_vec2;
+        GLint tmp;
         ss.clear();
         ss.str(line);
         ss >> prefix;
@@ -302,23 +305,135 @@ void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
         else if (prefix == "vt") // texture
         {
             ss >> tmp_vec2.x >> tmp_vec2.y;
-            mesh->texcoords_use_indices.push_back(tmp_vec2);
+            tmp_texcoords.push_back(tmp_vec2);
         }
         else if (prefix == "vn") // normal
         {
             ss >> tmp_vec3.x >> tmp_vec3.y >> tmp_vec3.z;
-            mesh->face_normals.push_back(tmp_vec3);
+            tmp_normals.push_back(tmp_vec3);
         }
         else if (prefix == "f") // faces
         {
-            int stride = 0;
-            while (ss >> tmp_glInt)
-            {
-                mesh->indices.push_back(tmp_glInt - 1);
-                stride++;
-            }
-            mesh->face_stride = stride;
+            ss >> tmp_glInt_1;
 
+            if (ss.peek() == '/')
+            {
+                ss.ignore(1, '/');
+                if (ss.peek() == '/')
+                {
+                    ss.ignore(1, '/');
+                    ss >> tmp; // normal indices
+                    tmp_normal_indices.push_back(tmp - 1);
+                }
+                else
+                {
+                    ss >> tmp;// should be texture indices or normal indices
+                    if (ss.peek() == '/')
+                    {
+                        tmp_texture_indices.push_back(tmp - 1);
+                        ss.ignore(1, '/');
+                        ss >> tmp; // normal indices
+                        tmp_normal_indices.push_back(tmp - 1);
+                    }
+                    else
+                    {
+                        tmp_texture_indices.push_back(tmp - 1);
+                    }
+                }
+            }
+            mesh->indices.push_back(tmp_glInt_1 - 1);
+            tmp_vertex_indices.push_back(tmp_glInt_1 - 1);
+            ss >> tmp_glInt_2;
+            if (ss.peek() == '/')
+            {
+                ss.ignore(1, '/');
+                if (ss.peek() == '/')
+                {
+                    ss.ignore(1, '/');
+                    ss >> tmp; // normal indices
+                    tmp_normal_indices.push_back(tmp - 1);
+                }
+                else
+                {
+                    ss >> tmp;// should be texture indices or normal indices
+                    if (ss.peek() == '/')
+                    {
+                        tmp_texture_indices.push_back(tmp - 1);
+                        ss.ignore(1, '/');
+                        ss >> tmp; // normal indices
+                        tmp_normal_indices.push_back(tmp - 1);
+                    }
+                    else
+                    {
+                        tmp_texture_indices.push_back(tmp - 1);
+                    }
+                }
+            }
+            mesh->indices.push_back(tmp_glInt_2 - 1);
+            tmp_vertex_indices.push_back(tmp_glInt_2 - 1);
+            ss >> tmp_glInt_3;
+            if (ss.peek() == '/')
+            {
+                ss.ignore(1, '/');
+                if (ss.peek() == '/')
+                {
+                    ss.ignore(1, '/');
+                    ss >> tmp; // normal indices
+                    tmp_normal_indices.push_back(tmp - 1);
+                }
+                else
+                {
+                    ss >> tmp;// should be texture indices or normal indices
+                    if (ss.peek() == '/')
+                    {
+                        tmp_texture_indices.push_back(tmp - 1);
+                        ss.ignore(1, '/');
+                        ss >> tmp; // normal indices
+                        tmp_normal_indices.push_back(tmp - 1);
+                    }
+                    else
+                    {
+                        tmp_texture_indices.push_back(tmp - 1);
+                    }
+                }
+            }
+            mesh->indices.push_back(tmp_glInt_3 - 1);
+            tmp_vertex_indices.push_back(tmp_glInt_3 - 1);
+            tmp_glInt_2 = tmp_glInt_3;
+            while (ss >> tmp_glInt_3)
+            {
+                if (ss.peek() == '/')
+                {
+                    ss.ignore(1, '/');
+                    if (ss.peek() == '/')
+                    {
+                        ss.ignore(1, '/');
+                        ss >> tmp; // normal indices
+                        tmp_normal_indices.push_back(tmp - 1);
+                    }
+                    else
+                    {
+                        ss >> tmp;// should be texture indices or normal indices
+                        if (ss.peek() == '/')
+                        {
+                            tmp_texture_indices.push_back(tmp - 1);
+                            ss.ignore(1, '/');
+                            ss >> tmp; // normal indices
+                            tmp_normal_indices.push_back(tmp - 1);
+                        }
+                        else
+                        {
+                            tmp_texture_indices.push_back(tmp - 1);
+                        }
+                    }
+                }
+                mesh->indices.push_back(tmp_glInt_1 - 1);
+                mesh->indices.push_back(tmp_glInt_2 - 1);
+                mesh->indices.push_back(tmp_glInt_3 - 1);
+                tmp_vertex_indices.push_back(tmp_glInt_3 - 1);
+                tmp_glInt_2 = tmp_glInt_3;
+            }
+            
         }
         else
         {
@@ -339,6 +454,41 @@ void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
         mesh->positions_use_indices[iterator] = glm::vec3((p.x - subtract_x) / denominator, (p.y - subtract_y) / denominator, (p.z - subtract_z) / denominator);
         iterator++;
     }
+
+    /////////////should change this codes - it doesn't work properly!!!////////////////////////////////////////////////////////////
+    if (!tmp_normals.empty())
+    {
+        if (!tmp_normal_indices.empty())
+        {
+            std::vector <glm::vec3> tmp_storage(mesh->positions_use_indices.size());
+            for (int i = 0; i < tmp_normal_indices.size(); i++)
+            {
+                tmp_storage[tmp_vertex_indices[i]] = tmp_normals[tmp_normal_indices[i]];
+            }
+            mesh->vertex_normals = tmp_storage;
+        }
+        else
+        {
+            mesh->vertex_normals = tmp_normals;
+        }
+    }
+    if (!tmp_texcoords.empty())
+    {
+        if (!tmp_texture_indices.empty())
+        {
+            std::vector<glm::vec2> tmp_storage(mesh->positions_use_indices.size());
+            for (int i = 0; i < tmp_texture_indices.size(); i++)
+            {
+                tmp_storage[tmp_vertex_indices[i]] = tmp_texcoords[tmp_texture_indices[i]];
+            }
+            mesh->texcoords_use_indices = tmp_storage;
+        }
+        else
+        {
+            mesh->texcoords_use_indices = tmp_texcoords;
+        }
+    }
+    /////////////should change this codes - it doesn't work properly!!!////////////////////////////////////////////////////////////
     mesh->name = mesh_id;
     mesh->Init();
     meshes.insert(std::pair<std::string, Mesh*>(mesh_id, mesh));
@@ -416,6 +566,11 @@ void Graphics::AddSphereMesh()
     sphere->name = "customsphere";
     sphere->Init();
     meshes.insert(std::pair<std::string, Mesh*>("customsphere", sphere));
+}
+
+void Graphics::SetBackgroundColor(glm::vec4 bgcolor)
+{
+    background_color = bgcolor;
 }
 
 void Graphics::AddMaterial(const std::string& material_id, Material* material)

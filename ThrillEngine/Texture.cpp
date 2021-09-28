@@ -1,17 +1,9 @@
 #include "Texture.h"
-
-#include <iostream>
-
 #include "Graphics.h"
-
-
 
 void Texture::Init()
 {
 }
-
-
-
 
 Texture::~Texture()
 {

@@ -27,20 +27,26 @@ void imGUIManager::Update()
     { 
         ImGui::Begin("GraphicsEngine GUI");
 
-
+        glm::vec3 bgcolor=GRAPHICS->background_color;
+        ImGui::DragFloat3("background color", glm::value_ptr(bgcolor), 0.01f, 0, 1);
+        GRAPHICS->SetBackgroundColor(glm::vec4(bgcolor, 1.0f));
         std::unordered_map<unsigned, Object*> objects = OBJECTMANAGER->GetAllObjects();
 
         if (ImGui::BeginCombo("select object", current_item != nullptr ? current_item->name.c_str() : ""))
         {
             for (auto obj : objects)
             {
-                bool is_selected = (current_item == obj.second);
-                if (ImGui::Selectable(obj.second->name.c_str(), is_selected))
+                if (obj.second != nullptr)
                 {
-                    current_item = obj.second;
+                    bool is_selected = (current_item == obj.second);
+                    if (ImGui::Selectable(obj.second->name.c_str(), is_selected))
+                    {
+                        current_item = obj.second;
+                    }
+                    if (is_selected)
+                        ImGui::SetItemDefaultFocus();
+
                 }
-                if (is_selected)
-                    ImGui::SetItemDefaultFocus();
             }
             ImGui::EndCombo();
         }
@@ -96,13 +102,13 @@ void imGUIManager::Update()
                 }
                 ImGui::EndCombo();
             }
-            int mode = current_item->mesh->n_mode;
+            int mode = current_item->drawmode;
             ImGui::RadioButton("face normal", &mode, 0); ImGui::SameLine();
             ImGui::RadioButton("vertex normal", &mode, 1);
-            current_item->mesh->ChangeMode(mode);
-            bool drawnormal = current_item->mesh->shouldDrawNormals;
+            current_item->drawmode = mode;
+            bool drawnormal = current_item->shouldDrawNormals;
             ImGui::Checkbox("draw normals", &drawnormal);
-            current_item->mesh->shouldDrawNormals=drawnormal;
+            current_item->shouldDrawNormals=drawnormal;
         }
 
         ImGui::End();

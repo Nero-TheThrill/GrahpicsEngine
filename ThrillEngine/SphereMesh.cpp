@@ -22,57 +22,41 @@ void SphereMesh::Init()
     }
     GenerateNormals();
     GenerateNormalLines();
+    glGenVertexArrays(1, &VAO);
+    glBindVertexArray(VAO);
+    glGenBuffers(1, &VBO_positions);
+    glGenBuffers(1, &VBO_normals);
+    glGenBuffers(1, &VBO_texcoords);
+    glGenBuffers(1, &EBO);
     BindData();
+   
     std::cout << "SphereMesh <" << name << "> Initialized" << std::endl;
 }
 
 void SphereMesh::Bind()
 {
     glBindVertexArray(VAO);
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
 }
 
 void SphereMesh::UnBind()
 {
     glBindVertexArray(0);
+    glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
+    glDisableVertexAttribArray(2);
 }
 
 void SphereMesh::Draw()
 {
     Bind();
     if (n_mode == 0)
-        glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(positions.size() * 3));
+        glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(positions.size()));
     else if( n_mode==1)
-        glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()*3), GL_UNSIGNED_INT, (void*)0);
+        glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, (void*)0);
     UnBind();
-    if (shouldDrawNormals)
-    {
-        UnBindData();
-        glGenVertexArrays(1, &VAO);
-        glBindVertexArray(VAO);
-        if (n_mode == 0)
-        {
-            glGenBuffers(1, &VBO_positions);
-            glBindBuffer(GL_ARRAY_BUFFER, VBO_positions);
-            glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 3 * face_normal_lines.size()), &face_normal_lines[0], GL_STATIC_DRAW);
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-            glEnableVertexAttribArray(0);
-
-            glDrawArrays(GL_LINES, 0, static_cast<GLsizei>(vertex_normal_lines.size() * 3));
-        }
-        else if (n_mode == 1)
-        {
-            glGenBuffers(1, &VBO_positions);
-            glBindBuffer(GL_ARRAY_BUFFER, VBO_positions);
-            glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 3 * vertex_normal_lines.size()), &vertex_normal_lines[0], GL_STATIC_DRAW);
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-            glEnableVertexAttribArray(0);
-
-            glDrawArrays(GL_LINES, 0, static_cast<GLsizei>(vertex_normal_lines.size() * 3));
-        }
-        UnBindData();
-
-        BindData();
-    }
 }
 
 void SphereMesh::GenerateNormals()
@@ -80,8 +64,8 @@ void SphereMesh::GenerateNormals()
     for (int i = 0; i < static_cast<int>(positions.size()); i += 3)
     {
         glm::vec3 v1 = positions[i],
-            v2 = positions[i + 1],
-            v3 = positions[i + 2];
+            v2 = positions[i + static_cast<int64_t>(1)],
+            v3 = positions[i + static_cast<int64_t>(2)];
         glm::vec3 cross_result = glm::normalize(glm::cross(v2 - v1, v3 - v1));
         for (int j = 0; j < 3; j++)
         {
@@ -95,19 +79,19 @@ void SphereMesh::GenerateNormalLines()
     for (int i = 0; i < static_cast<int>(positions_use_indices.size()); i++)
     {
         vertex_normal_lines.push_back(positions_use_indices[i]);
-        vertex_normal_lines.push_back(positions_use_indices[i] + vertex_normals[i]);
+        vertex_normal_lines.push_back(positions_use_indices[i] + vertex_normals[i]/10.f);
     }
     for (int i = 0; i < static_cast<int>(positions.size()); i += 3)
     {
         glm::vec3 midpoint = glm::vec3(0);
         for (int j = 0; j < 3; j++)
         {
-            midpoint += positions[i + j];
+            midpoint += positions[i + static_cast<int64_t>(j)];
         }
         midpoint /= 3;
 
         face_normal_lines.push_back(midpoint);
-        face_normal_lines.push_back(midpoint + face_normals[i]);
+        face_normal_lines.push_back(midpoint + face_normals[i]/10.f);
     }
 }
 
@@ -133,79 +117,79 @@ void SphereMesh::ChangeMode(int mode)
 
 void SphereMesh::UnBindData()
 {
+    glBindVertexArray(0);
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO_positions);
-    glDeleteBuffers(1, &VBO_normals);
-    glDeleteBuffers(1, &VBO_texcoords);
-    glDeleteBuffers(1, &EBO);
+    if (!texcoords_use_indices.empty())
+    {
+        glDisableVertexAttribArray(2);
+    }
 }
 
 void SphereMesh::BindData()
 {
+    glBindVertexArray(VAO);
     if (n_mode == 0)
     {
-        glGenVertexArrays(1, &VAO);
-        glBindVertexArray(VAO);
-
-
-        glGenBuffers(1, &VBO_positions);
         glBindBuffer(GL_ARRAY_BUFFER, VBO_positions);
-
         glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 3 * positions.size()), &positions[0], GL_STATIC_DRAW);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-        glGenBuffers(1, &VBO_normals);
+        
         glBindBuffer(GL_ARRAY_BUFFER, VBO_normals);
-
         glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 3 * face_normals.size()), &face_normals[0], GL_STATIC_DRAW);
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
-        glGenBuffers(1, &VBO_texcoords);
         glBindBuffer(GL_ARRAY_BUFFER, VBO_texcoords);
-
         glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * texcoords.size()), &texcoords[0], GL_STATIC_DRAW);
         glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-        glEnableVertexAttribArray(0);
-        glEnableVertexAttribArray(1);
-        glEnableVertexAttribArray(2);
     }
     else if (n_mode == 1)
     {
-        glGenVertexArrays(1, &VAO);
-        glBindVertexArray(VAO);
-
-
-        glGenBuffers(1, &VBO_positions);
         glBindBuffer(GL_ARRAY_BUFFER, VBO_positions);
-
         glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 3 * positions_use_indices.size()), &positions_use_indices[0], GL_STATIC_DRAW);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
-        glGenBuffers(1, &VBO_normals);
-        glBindBuffer(GL_ARRAY_BUFFER, VBO_normals);
 
+        glBindBuffer(GL_ARRAY_BUFFER, VBO_normals);
         glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 3 * vertex_normals.size()), &vertex_normals[0], GL_STATIC_DRAW);
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
-        glGenBuffers(1, &VBO_texcoords);
         glBindBuffer(GL_ARRAY_BUFFER, VBO_texcoords);
-
         glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * texcoords_use_indices.size()), &texcoords_use_indices[0], GL_STATIC_DRAW);
         glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 
-
-
-        glEnableVertexAttribArray(0);
-        glEnableVertexAttribArray(1);
-        glEnableVertexAttribArray(2);
-
-
-        glGenBuffers(1, &EBO);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(int) * indices.size()), &indices[0], GL_STATIC_DRAW);
     }
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
+}
+
+void SphereMesh::DrawNormals()
+{
+    glBindVertexArray(VAO);
+    if (n_mode == 0)
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, VBO_positions);
+        glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 3 * face_normal_lines.size()), &face_normal_lines[0], GL_STATIC_DRAW);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+        glEnableVertexAttribArray(0);
+
+        glDrawArrays(GL_LINES, 0, static_cast<GLsizei>(face_normal_lines.size()*2));
+    }
+    else if (n_mode == 1)
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, VBO_positions);
+        glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 3 * vertex_normal_lines.size()), &vertex_normal_lines[0], GL_STATIC_DRAW);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+        glEnableVertexAttribArray(0);
+
+        glDrawArrays(GL_LINES, 0, static_cast<GLsizei>(vertex_normal_lines.size()));
+    }
+    glDisableVertexAttribArray(0);
+    glBindVertexArray(0);
+
+    BindData();
 }

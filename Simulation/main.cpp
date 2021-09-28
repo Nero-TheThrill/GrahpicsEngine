@@ -26,11 +26,13 @@ int main()
 
 
 
-    GRAPHICS->LoadTexture("../images/awesomeface.png", "face", ImageType::RGBA);
-    GRAPHICS->LoadTexture("../images/container.jpg", "container", ImageType::RGB);
-    GRAPHICS->LoadTexture("../images/lol.png", "lol", ImageType::RGB);
     GRAPHICS->LoadTexture("../images/earth.bmp", "earth", ImageType::RGB);
     GRAPHICS->LoadTexture("../images/moon.bmp", "moon", ImageType::RGB);
+    GRAPHICS->LoadTexture("../images/camo.jpg", "camo", ImageType::RGB);
+    GRAPHICS->LoadTexture("../images/graycamo.png", "graycamo", ImageType::RGB);
+    GRAPHICS->LoadTexture("../images/space.png", "space", ImageType::RGB);
+    GRAPHICS->LoadTexture("../images/testmodel.jpg", "testmd", ImageType::RGB);
+    GRAPHICS->LoadTexture("../images/ramus.png", "ramus", ImageType::RGBA);
 
     Material* MTest = new Material("MTest"), * MLight = new Material("MLight"), * MTexture = new Material("MTexture");
     MTest->PickShader("test");
@@ -40,7 +42,11 @@ int main()
     MTest->set("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
     MTexture->set("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
     MLight->set("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-
+    
+    GRAPHICS->loadObject("../models/testmodel.obj", "testmodel");
+    GRAPHICS->loadObject("../models/ramus.obj", "ramus");
+    GRAPHICS->loadObject("../models/rhino.obj", "rhino");
+    GRAPHICS->loadObject("../models/starwars1.obj", "starwars");
     GRAPHICS->loadObject("../models/sphere.obj", "sphere");
     GRAPHICS->loadObject("../models/cube2.obj", "cube2");
     GRAPHICS->loadObject("../models/cube.obj", "cube");
@@ -49,10 +55,11 @@ int main()
     GRAPHICS->loadObject("../models/4Sphere.obj", "4Sphere");
     GRAPHICS->loadObject("../models/sphere_modified.obj", "sphere_modified");
     GRAPHICS->loadObject("../models/lucy_princeton.obj", "lucy_princeton");
-
+    GRAPHICS->loadObject("../models/cup.obj", "cup");
     GRAPHICS->loadObject("../models/quad.obj", "quad");
-
     GRAPHICS->loadObject("../models/triangle.obj", "triangle");
+    GRAPHICS->loadObject("../models/car.obj", "car");
+
     GRAPHICS->AddSphereMesh();
 
 
