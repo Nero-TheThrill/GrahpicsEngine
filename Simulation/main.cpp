@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "Graphics.h"
 #include "LevelManager.h"
+#include "ObjectLoader.h"
 #include "TestLevel.h"
 #include "TestLevel1.h"
 
@@ -9,7 +10,7 @@ int main()
 {
 
     auto* ThrillEngine = new Engine();
-
+    ObjectLoader objloader;
 
 
     GRAPHICS->LoadShader("../shaders/test.vert", "testvert", ShaderType::VERTEX);
@@ -31,27 +32,26 @@ int main()
     GRAPHICS->LoadTexture("../images/camo.jpg", "camo", ImageType::RGB);
     GRAPHICS->LoadTexture("../images/graycamo.png", "graycamo", ImageType::RGB);
     GRAPHICS->LoadTexture("../images/space.png", "space", ImageType::RGB);
-    GRAPHICS->LoadTexture("../images/testmodel.jpg", "testmd", ImageType::RGB);
     GRAPHICS->LoadTexture("../images/ramus.png", "ramus", ImageType::RGBA);
     GRAPHICS->LoadTexture("../images/baron.png", "baron", ImageType::RGBA);
     GRAPHICS->LoadTexture("../images/penguin.png", "penguin", ImageType::RGBA);
 
-    GRAPHICS->loadObject("../models/ramus.obj", "ramus");
-    GRAPHICS->loadObject("../models/rhino.obj", "rhino");
-   // GRAPHICS->loadObject("../models/starwars1.obj", "starwars");
-    GRAPHICS->loadObject("../models/sphere.obj", "sphere");
-    GRAPHICS->loadObject("../models/cube2.obj", "cube2");
-    GRAPHICS->loadObject("../models/cube.obj", "cube");
-    GRAPHICS->loadObject("../models/bunny.obj", "bunny");
-    GRAPHICS->loadObject("../models/bunny_high_poly.obj", "bunny_high_poly");
-    GRAPHICS->loadObject("../models/4Sphere.obj", "4Sphere");
-    GRAPHICS->loadObject("../models/sphere_modified.obj", "sphere_modified");
-    GRAPHICS->loadObject("../models/lucy_princeton.obj", "lucy_princeton");
-    GRAPHICS->loadObject("../models/cup.obj", "cup");
-    GRAPHICS->loadObject("../models/quad.obj", "quad");
-    GRAPHICS->loadObject("../models/triangle.obj", "triangle");
-    GRAPHICS->loadObject("../models/baron.obj", "baron");
-    GRAPHICS->loadObject("../models/penguin.obj", "penguin");
+    objloader.loadObject("../models/ramus.obj", "ramus");
+    objloader.loadObject("../models/rhino.obj", "rhino");
+    objloader.loadObject("../models/starwars1.obj", "starwars");
+    objloader.loadObject("../models/sphere.obj", "sphere");
+    objloader.loadObject("../models/cube2.obj", "cube2");
+    objloader.loadObject("../models/cube.obj", "cube");
+    objloader.loadObject("../models/bunny.obj", "bunny");
+    objloader.loadObject("../models/bunny_high_poly.obj", "bunny_high_poly");
+    objloader.loadObject("../models/4Sphere.obj", "4Sphere");
+    objloader.loadObject("../models/sphere_modified.obj", "sphere_modified");
+    objloader.loadObject("../models/lucy_princeton.obj", "lucy_princeton");
+    objloader.loadObject("../models/cup.obj", "cup");
+    objloader.loadObject("../models/quad.obj", "quad");
+    objloader.loadObject("../models/triangle.obj", "triangle");
+    objloader.loadObject("../models/baron.obj", "baron");
+    objloader.loadObject("../models/penguin.obj", "penguin");
 
     GRAPHICS->AddSphereMesh();
 

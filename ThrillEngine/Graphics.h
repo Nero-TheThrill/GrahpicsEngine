@@ -41,9 +41,9 @@ public:
     Material* GetMaterial(const std::string& material_id);
 
     void LoadTexture(const std::string& path, const std::string& texture_id, ImageType image_type);
-    void loadObject(const std::string& path, const std::string& mesh_id);
 
     MeshGroup* GetMeshGroup(const std::string& mesh_id);
+    void AddMeshGroup(const std::string& mesh_id, MeshGroup* mesh_group);
 
     void AddSphereMesh();
 
@@ -71,4 +71,10 @@ private:
 
 
 };
+
+inline void Graphics::AddMeshGroup(const std::string& mesh_id, MeshGroup* mesh_group)
+{
+    meshgroups.insert(std::pair<std::string, MeshGroup*>(mesh_id, mesh_group));
+}
+
 extern Graphics* GRAPHICS;

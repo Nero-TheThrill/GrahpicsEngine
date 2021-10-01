@@ -16,9 +16,10 @@ public:
     ~MeshGroup();
     std::string name;
     int n_mode;
+    std::vector<Mesh*> model_meshes;
 private:
     GLuint VAO;
-    std::vector<Mesh*> model_meshes;
+
 };
 
 

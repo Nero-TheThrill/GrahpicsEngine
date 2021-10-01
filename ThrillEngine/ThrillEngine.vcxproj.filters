@@ -67,6 +67,9 @@
     <Filter Include="Object\Component\MeshGroup\Mesh\LineMesh">
       <UniqueIdentifier>{131cd1cc-ac5f-44b2-88d4-6a8539a89d6f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\ObjectLoader">
+      <UniqueIdentifier>{d9d2697e-f553-4635-bc55-78d717df9ef9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -147,6 +150,9 @@
     </ClCompile>
     <ClCompile Include="MeshGroup.cpp">
       <Filter>Object\Component\MeshGroup</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectLoader.cpp">
+      <Filter>Object\ObjectLoader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -242,6 +248,9 @@
     </ClInclude>
     <ClInclude Include="MeshGroup.h">
       <Filter>Object\Component\MeshGroup</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectLoader.h">
+      <Filter>Object\ObjectLoader</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

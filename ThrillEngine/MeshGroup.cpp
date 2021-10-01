@@ -12,6 +12,8 @@ void MeshGroup::Init()
     glBindVertexArray(VAO);
     for (auto mesh : model_meshes)
         mesh->Init();
+
+    std::cout << "ModelMesh <" << name << "> Initialized" << std::endl;
 }
 
 void MeshGroup::Draw()
