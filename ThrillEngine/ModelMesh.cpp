@@ -6,13 +6,12 @@
 
 ModelMesh::ModelMesh()
 {
-    VAO = 0;
+    material=nullptr;
     VBO_positions = 0;
     VBO_normals = 0;
     EBO = 0;
     index_size = 0;
     VBO_texcoords = 0;
-
 }
 
 void ModelMesh::Init()
@@ -20,7 +19,6 @@ void ModelMesh::Init()
     GeneratePositionsWithIndices();
     GenerateNormals();
     GenerateNormalLines();
-    glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO_positions);
     glGenBuffers(1, &VBO_normals);
     if (!texcoords_use_indices.empty())
@@ -34,7 +32,6 @@ void ModelMesh::Init()
 
 void ModelMesh::Bind()
 {
-    glBindVertexArray(VAO);
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
     if (!texcoords_use_indices.empty())
@@ -45,7 +42,6 @@ void ModelMesh::Bind()
 
 void ModelMesh::UnBind()
 {
-    glBindVertexArray(0);
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
     if (!texcoords_use_indices.empty())
@@ -74,7 +70,6 @@ void ModelMesh::Draw()
 
 ModelMesh::~ModelMesh()
 {
-    glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO_positions);
     glDeleteBuffers(1, &VBO_normals);
     if (!texcoords_use_indices.empty())
@@ -165,7 +160,6 @@ void ModelMesh::GenerateNormalLines()
 
 void ModelMesh::BindData()
 {
-    glBindVertexArray(VAO);
     if (n_mode == 0)
     {
         glBindBuffer(GL_ARRAY_BUFFER, VBO_positions);
@@ -218,7 +212,6 @@ void ModelMesh::BindData()
 
 void ModelMesh::UnBindData()
 {
-    glBindVertexArray(0);
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
     if (!texcoords_use_indices.empty())
@@ -239,7 +232,7 @@ void ModelMesh::ChangeMode(int mode)
 
 void ModelMesh::DrawNormals()
 {
-    glBindVertexArray(VAO);
+
     if (n_mode == 0)
     {
         glBindBuffer(GL_ARRAY_BUFFER, VBO_positions);
@@ -258,7 +251,6 @@ void ModelMesh::DrawNormals()
 
         glDrawArrays(GL_LINES, 0, static_cast<GLsizei>(vertex_normal_lines.size()));
     }
-    glBindVertexArray(0);
     glDisableVertexAttribArray(0);
     BindData();
 }

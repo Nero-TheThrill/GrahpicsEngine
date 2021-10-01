@@ -14,6 +14,7 @@ public:
     void set(const std::string& value_name, glm::mat4 matrix) const;
 
     GLuint program_handle = 0;
+    std::string name;
 
 private:
 

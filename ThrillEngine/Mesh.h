@@ -13,6 +13,8 @@ public:
     virtual void Bind()=0;
     virtual void Draw()=0;
     virtual void UnBind()=0;
+    virtual void UnBindData();
+    virtual void BindData();
     virtual ~Mesh();
     virtual void ChangeMode(int mode);
     virtual void DrawNormals();
@@ -36,6 +38,14 @@ public:
     std::string name;
     int n_mode = 0; // 0 : face  1 : vertex
 };
+
+inline void Mesh::UnBindData()
+{
+}
+
+inline void Mesh::BindData()
+{
+}
 
 inline Mesh::~Mesh()
 {

@@ -11,7 +11,6 @@ public:
     void Draw() override;
     ~LineMesh() override;
 private:
-    GLuint VAO;
     GLuint VBO_positions, VBO_normals;
     GLuint EBO;
     int index_size;

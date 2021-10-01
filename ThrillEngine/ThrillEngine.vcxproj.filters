@@ -34,9 +34,6 @@
     <Filter Include="Object\Component\Transform">
       <UniqueIdentifier>{3c073931-c24a-4f36-b6fa-72a77df9cb99}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Object\Component\Mesh">
-      <UniqueIdentifier>{dc375ce1-294a-43c8-be7d-e3587c25f0e5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Graphics\Camera">
       <UniqueIdentifier>{34a3f236-2d07-49ae-892a-c196e97264bd}</UniqueIdentifier>
     </Filter>
@@ -55,13 +52,19 @@
     <Filter Include="Graphics\imGUIManager">
       <UniqueIdentifier>{601d7275-6fe1-4092-8bc0-64ec3415e3da}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Object\Component\Mesh\SphereMesh">
+    <Filter Include="Object\Component\MeshGroup">
+      <UniqueIdentifier>{7816419e-3925-4cb6-b4bc-538a47496b71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Component\MeshGroup\Mesh">
+      <UniqueIdentifier>{dc375ce1-294a-43c8-be7d-e3587c25f0e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Component\MeshGroup\Mesh\SphereMesh">
       <UniqueIdentifier>{bc1afe3a-ca3f-48c2-b874-8afb8e2c4d50}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Object\Component\Mesh\ModelMesh">
+    <Filter Include="Object\Component\MeshGroup\Mesh\ModelMesh">
       <UniqueIdentifier>{4f86f282-ce10-4560-88be-9c2dc9fbc593}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Object\Component\Mesh\LineMesh">
+    <Filter Include="Object\Component\MeshGroup\Mesh\LineMesh">
       <UniqueIdentifier>{131cd1cc-ac5f-44b2-88d4-6a8539a89d6f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -134,13 +137,16 @@
       <Filter>Graphics\imGUIManager</Filter>
     </ClCompile>
     <ClCompile Include="ModelMesh.cpp">
-      <Filter>Object\Component\Mesh\ModelMesh</Filter>
+      <Filter>Object\Component\MeshGroup\Mesh\ModelMesh</Filter>
     </ClCompile>
     <ClCompile Include="SphereMesh.cpp">
-      <Filter>Object\Component\Mesh\SphereMesh</Filter>
+      <Filter>Object\Component\MeshGroup\Mesh\SphereMesh</Filter>
     </ClCompile>
     <ClCompile Include="LineMesh.cpp">
-      <Filter>Object\Component\Mesh\LineMesh</Filter>
+      <Filter>Object\Component\MeshGroup\Mesh\LineMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshGroup.cpp">
+      <Filter>Object\Component\MeshGroup</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -184,7 +190,7 @@
       <Filter>Graphics\Material\Texture</Filter>
     </ClInclude>
     <ClInclude Include="Mesh.h">
-      <Filter>Object\Component\Mesh</Filter>
+      <Filter>Object\Component\MeshGroup\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Graphics\Camera</Filter>
@@ -226,13 +232,16 @@
       <Filter>Graphics\imGUIManager</Filter>
     </ClInclude>
     <ClInclude Include="ModelMesh.h">
-      <Filter>Object\Component\Mesh\ModelMesh</Filter>
+      <Filter>Object\Component\MeshGroup\Mesh\ModelMesh</Filter>
     </ClInclude>
     <ClInclude Include="SphereMesh.h">
-      <Filter>Object\Component\Mesh\SphereMesh</Filter>
+      <Filter>Object\Component\MeshGroup\Mesh\SphereMesh</Filter>
     </ClInclude>
     <ClInclude Include="LineMesh.h">
-      <Filter>Object\Component\Mesh\LineMesh</Filter>
+      <Filter>Object\Component\MeshGroup\Mesh\LineMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshGroup.h">
+      <Filter>Object\Component\MeshGroup</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -105,6 +105,7 @@
     <ClCompile Include="LineMesh.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="ModelMesh.cpp" />
+    <ClCompile Include="MeshGroup.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -138,6 +139,7 @@
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="ModelMesh.h" />
+    <ClInclude Include="MeshGroup.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Shader.h" />

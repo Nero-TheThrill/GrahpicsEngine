@@ -3,7 +3,8 @@
 #include <sstream>
 #include<fstream>
 #include <iostream>
-
+#define GLM_ENABLE_EXPERIMENTAL
+#include  "glm/gtx/hash.hpp"
 #include "Input.h"
 #include "LineMesh.h"
 #include "ModelMesh.h"
@@ -25,14 +26,17 @@ void Graphics::Init()
     UpdatePVmatrices();
     LineMesh* linemesh = new LineMesh();
     linemesh->name = "linemesh";
-     linemesh->Init();
-    meshes.insert(std::pair<std::string, Mesh*>("line", linemesh));
+    MeshGroup* m_linemesh = new MeshGroup;
+    m_linemesh->name = "linemesh";
+    m_linemesh->AddMesh(linemesh);
+    m_linemesh->Init();
+    meshgroups.insert(std::pair<std::string, MeshGroup*>("line", m_linemesh));
     std::cout << "Initialize Graphics" << std::endl;
 }
 
 void Graphics::Update()
 {
-    glClearColor(background_color.x,background_color.y,background_color.z,background_color.w);
+    glClearColor(background_color.x, background_color.y, background_color.z, background_color.w);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
@@ -48,14 +52,14 @@ Graphics::~Graphics()
         delete m.second;
         m.second = nullptr;
     }
-    for (auto m : meshes)
+    for (auto m : meshgroups)
     {
         delete m.second;
         m.second = nullptr;
     }
-    for (auto handle : program_handles)
+    for (auto shader : shaders)
     {
-        glDeleteProgram(handle.second);
+        glDeleteProgram(shader.second.program_handle);
     }
     std::cout << "Graphics Destructor Called" << std::endl;
 }
@@ -127,7 +131,10 @@ void Graphics::CompileShader(const std::string& vertexshader_id, const std::stri
     else { // attach the shader to the program object
         glAttachShader(program_handle, vertexshader_handle);
         glAttachShader(program_handle, fragmentshader_handle);
-        program_handles.insert(std::pair<std::string, GLuint>(program_id, program_handle));
+        Shader s;
+        s.name = program_id;
+        s.program_handle = program_handle;
+        shaders.insert(std::pair<std::string, Shader>(program_id, s));
         glLinkProgram(program_handle);
 
         // validate the program
@@ -151,9 +158,9 @@ void Graphics::CompileShader(const std::string& vertexshader_id, const std::stri
     }
 }
 
-GLuint Graphics::GetProgramHandle(const std::string& program_id)
+Shader Graphics::GetShader(const std::string& id)
 {
-    return program_handles[program_id];
+    return shaders[id];
 }
 
 void Graphics::LoadShader(const std::string& path, const std::string& id, ShaderType type)
@@ -208,6 +215,7 @@ void Graphics::LoadTexture(const std::string& path, const std::string& texture_i
         int width, height, nrChannels;
         unsigned char* data;
         unsigned texture;
+        stbi_set_flip_vertically_on_load(true);
         glGenTextures(1, &texture);
         glBindTexture(GL_TEXTURE_2D, texture);
         // set the texture wrapping parameters
@@ -231,7 +239,7 @@ void Graphics::LoadTexture(const std::string& path, const std::string& texture_i
         }
         else
         {
-            std::cout << "Failed to load texture" << path <<std::endl;
+            std::cout << "Failed to load texture" << path << std::endl;
             return;
         }
         stbi_image_free(data);
@@ -241,19 +249,26 @@ void Graphics::LoadTexture(const std::string& path, const std::string& texture_i
 
 void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
 {
+    MeshGroup* meshgroup = new MeshGroup();
     ModelMesh* mesh = new ModelMesh();
     std::stringstream ss;
     std::ifstream in_file(path);
     std::string line = "";
-    std::vector<int> tmp_normal_indices;
-    std::vector<int> tmp_texture_indices;
+
+
+    std::vector<glm::vec3> tmp_positions;
     std::vector<glm::vec3> tmp_normals;
     std::vector<glm::vec2> tmp_texcoords;
-    std::vector<int> tmp_vertex_indices;
-    int tmp_glInt = 0;
-    float tmp_glFloat = 0;
-    int tmp_glInt_1 = 0, tmp_glInt_2=0, tmp_glInt_3=0;
 
+    std::vector<int> tmp_positions_indices;
+    std::vector<int> tmp_normal_indices;
+    std::vector<int> tmp_texture_indices;
+
+    std::unordered_map<glm::ivec3, int> pos_texcoord_norm_indices;
+
+    int tmp_glInt_p1 = 0, tmp_glInt_p2 = 0, tmp_glInt_p3 = 0;
+    int tmp_glInt_n1 = 0, tmp_glInt_n2 = 0, tmp_glInt_n3 = 0;
+    int tmp_glInt_t1 = 0, tmp_glInt_t2 = 0, tmp_glInt_t3 = 0;
 
     if (!in_file.is_open())
     {
@@ -263,13 +278,12 @@ void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
     float min_val_x = FLT_MAX;
     float max_val_x = FLT_MIN;
     float max_val_y = max_val_x, min_val_y = min_val_x;
-    float max_val_z = max_val_x, min_val_z  = min_val_x;
+    float max_val_z = max_val_x, min_val_z = min_val_x;
     while (std::getline(in_file, line))
     {
         std::string prefix = "";
         glm::vec3 tmp_vec3;
         glm::vec2 tmp_vec2;
-        GLint tmp;
         ss.clear();
         ss.str(line);
         ss >> prefix;
@@ -292,7 +306,7 @@ void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
         else if (prefix == "v") // position
         {
             ss >> tmp_vec3.x >> tmp_vec3.y >> tmp_vec3.z;
-            mesh->positions_use_indices.push_back(tmp_vec3);
+            tmp_positions.push_back(tmp_vec3);
             min_val_x = std::min(tmp_vec3.x, min_val_x);
             max_val_x = std::max(tmp_vec3.x, max_val_x);
 
@@ -314,7 +328,7 @@ void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
         }
         else if (prefix == "f") // faces
         {
-            ss >> tmp_glInt_1;
+            ss >> tmp_glInt_p1;
 
             if (ss.peek() == '/')
             {
@@ -322,85 +336,84 @@ void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
                 if (ss.peek() == '/')
                 {
                     ss.ignore(1, '/');
-                    ss >> tmp; // normal indices
-                    tmp_normal_indices.push_back(tmp - 1);
+                    ss >> tmp_glInt_n1; // normal indices
+                    tmp_normal_indices.push_back(tmp_glInt_n1 - 1);
                 }
                 else
                 {
-                    ss >> tmp;// should be texture indices or normal indices
+                    ss >> tmp_glInt_t1;// should be texture indices or normal indices
                     if (ss.peek() == '/')
                     {
-                        tmp_texture_indices.push_back(tmp - 1);
+                        tmp_texture_indices.push_back(tmp_glInt_t1 - 1);
                         ss.ignore(1, '/');
-                        ss >> tmp; // normal indices
-                        tmp_normal_indices.push_back(tmp - 1);
+                        ss >> tmp_glInt_n1; // normal indices
+                        tmp_normal_indices.push_back(tmp_glInt_n1 - 1);
                     }
                     else
                     {
-                        tmp_texture_indices.push_back(tmp - 1);
+                        tmp_texture_indices.push_back(tmp_glInt_t1 - 1);
                     }
                 }
             }
-            mesh->indices.push_back(tmp_glInt_1 - 1);
-            tmp_vertex_indices.push_back(tmp_glInt_1 - 1);
-            ss >> tmp_glInt_2;
+            tmp_positions_indices.push_back(tmp_glInt_p1 - 1);
+            ss >> tmp_glInt_p2;
             if (ss.peek() == '/')
             {
                 ss.ignore(1, '/');
                 if (ss.peek() == '/')
                 {
                     ss.ignore(1, '/');
-                    ss >> tmp; // normal indices
-                    tmp_normal_indices.push_back(tmp - 1);
+                    ss >> tmp_glInt_n2; // normal indices
+                    tmp_normal_indices.push_back(tmp_glInt_n2 - 1);
                 }
                 else
                 {
-                    ss >> tmp;// should be texture indices or normal indices
+                    ss >> tmp_glInt_t2;// should be texture indices or normal indices
                     if (ss.peek() == '/')
                     {
-                        tmp_texture_indices.push_back(tmp - 1);
+                        tmp_texture_indices.push_back(tmp_glInt_t2 - 1);
                         ss.ignore(1, '/');
-                        ss >> tmp; // normal indices
-                        tmp_normal_indices.push_back(tmp - 1);
+                        ss >> tmp_glInt_n2; // normal indices
+                        tmp_normal_indices.push_back(tmp_glInt_n2 - 1);
                     }
                     else
                     {
-                        tmp_texture_indices.push_back(tmp - 1);
+                        tmp_texture_indices.push_back(tmp_glInt_t2 - 1);
                     }
                 }
             }
-            mesh->indices.push_back(tmp_glInt_2 - 1);
-            tmp_vertex_indices.push_back(tmp_glInt_2 - 1);
-            ss >> tmp_glInt_3;
+            tmp_positions_indices.push_back(tmp_glInt_p2 - 1);
+            ss >> tmp_glInt_p3;
             if (ss.peek() == '/')
             {
                 ss.ignore(1, '/');
                 if (ss.peek() == '/')
                 {
                     ss.ignore(1, '/');
-                    ss >> tmp; // normal indices
-                    tmp_normal_indices.push_back(tmp - 1);
+                    ss >> tmp_glInt_n3; // normal indices
+                    tmp_normal_indices.push_back(tmp_glInt_n3 - 1);
                 }
                 else
                 {
-                    ss >> tmp;// should be texture indices or normal indices
+                    ss >> tmp_glInt_t3;// should be texture indices or normal indices
                     if (ss.peek() == '/')
                     {
-                        tmp_texture_indices.push_back(tmp - 1);
+                        tmp_texture_indices.push_back(tmp_glInt_t3 - 1);
                         ss.ignore(1, '/');
-                        ss >> tmp; // normal indices
-                        tmp_normal_indices.push_back(tmp - 1);
+                        ss >> tmp_glInt_n3; // normal indices
+                        tmp_normal_indices.push_back(tmp_glInt_n3 - 1);
                     }
                     else
                     {
-                        tmp_texture_indices.push_back(tmp - 1);
+                        tmp_texture_indices.push_back(tmp_glInt_t3 - 1);
                     }
                 }
             }
-            mesh->indices.push_back(tmp_glInt_3 - 1);
-            tmp_vertex_indices.push_back(tmp_glInt_3 - 1);
-            tmp_glInt_2 = tmp_glInt_3;
-            while (ss >> tmp_glInt_3)
+            tmp_positions_indices.push_back(tmp_glInt_p3 - 1);
+            tmp_glInt_p2 = tmp_glInt_p3;
+            tmp_glInt_n2 = tmp_glInt_n3;
+            tmp_glInt_t2 = tmp_glInt_t3;
+            while (ss >> tmp_glInt_p3)
             {
                 if (ss.peek() == '/')
                 {
@@ -408,36 +421,113 @@ void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
                     if (ss.peek() == '/')
                     {
                         ss.ignore(1, '/');
-                        ss >> tmp; // normal indices
-                        tmp_normal_indices.push_back(tmp - 1);
+                        ss >> tmp_glInt_n3; // normal indices
+                        tmp_normal_indices.push_back(tmp_glInt_n1 - 1);
+                        tmp_normal_indices.push_back(tmp_glInt_n2 - 1);
+                        tmp_normal_indices.push_back(tmp_glInt_n3 - 1);
+                        tmp_glInt_n2 = tmp_glInt_n3;
                     }
                     else
                     {
-                        ss >> tmp;// should be texture indices or normal indices
+                        ss >> tmp_glInt_t3;// should be texture indices or normal indices
                         if (ss.peek() == '/')
                         {
-                            tmp_texture_indices.push_back(tmp - 1);
+                            tmp_texture_indices.push_back(tmp_glInt_t1 - 1);
+                            tmp_texture_indices.push_back(tmp_glInt_t2 - 1);
+                            tmp_texture_indices.push_back(tmp_glInt_t3 - 1);
+                            tmp_glInt_t2 = tmp_glInt_t3;
                             ss.ignore(1, '/');
-                            ss >> tmp; // normal indices
-                            tmp_normal_indices.push_back(tmp - 1);
+                            ss >> tmp_glInt_n3; // normal indices
+                            tmp_normal_indices.push_back(tmp_glInt_n1 - 1);
+                            tmp_normal_indices.push_back(tmp_glInt_n2 - 1);
+                            tmp_normal_indices.push_back(tmp_glInt_n3 - 1);
+                            tmp_glInt_n2 = tmp_glInt_n3;
                         }
                         else
                         {
-                            tmp_texture_indices.push_back(tmp - 1);
+                            tmp_texture_indices.push_back(tmp_glInt_t1 - 1);
+                            tmp_texture_indices.push_back(tmp_glInt_t2 - 1);
+                            tmp_texture_indices.push_back(tmp_glInt_t3 - 1);
+                            tmp_glInt_t2 = tmp_glInt_t3;
                         }
                     }
                 }
-                mesh->indices.push_back(tmp_glInt_1 - 1);
-                mesh->indices.push_back(tmp_glInt_2 - 1);
-                mesh->indices.push_back(tmp_glInt_3 - 1);
-                tmp_vertex_indices.push_back(tmp_glInt_3 - 1);
-                tmp_glInt_2 = tmp_glInt_3;
+                tmp_positions_indices.push_back(tmp_glInt_p1 - 1);
+                tmp_positions_indices.push_back(tmp_glInt_p2 - 1);
+                tmp_positions_indices.push_back(tmp_glInt_p3 - 1);
+                tmp_glInt_p2 = tmp_glInt_p3;
             }
-            
+
         }
         else
         {
 
+        }
+    }
+    int iter = 0;
+    if (tmp_normal_indices.empty() && tmp_texture_indices.empty())
+    {
+        mesh->positions_use_indices = tmp_positions;
+        mesh->indices = tmp_positions_indices;
+    }
+    else if (tmp_normal_indices.empty())
+    {
+        for (int i = 0; i < tmp_positions_indices.size(); i++)
+        {
+            glm::ivec3 key = glm::ivec3(tmp_positions_indices[i], tmp_texture_indices[i], 0);
+            if (pos_texcoord_norm_indices.find(key) == pos_texcoord_norm_indices.end())
+            {
+                mesh->positions_use_indices.push_back(tmp_positions[tmp_positions_indices[i]]);
+                mesh->texcoords_use_indices.push_back(tmp_texcoords[tmp_texture_indices[i]]);
+                mesh->indices.push_back(iter);
+                pos_texcoord_norm_indices.insert(std::pair<glm::ivec3, int>(key, iter));
+                iter++;
+            }
+            else
+            {
+                mesh->indices.push_back(pos_texcoord_norm_indices[key]);
+            }
+
+        }
+    }
+    else if (tmp_texture_indices.empty())
+    {
+        for (int i = 0; i < tmp_positions_indices.size(); i++)
+        {
+            glm::ivec3 key = glm::ivec3(tmp_positions_indices[i], 0, tmp_normal_indices[i]);
+            if (pos_texcoord_norm_indices.find(key) == pos_texcoord_norm_indices.end())
+            {
+                mesh->positions_use_indices.push_back(tmp_positions[tmp_positions_indices[i]]);
+                mesh->vertex_normals.push_back(tmp_normals[tmp_normal_indices[i]]);
+                mesh->indices.push_back(iter);
+                pos_texcoord_norm_indices.insert(std::pair<glm::ivec3, int>(key, iter));
+                iter++;
+            }
+            else
+            {
+                mesh->indices.push_back(pos_texcoord_norm_indices[key]);
+            }
+
+        }
+    }
+    else
+    {
+        for (int i = 0; i < tmp_positions_indices.size(); i++)
+        {
+            glm::ivec3 key = glm::ivec3(tmp_positions_indices[i], tmp_texture_indices[i], tmp_normal_indices[i]);
+            if (pos_texcoord_norm_indices.find(key) == pos_texcoord_norm_indices.end())
+            {
+                mesh->positions_use_indices.push_back(tmp_positions[tmp_positions_indices[i]]);
+                mesh->vertex_normals.push_back(tmp_normals[tmp_normal_indices[i]]);
+                mesh->texcoords_use_indices.push_back(tmp_texcoords[tmp_texture_indices[i]]);
+                mesh->indices.push_back(iter);
+                pos_texcoord_norm_indices.insert(std::pair<glm::ivec3, int>(key, iter));
+                iter++;
+            }
+            else
+            {
+                mesh->indices.push_back(pos_texcoord_norm_indices[key]);
+            }
         }
     }
     float gap_x = max_val_x - min_val_x;
@@ -455,60 +545,29 @@ void Graphics::loadObject(const std::string& path, const std::string& mesh_id)
         iterator++;
     }
 
-    /////////////should change this codes - it doesn't work properly!!!////////////////////////////////////////////////////////////
-    if (!tmp_normals.empty())
-    {
-        if (!tmp_normal_indices.empty())
-        {
-            std::vector <glm::vec3> tmp_storage(mesh->positions_use_indices.size());
-            for (int i = 0; i < tmp_normal_indices.size(); i++)
-            {
-                tmp_storage[tmp_vertex_indices[i]] = tmp_normals[tmp_normal_indices[i]];
-            }
-            mesh->vertex_normals = tmp_storage;
-        }
-        else
-        {
-            mesh->vertex_normals = tmp_normals;
-        }
-    }
-    if (!tmp_texcoords.empty())
-    {
-        if (!tmp_texture_indices.empty())
-        {
-            std::vector<glm::vec2> tmp_storage(mesh->positions_use_indices.size());
-            for (int i = 0; i < tmp_texture_indices.size(); i++)
-            {
-                tmp_storage[tmp_vertex_indices[i]] = tmp_texcoords[tmp_texture_indices[i]];
-            }
-            mesh->texcoords_use_indices = tmp_storage;
-        }
-        else
-        {
-            mesh->texcoords_use_indices = tmp_texcoords;
-        }
-    }
-    /////////////should change this codes - it doesn't work properly!!!////////////////////////////////////////////////////////////
+    meshgroup->AddMesh(mesh);
+    meshgroup->name = mesh_id;
     mesh->name = mesh_id;
-    mesh->Init();
-    meshes.insert(std::pair<std::string, Mesh*>(mesh_id, mesh));
+    meshgroup->Init();
+    meshgroups.insert(std::pair<std::string, MeshGroup*>(mesh_id, meshgroup));
 }
 
-Mesh* Graphics::GetMesh(const std::string& mesh_id)
+MeshGroup* Graphics::GetMeshGroup(const std::string& mesh_id)
 {
-    if (meshes.find(mesh_id) == meshes.end())
+    if (meshgroups.find(mesh_id) == meshgroups.end())
     {
         return nullptr;
     }
     else
     {
-        return meshes[mesh_id];
+        return meshgroups[mesh_id];
     }
 }
 
 void Graphics::AddSphereMesh()
 {
-    float PI = 22.f/7.f;
+    MeshGroup* m_sphere = new MeshGroup();
+    float PI = 22.f / 7.f;
     SphereMesh* sphere = new SphereMesh();
     float x, y, z, xy;
     float s, t;
@@ -531,11 +590,11 @@ void Graphics::AddSphereMesh()
 
             x = xy * cos(sectorAngle);
             y = xy * sin(sectorAngle);
-            sphere->positions_use_indices.push_back(glm::vec3(x,y,z));
+            sphere->positions_use_indices.push_back(glm::vec3(x, y, z));
             sphere->vertex_normals.push_back(glm::vec3(x, y, z));
             s = static_cast<float>(j) / static_cast<float>(sectorCount);
             t = static_cast<float>(i) / static_cast<float>(stackCount);
-            sphere->texcoords_use_indices.push_back(glm::vec2(s, t));
+            sphere->texcoords_use_indices.push_back(glm::vec2(1 - s, t));
         }
     }
     int k1, k2;
@@ -563,14 +622,21 @@ void Graphics::AddSphereMesh()
 
 
     }
+    m_sphere->name = "customsphere";
     sphere->name = "customsphere";
-    sphere->Init();
-    meshes.insert(std::pair<std::string, Mesh*>("customsphere", sphere));
+    m_sphere->AddMesh(sphere);
+    m_sphere->Init();
+    meshgroups.insert(std::pair<std::string, MeshGroup*>("customsphere", m_sphere));
 }
 
 void Graphics::SetBackgroundColor(glm::vec4 bgcolor)
 {
     background_color = bgcolor;
+}
+
+void Graphics::SetLightObject(Object* obj)
+{
+    light = obj;
 }
 
 void Graphics::AddMaterial(const std::string& material_id, Material* material)
@@ -596,8 +662,13 @@ std::unordered_map<std::string, Material*> Graphics::GetAllMaterial()
     return materials;
 }
 
-std::unordered_map<std::string, Mesh*> Graphics::GetAllMeshes()
+std::unordered_map<std::string, MeshGroup*> Graphics::GetAllMeshGroups()
 {
-    return meshes;
+    return meshgroups;
+}
+
+std::unordered_map<std::string, Shader> Graphics::GetAllShaders()
+{
+    return shaders;
 }
 

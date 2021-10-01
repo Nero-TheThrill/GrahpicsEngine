@@ -13,12 +13,18 @@ void Object::Update()
     Draw();
 }
 
+void Object::SetShader(std::string id)
+{
+    shader = GRAPHICS->GetShader(id);
+}
+
 Object::Object(std::string n)
 {
     id = 0;
     transform.Init();
     OBJECTMANAGER->RegisterObject(this);
     name = n;
+    draw_normal_shader = GRAPHICS->GetShader("test");
 }
 
 Object::Object(std::string n, Object* obj)
@@ -29,10 +35,11 @@ Object::Object(std::string n, Object* obj)
     color = obj->color;
     transform = obj->transform;
     texture = obj->texture;
-    material = obj->material;
     mesh = obj->mesh;
     drawmode = obj->drawmode;
     shouldDrawNormals = obj->shouldDrawNormals;
+    draw_normal_shader = obj->draw_normal_shader;
+    shader = obj->shader;
 }
 
 
@@ -46,7 +53,7 @@ void Object::SetColor(glm::vec3 inputcolor)
     color = inputcolor;
 }
 
-void Object::SetMesh(Mesh* input)
+void Object::SetMeshGroup(MeshGroup* input)
 {
     mesh = input;
 }
@@ -54,28 +61,27 @@ void Object::SetMesh(Mesh* input)
 void Object::Draw()
 {
     mesh->ChangeMode(drawmode);
-    material->Use();
-    material->shader.set("model", transform.GetTransformMatrix());
-    material->Update();
-    material->shader.set("objectColor", color);
+    glUseProgram(shader.program_handle);
+    shader.set("model", transform.GetTransformMatrix());
+    shader.set("objectColor", color);
+    if (shader.name != "test")
+    {
+        shader.set("viewPosition", GRAPHICS->camera.cam_position);
+        shader.set("lightPosition", GRAPHICS->light->transform.position);
+        shader.set("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
+    }
     texture.Update();
     mesh->Draw();
-    material->UnUse();
+    glUseProgram(0);
     if(shouldDrawNormals)
     {
-        GRAPHICS->GetMaterial("MTest")->Use();
-        GRAPHICS->GetMaterial("MTest")->shader.set("model", transform.GetTransformMatrix());
-        GRAPHICS->GetMaterial("MTest")->shader.set("objectColor", glm::vec3(1));
+        glUseProgram(draw_normal_shader.program_handle);
+        draw_normal_shader.set("model", transform.GetTransformMatrix());
+        draw_normal_shader.set("objectColor", glm::vec3(1));
         mesh->DrawNormals();
-        GRAPHICS->GetMaterial("MTest")->UnUse();
+        glUseProgram(0);
     }
 }
 
 
-
-//should change pick_shader -> pick_material and should make materials outside of engine.lib
-void Object::Pick_Material(const std::string& material_id)
-{
-    material = GRAPHICS->GetMaterial(material_id);
-}
 

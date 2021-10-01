@@ -33,20 +33,12 @@ int main()
     GRAPHICS->LoadTexture("../images/space.png", "space", ImageType::RGB);
     GRAPHICS->LoadTexture("../images/testmodel.jpg", "testmd", ImageType::RGB);
     GRAPHICS->LoadTexture("../images/ramus.png", "ramus", ImageType::RGBA);
+    GRAPHICS->LoadTexture("../images/baron.png", "baron", ImageType::RGBA);
+    GRAPHICS->LoadTexture("../images/penguin.png", "penguin", ImageType::RGBA);
 
-    Material* MTest = new Material("MTest"), * MLight = new Material("MLight"), * MTexture = new Material("MTexture");
-    MTest->PickShader("test");
-    MTexture->PickShader("texture");
-    MLight->PickShader("light");
-
-    MTest->set("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-    MTexture->set("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-    MLight->set("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-    
-    GRAPHICS->loadObject("../models/testmodel.obj", "testmodel");
     GRAPHICS->loadObject("../models/ramus.obj", "ramus");
     GRAPHICS->loadObject("../models/rhino.obj", "rhino");
-    GRAPHICS->loadObject("../models/starwars1.obj", "starwars");
+   // GRAPHICS->loadObject("../models/starwars1.obj", "starwars");
     GRAPHICS->loadObject("../models/sphere.obj", "sphere");
     GRAPHICS->loadObject("../models/cube2.obj", "cube2");
     GRAPHICS->loadObject("../models/cube.obj", "cube");
@@ -58,7 +50,8 @@ int main()
     GRAPHICS->loadObject("../models/cup.obj", "cup");
     GRAPHICS->loadObject("../models/quad.obj", "quad");
     GRAPHICS->loadObject("../models/triangle.obj", "triangle");
-    GRAPHICS->loadObject("../models/car.obj", "car");
+    GRAPHICS->loadObject("../models/baron.obj", "baron");
+    GRAPHICS->loadObject("../models/penguin.obj", "penguin");
 
     GRAPHICS->AddSphereMesh();
 

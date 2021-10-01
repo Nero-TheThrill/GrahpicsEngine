@@ -1,4 +1,5 @@
 #pragma once
+#include "Material.h"
 #include "Mesh.h"
 
 class ModelMesh : public Mesh
@@ -19,7 +20,7 @@ public:
     void DrawNormals() override;
     
 private:
-    GLuint VAO;
+    Material* material;
     GLuint VBO_positions, VBO_normals, VBO_texcoords;
     GLuint EBO;
     int index_size;

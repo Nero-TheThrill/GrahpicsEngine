@@ -66,18 +66,18 @@ void imGUIManager::Update()
             ImGui::DragFloat("degree", &degree);
             current_item->transform.Rotate(degree, rotate);
 
-            std::unordered_map<std::string, Material*> materials = GRAPHICS->GetAllMaterial();
-            std::string current_material = current_item->material->name;
+            std::unordered_map<std::string, Shader> shaders = GRAPHICS->GetAllShaders();
+            std::string current_shader = current_item->shader.name;
 
-            if (ImGui::BeginCombo("select_material", current_material.c_str()))
+            if (ImGui::BeginCombo("select_shader", current_shader.c_str()))
             {
-                 for (auto mat : materials)
+                 for (auto shader : shaders)
                 {
-                    bool is_selected = (current_material == mat.second->name);
-                    if (ImGui::Selectable(mat.second->name.c_str(), is_selected))
+                    bool is_selected = (current_shader == shader.second.name);
+                    if (ImGui::Selectable(shader.second.name.c_str(), is_selected))
                     {
-                        current_material = mat.second->name;
-                        current_item->Pick_Material(mat.second->name);
+                        current_shader = shader.second.name;
+                        current_item->SetShader(shader.second.name);
                     }
                     if (is_selected)
                         ImGui::SetItemDefaultFocus();
@@ -85,7 +85,7 @@ void imGUIManager::Update()
                 ImGui::EndCombo();
             }
 
-            std::unordered_map<std::string, Mesh*> meshes = GRAPHICS->GetAllMeshes();
+            std::unordered_map<std::string, MeshGroup*> meshes = GRAPHICS->GetAllMeshGroups();
             std::string current_mesh = current_item->mesh->name;
             if (ImGui::BeginCombo("select_mesh", current_mesh.c_str()))
             {
@@ -95,7 +95,7 @@ void imGUIManager::Update()
                     if (ImGui::Selectable(mesh.second->name.c_str(), is_selected))
                     {
                         current_mesh = mesh.second->name;
-                        current_item->SetMesh(mesh.second);
+                        current_item->SetMeshGroup(mesh.second);
                     }
                     if (is_selected)
                         ImGui::SetItemDefaultFocus();

@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include "Material.h"
-#include "Mesh.h"
+#include "MeshGroup.h"
 #include "Texture.h"
 #include "Transform.h"
 
@@ -12,18 +12,17 @@ public:
     Object(std::string n, Object* obj);
     ~Object();
     void SetColor(glm::vec3 inputcolor);
-    void SetMesh(Mesh* input);
+    void SetMeshGroup(MeshGroup* input);
     void Update();
-
+    void SetShader(std::string id);
     void Draw();
-    void Pick_Material(const std::string& material_id);
     bool alive = true;
     unsigned id;
     int drawmode = 0;// 0: facenormal 1: vertexnormal
     bool shouldDrawNormals = false;
-    Material* material;
     Transform transform;
-    Mesh* mesh;
+    MeshGroup* mesh;
+    Shader shader, draw_normal_shader;
     Texture texture;
     glm::vec3 color{ 1.0 };
     std::string name;

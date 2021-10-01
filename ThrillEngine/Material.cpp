@@ -35,7 +35,7 @@ void Material::Update()
 
 void Material::PickShader(const std::string& input_program)
 {
-    shader.program_handle = GRAPHICS->GetProgramHandle(input_program);
+    shader = GRAPHICS->GetShader(input_program);
 }
 
 void Material::set(const std::string& value_id, glm::vec3 input)

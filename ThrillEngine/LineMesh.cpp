@@ -2,7 +2,6 @@
 
 LineMesh::LineMesh()
 {
-    VAO = 0;
     VBO_positions = 0;
     VBO_normals = 0;
     EBO = 0;
@@ -18,12 +17,7 @@ void LineMesh::Init()
         positions.push_back(input1);
         positions.push_back(input2);
     }
-
-
-
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
-
+    
 
     glGenBuffers(1, &VBO_positions);
     glBindBuffer(GL_ARRAY_BUFFER, VBO_positions);
@@ -35,12 +29,12 @@ void LineMesh::Init()
 
 void LineMesh::Bind()
 {
-    glBindVertexArray(VAO);
+
 }
 
 void LineMesh::UnBind()
 {
-    glBindVertexArray(0);
+
 }
 
 void LineMesh::Draw()
@@ -52,7 +46,6 @@ void LineMesh::Draw()
 
 LineMesh::~LineMesh()
 {
-    glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO_positions);
     glDeleteBuffers(1, &VBO_normals);
     glDeleteBuffers(1, &EBO);

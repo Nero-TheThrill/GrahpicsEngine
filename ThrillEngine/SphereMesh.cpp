@@ -5,7 +5,6 @@
 
 SphereMesh::SphereMesh()
 {
-    VAO = 0;
     VBO_positions = 0;
     VBO_normals = 0;
     VBO_texcoords = 0;
@@ -22,8 +21,6 @@ void SphereMesh::Init()
     }
     GenerateNormals();
     GenerateNormalLines();
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
     glGenBuffers(1, &VBO_positions);
     glGenBuffers(1, &VBO_normals);
     glGenBuffers(1, &VBO_texcoords);
@@ -35,7 +32,6 @@ void SphereMesh::Init()
 
 void SphereMesh::Bind()
 {
-    glBindVertexArray(VAO);
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
     glEnableVertexAttribArray(2);
@@ -43,7 +39,6 @@ void SphereMesh::Bind()
 
 void SphereMesh::UnBind()
 {
-    glBindVertexArray(0);
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
     glDisableVertexAttribArray(2);
@@ -97,7 +92,6 @@ void SphereMesh::GenerateNormalLines()
 
 SphereMesh::~SphereMesh()
 {
-    glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO_positions);
     glDeleteBuffers(1, &VBO_normals);
     glDeleteBuffers(1, &VBO_texcoords);
@@ -117,7 +111,6 @@ void SphereMesh::ChangeMode(int mode)
 
 void SphereMesh::UnBindData()
 {
-    glBindVertexArray(0);
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
     if (!texcoords_use_indices.empty())
@@ -128,7 +121,6 @@ void SphereMesh::UnBindData()
 
 void SphereMesh::BindData()
 {
-    glBindVertexArray(VAO);
     if (n_mode == 0)
     {
         glBindBuffer(GL_ARRAY_BUFFER, VBO_positions);
@@ -169,7 +161,6 @@ void SphereMesh::BindData()
 
 void SphereMesh::DrawNormals()
 {
-    glBindVertexArray(VAO);
     if (n_mode == 0)
     {
         glBindBuffer(GL_ARRAY_BUFFER, VBO_positions);
@@ -189,7 +180,6 @@ void SphereMesh::DrawNormals()
         glDrawArrays(GL_LINES, 0, static_cast<GLsizei>(vertex_normal_lines.size()));
     }
     glDisableVertexAttribArray(0);
-    glBindVertexArray(0);
 
     BindData();
 }
