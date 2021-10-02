@@ -55,10 +55,12 @@ void TestLevel::Init()
     obj2->transform.Scale(glm::vec3(2.f));
     obj2->SetColor(glm::vec3(0.21f, 0.42f, 0.39f));
 
-    obj3 = new Object("bunny");
-    obj3->SetMeshGroup(GRAPHICS->GetMeshGroup("bunny_high_poly"));
+    obj3 = new Object("human");
+    obj3->SetMeshGroup(GRAPHICS->GetMeshGroup("human"));
     obj3->SetShader("light");
     obj3->transform.Translate(glm::vec3(-3.4f, 0.8f, 0.0f));
+    //obj3->texture.SetTexture("starwars");
+    obj3->transform.Scale(glm::vec3(4.f));
     obj3->drawmode = 1;
 
     obj4 = new Object("sphere loaded from file", obj3);
@@ -216,19 +218,19 @@ void TestLevel::Update()
     }
     if (Input::IsPressed(GLFW_KEY_O))
     {
-        GRAPHICS->camera.RotateYaxis(0.5f);
+        GRAPHICS->camera.RotateYaxis(0.3f);
     }
     if (Input::IsPressed(GLFW_KEY_U))
     {
-        GRAPHICS->camera.RotateYaxis(-0.5f);
+        GRAPHICS->camera.RotateYaxis(-0.3f);
     }
     if (Input::IsPressed(GLFW_KEY_SEMICOLON))
     {
-        GRAPHICS->camera.RotateXaxis(0.5f);
+        GRAPHICS->camera.RotateXaxis(0.3f);
     }
     if (Input::IsPressed(GLFW_KEY_P))
     {
-        GRAPHICS->camera.RotateXaxis(-0.5f);
+        GRAPHICS->camera.RotateXaxis(-0.3f);
     }
     if (Input::IsTriggered(GLFW_KEY_N))
     {

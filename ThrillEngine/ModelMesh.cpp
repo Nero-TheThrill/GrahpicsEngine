@@ -132,7 +132,7 @@ ModelMesh::~ModelMesh()
         glDeleteBuffers(1, &VBO_texcoords);
     }
     glDeleteBuffers(1, &EBO);
-    std::cout << "ModelMesh <" << name << "> Destructor Called" << std::endl;
+
 }
 
 void ModelMesh::GeneratePositionsWithIndices()

@@ -208,7 +208,7 @@ void Graphics::AddTexture(const std::string& texture_id, unsigned texture)
     textures.insert(std::pair<std::string, unsigned>(texture_id, texture));
 }
 
-void Graphics::LoadTexture(const std::string& path, const std::string& texture_id, ImageType image_type)
+void Graphics::LoadTexture(const std::string& path, const std::string& texture_id)
 {
     if (textures.find(texture_id) == textures.end())
     {
@@ -231,9 +231,9 @@ void Graphics::LoadTexture(const std::string& path, const std::string& texture_i
         data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
         if (data)
         {
-            if (image_type == ImageType::RGBA)
+            if (nrChannels == 4)
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-            else if (image_type == ImageType::RGB)
+            else if (nrChannels == 3)
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
             glGenerateMipmap(GL_TEXTURE_2D);
         }

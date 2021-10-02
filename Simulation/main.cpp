@@ -25,17 +25,17 @@ int main()
     GRAPHICS->LoadShader("../shaders/light.frag", "lightfrag", ShaderType::FRAGMENT);
     GRAPHICS->CompileShader("lightvert", "lightfrag", "light");
 
+    GRAPHICS->LoadTexture("../images/starwars.jpg", "starwars");
+    GRAPHICS->LoadTexture("../images/earth.bmp", "earth");
+    GRAPHICS->LoadTexture("../images/moon.bmp", "moon");
+    GRAPHICS->LoadTexture("../images/camo.jpg", "camo");
+    GRAPHICS->LoadTexture("../images/graycamo.png", "graycamo");
+    GRAPHICS->LoadTexture("../images/space.png", "space");
+    GRAPHICS->LoadTexture("../images/ramus.png", "ramus");
+    GRAPHICS->LoadTexture("../images/baron.png", "baron");
+    GRAPHICS->LoadTexture("../images/penguin.png", "penguin");
 
-
-    GRAPHICS->LoadTexture("../images/earth.bmp", "earth", ImageType::RGB);
-    GRAPHICS->LoadTexture("../images/moon.bmp", "moon", ImageType::RGB);
-    GRAPHICS->LoadTexture("../images/camo.jpg", "camo", ImageType::RGB);
-    GRAPHICS->LoadTexture("../images/graycamo.png", "graycamo", ImageType::RGB);
-    GRAPHICS->LoadTexture("../images/space.png", "space", ImageType::RGB);
-    GRAPHICS->LoadTexture("../images/ramus.png", "ramus", ImageType::RGBA);
-    GRAPHICS->LoadTexture("../images/baron.png", "baron", ImageType::RGBA);
-    GRAPHICS->LoadTexture("../images/penguin.png", "penguin", ImageType::RGBA);
-
+    objloader.loadObject("../models/human.obj", "human");
     objloader.loadObject("../models/ramus.obj", "ramus");
     objloader.loadObject("../models/rhino.obj", "rhino");
     objloader.loadObject("../models/starwars1.obj", "starwars");

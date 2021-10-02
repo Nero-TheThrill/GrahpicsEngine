@@ -66,4 +66,5 @@ MeshGroup::~MeshGroup()
         delete mesh;
         mesh = nullptr;
     }
+    std::cout << "ModelMesh <" << name << "> Destructor Called" << std::endl;
 }

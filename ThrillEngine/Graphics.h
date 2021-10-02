@@ -13,11 +13,6 @@ enum class ShaderType
     VERTEX
 };
 
-enum class ImageType
-{
-    RGBA,
-    RGB
-};
 
 class Graphics : public EngineCore
 {
@@ -40,7 +35,7 @@ public:
     void AddMaterial(const std::string& material_id, Material* material);
     Material* GetMaterial(const std::string& material_id);
 
-    void LoadTexture(const std::string& path, const std::string& texture_id, ImageType image_type);
+    void LoadTexture(const std::string& path, const std::string& texture_id);
 
     MeshGroup* GetMeshGroup(const std::string& mesh_id);
     void AddMeshGroup(const std::string& mesh_id, MeshGroup* mesh_group);
