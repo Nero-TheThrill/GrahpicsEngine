@@ -55,19 +55,15 @@ void TestLevel::Init()
     obj2->transform.Scale(glm::vec3(2.f));
     obj2->SetColor(glm::vec3(0.21f, 0.42f, 0.39f));
 
-    obj3 = new Object("human");
-    obj3->SetMeshGroup(GRAPHICS->GetMeshGroup("human"));
+    obj3 = new Object("plane");
+    obj3->SetMeshGroup(GRAPHICS->GetMeshGroup("quad"));
     obj3->SetShader("light");
-    obj3->transform.Translate(glm::vec3(-3.4f, 0.8f, 0.0f));
-    //obj3->texture.SetTexture("starwars");
-    obj3->transform.Scale(glm::vec3(4.f));
+    obj3->transform.Translate(glm::vec3(0, -7, 0));
+    obj3->transform.Rotate(-90, glm::vec3(1, 0, 0));
+    obj3->transform.Scale(glm::vec3(10.f));
     obj3->drawmode = 1;
 
-    obj4 = new Object("sphere loaded from file", obj3);
-    obj4->SetMeshGroup(GRAPHICS->GetMeshGroup("sphere"));
-    obj4->SetColor(glm::vec3(0.512, 0.508, 0.501));
-    obj4->transform.Translate(glm::vec3(-11, 4, -13));
-
+   
     obj5 = new Object("sphere from code");
     obj5->SetMeshGroup(GRAPHICS->GetMeshGroup("customsphere"));
     obj5->SetShader("texture");
@@ -172,22 +168,25 @@ void TestLevel::Update()
         c8->transform.RotateMove(TIMEMANAGER->deltaTime * 40, glm::vec3(0.0f, 0.0f, 1.0f));
     if (obj5 != nullptr)
         obj5->transform.RotateMove(TIMEMANAGER->deltaTime * 50, glm::vec3(0.0f, 0.0f, 1.0f));
-    if (c1 != nullptr)
-        c1->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame) * 9, -3, sin(TIMEMANAGER->currentFrame) * 9));
-    if (c2 != nullptr)
-        c2->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + 0.76f) * 9, -3, sin(TIMEMANAGER->currentFrame + 0.76f) * 9));
-    if (c3 != nullptr)
-        c3->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + 2 * 0.76f) * 9, -3, sin(TIMEMANAGER->currentFrame + 2 * 0.76f) * 9));
-    if (c4 != nullptr)
-        c4->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + 3 * 0.76f) * 9, -3, sin(TIMEMANAGER->currentFrame + 3 * 0.76f) * 9));
-    if (c5 != nullptr)
-        c5->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + 4 * 0.76f) * 9, -3, sin(TIMEMANAGER->currentFrame + 4 * 0.76f) * 9));
-    if (c6 != nullptr)
-        c6->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + 5 * 0.76f) * 9, -3, sin(TIMEMANAGER->currentFrame + 5 * 0.76f) * 9));
-    if (c7 != nullptr)
-        c7->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + 6 * 0.76f) * 9, -3, sin(TIMEMANAGER->currentFrame + 6 * 0.76f) * 9));
-    if (c8 != nullptr)
-        c8->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + 7 * 0.76f) * 9, -3, sin(TIMEMANAGER->currentFrame + 7 * 0.76f) * 9));
+    if (IMGUIMANAGER->shouldRotatelight)
+    {
+        if (c1 != nullptr)
+            c1->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame) * 9, -3, sin(TIMEMANAGER->currentFrame) * 9));
+        if (c2 != nullptr)
+            c2->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + 0.76f) * 9, -3, sin(TIMEMANAGER->currentFrame + 0.76f) * 9));
+        if (c3 != nullptr)
+            c3->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + 2 * 0.76f) * 9, -3, sin(TIMEMANAGER->currentFrame + 2 * 0.76f) * 9));
+        if (c4 != nullptr)
+            c4->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + 3 * 0.76f) * 9, -3, sin(TIMEMANAGER->currentFrame + 3 * 0.76f) * 9));
+        if (c5 != nullptr)
+            c5->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + 4 * 0.76f) * 9, -3, sin(TIMEMANAGER->currentFrame + 4 * 0.76f) * 9));
+        if (c6 != nullptr)
+            c6->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + 5 * 0.76f) * 9, -3, sin(TIMEMANAGER->currentFrame + 5 * 0.76f) * 9));
+        if (c7 != nullptr)
+            c7->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + 6 * 0.76f) * 9, -3, sin(TIMEMANAGER->currentFrame + 6 * 0.76f) * 9));
+        if (c8 != nullptr)
+            c8->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + 7 * 0.76f) * 9, -3, sin(TIMEMANAGER->currentFrame + 7 * 0.76f) * 9));
+    }
     if (ramus != nullptr)
     {
         ramus->transform.RotateMove(TIMEMANAGER->deltaTime * 6, glm::vec3(0, 1, 0));

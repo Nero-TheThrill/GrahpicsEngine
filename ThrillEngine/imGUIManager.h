@@ -8,5 +8,6 @@ public:
     void Update();
     ~imGUIManager();
     Object* current_item = nullptr;
+    bool shouldRotatelight = true;
 };
 extern imGUIManager* IMGUIMANAGER;

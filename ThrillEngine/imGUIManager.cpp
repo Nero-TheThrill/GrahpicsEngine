@@ -28,6 +28,9 @@ void imGUIManager::Update()
         ImGui::Begin("GraphicsEngine GUI");
         if (ImGui::Button("Reload Shader"))
             GRAPHICS->ReLoadShader();
+        
+        ImGui::Checkbox("Rotate lights", &shouldRotatelight);
+        
         glm::vec3 bgcolor=GRAPHICS->background_color;
         ImGui::DragFloat3("background color", glm::value_ptr(bgcolor), 0.01f, 0, 1);
         GRAPHICS->SetBackgroundColor(glm::vec4(bgcolor, 1.0f));
