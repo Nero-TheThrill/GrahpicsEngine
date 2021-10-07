@@ -24,9 +24,10 @@ void imGUIManager::Update()
     ImGui_ImplGlfw_NewFrame();
 
     ImGui::NewFrame();
-    { 
+    {   
         ImGui::Begin("GraphicsEngine GUI");
-
+        if (ImGui::Button("Reload Shader"))
+            GRAPHICS->ReLoadShader();
         glm::vec3 bgcolor=GRAPHICS->background_color;
         ImGui::DragFloat3("background color", glm::value_ptr(bgcolor), 0.01f, 0, 1);
         GRAPHICS->SetBackgroundColor(glm::vec4(bgcolor, 1.0f));
@@ -66,18 +67,18 @@ void imGUIManager::Update()
             ImGui::DragFloat("degree", &degree);
             current_item->transform.Rotate(degree, rotate);
 
-            std::unordered_map<std::string, Shader> shaders = GRAPHICS->GetAllShaders();
+            std::unordered_map < std::string, std::pair<Shader, std::pair<std::string, std::string>>> shaders = GRAPHICS->GetAllShaders();
             std::string current_shader = current_item->shader.name;
 
             if (ImGui::BeginCombo("select_shader", current_shader.c_str()))
             {
                  for (auto shader : shaders)
                 {
-                    bool is_selected = (current_shader == shader.second.name);
-                    if (ImGui::Selectable(shader.second.name.c_str(), is_selected))
+                    bool is_selected = (current_shader == shader.second.first.name);
+                    if (ImGui::Selectable(shader.second.first.name.c_str(), is_selected))
                     {
-                        current_shader = shader.second.name;
-                        current_item->SetShader(shader.second.name);
+                        current_shader = shader.second.first.name;
+                        current_item->SetShader(shader.second.first.name);
                     }
                     if (is_selected)
                         ImGui::SetItemDefaultFocus();

@@ -59,7 +59,7 @@ Graphics::~Graphics()
     }
     for (auto shader : shaders)
     {
-        glDeleteProgram(shader.second.program_handle);
+        glDeleteProgram(shader.second.first.program_handle);
     }
     std::cout << "Graphics Destructor Called" << std::endl;
 }
@@ -88,79 +88,56 @@ void Graphics::UpdatePVmatrices()
     glBindBufferBase(GL_UNIFORM_BUFFER, 0, uboMatrices);
 }
 
-void Graphics::CompileShader(const std::string& vertexshader_id, const std::string& fragmentshader_id, const std::string& program_id)
+void Graphics::CompileShader(const std::string& vertexshader_id, const std::string& fragmentshader_id, const std::string& program_id, bool is_ReCompile)
 {
-    GLuint program_handle = glCreateProgram();
-    if (0 == program_handle) {
-        log_string = "Cannot create program handle";
-        return;
-    }
-    GLuint vertexshader_handle = glCreateShader(GL_VERTEX_SHADER);
-    GLuint fragmentshader_handle = glCreateShader(GL_FRAGMENT_SHADER);
-    GLchar const* vertexshader[] = { vertex_shaders.find(vertexshader_id)->second.c_str() };
-    GLchar const* fragmentshader[] = { fragment_shaders.find(fragmentshader_id)->second.c_str() };
-    glShaderSource(vertexshader_handle, 1, vertexshader, NULL);
-    glShaderSource(fragmentshader_handle, 1, fragmentshader, NULL);
-    GLint vertexshader_result, fragmentshader_result;
-    glCompileShader(vertexshader_handle);
-    glGetShaderiv(vertexshader_handle, GL_COMPILE_STATUS, &vertexshader_result);
-    glCompileShader(fragmentshader_handle);
-    glGetShaderiv(fragmentshader_handle, GL_COMPILE_STATUS, &fragmentshader_result);
-    if ((!vertexshader_result) || (!fragmentshader_result)) {
-        log_string = "shader compilation failed\n";
-        GLint log_len;
-        glGetShaderiv(vertexshader_handle, GL_INFO_LOG_LENGTH, &log_len);
-        if (log_len > 0) {
-            GLchar* log = new GLchar[log_len];
-            GLsizei written_log_len;
-            glGetShaderInfoLog(vertexshader_handle, log_len, &written_log_len, log);
-            log_string += log;
-            std::cout << log_string << std::endl;
-            delete[] log;
-        }
-        glGetShaderiv(fragmentshader_handle, GL_INFO_LOG_LENGTH, &log_len);
-        if (log_len > 0) {
-            GLchar* log = new GLchar[log_len];
-            GLsizei written_log_len;
-            glGetShaderInfoLog(fragmentshader_handle, log_len, &written_log_len, log);
-            log_string += log;
-            std::cout << log_string << std::endl;
-            delete[] log;
-        }
-    }
-    else { // attach the shader to the program object
-        glAttachShader(program_handle, vertexshader_handle);
-        glAttachShader(program_handle, fragmentshader_handle);
-        Shader s;
-        s.name = program_id;
-        s.program_handle = program_handle;
-        shaders.insert(std::pair<std::string, Shader>(program_id, s));
-        glLinkProgram(program_handle);
-
-        // validate the program
-        glValidateProgram(program_handle);
-        GLint status;
-        glGetProgramiv(program_handle, GL_VALIDATE_STATUS, &status);
-        if (GL_FALSE == status) {
-            log_string = "Failed to validate shader program for current OpenGL context\n";
-            GLint log_len;
-            glGetProgramiv(program_handle, GL_INFO_LOG_LENGTH, &log_len);
-            if (log_len > 0) {
-                GLchar* log_str = new GLchar[log_len];
-                GLsizei written_log_len;
-                glGetProgramInfoLog(program_handle, log_len, &written_log_len, log_str);
-                log_string += log_str;
-                std::cout << log_string << std::endl;
-                delete[] log_str;
-            }
+    GLuint program_handle;
+    if (!is_ReCompile)
+    {
+        program_handle = glCreateProgram();
+        if (0 == program_handle) {
+            log_string = "Cannot create program handle";
             return;
         }
+      
+    }
+    else
+    {
+        program_handle = shaders[program_id].first.program_handle;
+
+    }
+    glAttachShader(program_handle, vertex_shaders[vertexshader_id].first);
+    glAttachShader(program_handle, fragment_shaders[fragmentshader_id].first);
+    Shader s;
+    s.name = program_id;
+    s.program_handle = program_handle;
+
+    shaders.insert(std::pair<std::string, std::pair<Shader, std::pair<std::string, std::string>>>(program_id, std::make_pair(s, std::make_pair(vertexshader_id, fragmentshader_id))));
+
+    glLinkProgram(program_handle);
+
+    // validate the program
+    glValidateProgram(program_handle);
+    GLint status;
+    glGetProgramiv(program_handle, GL_VALIDATE_STATUS, &status);
+    if (GL_FALSE == status) {
+        log_string = "Failed to validate shader program for current OpenGL context\n";
+        GLint log_len;
+        glGetProgramiv(program_handle, GL_INFO_LOG_LENGTH, &log_len);
+        if (log_len > 0) {
+            GLchar* log_str = new GLchar[log_len];
+            GLsizei written_log_len;
+            glGetProgramInfoLog(program_handle, log_len, &written_log_len, log_str);
+            log_string += log_str;
+            std::cout << log_string << std::endl;
+            delete[] log_str;
+        }
+        return;
     }
 }
 
 Shader Graphics::GetShader(const std::string& id)
 {
-    return shaders[id];
+    return shaders[id].first;
 }
 
 void Graphics::LoadShader(const std::string& path, const std::string& id, ShaderType type)
@@ -174,21 +151,91 @@ void Graphics::LoadShader(const std::string& path, const std::string& id, Shader
     std::stringstream buffer;
     buffer << shader_file.rdbuf();
     shader_file.close();
-    switch (type)
+
+
+    std::string stringbuffer = buffer.str();
+    if (type == ShaderType::FRAGMENT||type==ShaderType::RELOAD_FRAGMENT)
     {
-    case ShaderType::FRAGMENT:
-        fragment_shaders.insert(std::pair<std::string, std::string>(id, buffer.str()));
-        break;
-
-    case ShaderType::VERTEX:
-        vertex_shaders.insert(std::pair<std::string, std::string>(id, buffer.str()));
-        break;
-
-    default:
-        std::cout << "wrong type" << std::endl;
-        break;
+        GLuint fragmentshader_handle;
+        GLint  fragmentshader_result;
+ 
+        GLchar const* fragmentshader[] = { stringbuffer.c_str() };
+        if (type == ShaderType::FRAGMENT)
+            fragmentshader_handle = glCreateShader(GL_FRAGMENT_SHADER);
+        else
+            fragmentshader_handle = fragment_shaders[id].first;
+        glShaderSource(fragmentshader_handle, 1, fragmentshader, NULL);
+        glCompileShader(fragmentshader_handle);
+        glGetShaderiv(fragmentshader_handle, GL_COMPILE_STATUS, &fragmentshader_result);
+        if (!fragmentshader_result)
+        {
+            log_string = "shader compilation failed\n";
+            GLint log_len;
+            glGetShaderiv(fragmentshader_handle, GL_INFO_LOG_LENGTH, &log_len);
+            if (log_len > 0) {
+                GLchar* log = new GLchar[log_len];
+                GLsizei written_log_len;
+                glGetShaderInfoLog(fragmentshader_handle, log_len, &written_log_len, log);
+                log_string += log;
+                std::cout << log_string << std::endl;
+                delete[] log;
+            }
+        }
+        if (type == ShaderType::FRAGMENT)
+            fragment_shaders.insert(std::pair<std::string, std::pair<GLuint, std::string>>(id, std::make_pair(fragmentshader_handle, path)));
+        else
+            fragment_shaders[id].first = fragmentshader_handle;
     }
+    else if (type == ShaderType::VERTEX||type==ShaderType::RELOAD_VERTEX)
+    {
+        GLuint vertexshader_handle;
+        GLint vertexshader_result;
+        GLchar const* vertexshader[] = { stringbuffer.c_str() };
 
+        if (type == ShaderType::VERTEX)
+            vertexshader_handle = glCreateShader(GL_VERTEX_SHADER);
+        else
+            vertexshader_handle = vertex_shaders[id].first;
+
+        glShaderSource(vertexshader_handle, 1, vertexshader, NULL);
+        glCompileShader(vertexshader_handle);
+        glGetShaderiv(vertexshader_handle, GL_COMPILE_STATUS, &vertexshader_result);
+        if (!vertexshader_result)
+        {
+            log_string = "shader compilation failed\n";
+            GLint log_len;
+            glGetShaderiv(vertexshader_handle, GL_INFO_LOG_LENGTH, &log_len);
+            if (log_len > 0) {
+                GLchar* log = new GLchar[log_len];
+                GLsizei written_log_len;
+                glGetShaderInfoLog(vertexshader_handle, log_len, &written_log_len, log);
+                log_string += log;
+                std::cout << log_string << std::endl;
+                delete[] log;
+            }
+        }
+        if (type == ShaderType::VERTEX)
+            vertex_shaders.insert(std::pair<std::string, std::pair<GLuint, std::string>>(id, std::make_pair(vertexshader_handle, path)));
+        else
+            vertex_shaders[id].first = vertexshader_handle;
+      
+    }
+}
+
+void Graphics::ReLoadShader()
+{
+    for (auto vertex_shader : vertex_shaders)
+    {
+        LoadShader(vertex_shader.second.second, vertex_shader.first, ShaderType::RELOAD_VERTEX);
+    }
+    for (auto fragment_shader : fragment_shaders)
+    {
+        LoadShader(fragment_shader.second.second, fragment_shader.first, ShaderType::RELOAD_FRAGMENT);
+    }
+    for (auto shader : shaders)
+    {
+        CompileShader(shader.second.second.first, shader.second.second.second, shader.first, true);
+    }
 }
 
 unsigned Graphics::GetTexture(const std::string& texture_id)
@@ -363,7 +410,7 @@ std::unordered_map<std::string, MeshGroup*> Graphics::GetAllMeshGroups()
     return meshgroups;
 }
 
-std::unordered_map<std::string, Shader> Graphics::GetAllShaders()
+std::unordered_map < std::string, std::pair<Shader, std::pair<std::string, std::string>>> Graphics::GetAllShaders()
 {
     return shaders;
 }

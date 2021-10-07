@@ -10,7 +10,9 @@
 enum class ShaderType
 {
     FRAGMENT,
-    VERTEX
+    VERTEX,
+    RELOAD_FRAGMENT,
+    RELOAD_VERTEX
 };
 
 
@@ -25,9 +27,10 @@ public:
     void InitPVmatrices();
     void UpdatePVmatrices();
 
-    void CompileShader(const std::string& vertexshader_id, const std::string& fragmentshader_id, const std::string& program_id);
+    void CompileShader(const std::string& vertexshader_id, const std::string& fragmentshader_id, const std::string& program_id, bool is_ReCompile=false);
     Shader GetShader(const std::string& id);
     void LoadShader(const std::string& path, const std::string& id, ShaderType type);
+    void ReLoadShader();
 
     void AddTexture(const std::string& texture_id, unsigned texture);
     unsigned GetTexture(const std::string& texture_id);
@@ -50,16 +53,16 @@ public:
     glm::vec4 background_color = glm::vec4(0.61f, 0.61f, 0.9f, 1.0f);
     std::unordered_map<std::string, Material* > GetAllMaterial();
     std::unordered_map<std::string , MeshGroup*> GetAllMeshGroups();
-    std::unordered_map<std::string, Shader> GetAllShaders();
+    std::unordered_map < std::string, std::pair<Shader, std::pair<std::string, std::string>>> GetAllShaders();
     Camera camera;
     Object* light=nullptr;
 private:
     std::unordered_map<std::string /*id*/, Material* /*material*/> materials;
     std::unordered_map<std::string /*id*/, MeshGroup* /*mesh*/> meshgroups;
-    std::unordered_map<std::string /*id*/, std::string /*shader*/> fragment_shaders;
-    std::unordered_map<std::string /*id*/, std::string /*shader*/> vertex_shaders;
+    std::unordered_map<std::string /*id*/, std::pair<GLuint /*shader handle*/,std::string/*path*/>> fragment_shaders;
+    std::unordered_map<std::string /*id*/, std::pair<GLuint /*shader handle*/, std::string/*path*/>> vertex_shaders;
     std::string log_string; // log for OpenGL compiler and linker messages
-    std::unordered_map < std::string /*id*/, Shader/*shader*/> shaders;
+    std::unordered_map < std::string /*id*/, std::pair<Shader/*shader*/,std::pair<std::string/*vertex_id*/, std::string/*frag_id*/>>> shaders;
     std::unordered_map<std::string /*id*/, unsigned /*texture*/> textures;
 
     unsigned int uboMatrices = 0;
