@@ -169,7 +169,7 @@ void Graphics::LoadShader(const std::string& path, const std::string& id, Shader
         glGetShaderiv(fragmentshader_handle, GL_COMPILE_STATUS, &fragmentshader_result);
         if (!fragmentshader_result)
         {
-            log_string = "shader compilation failed\n";
+            log_string = id + " fragment shader compilation failed\n";
             GLint log_len;
             glGetShaderiv(fragmentshader_handle, GL_INFO_LOG_LENGTH, &log_len);
             if (log_len > 0) {
@@ -202,7 +202,7 @@ void Graphics::LoadShader(const std::string& path, const std::string& id, Shader
         glGetShaderiv(vertexshader_handle, GL_COMPILE_STATUS, &vertexshader_result);
         if (!vertexshader_result)
         {
-            log_string = "shader compilation failed\n";
+            log_string = id+ " vertex shader compilation failed\n";
             GLint log_len;
             glGetShaderiv(vertexshader_handle, GL_INFO_LOG_LENGTH, &log_len);
             if (log_len > 0) {
