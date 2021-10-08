@@ -14,14 +14,7 @@ TestLevel::TestLevel()
     obj3 = nullptr;
     obj4 = nullptr;
     obj5 = nullptr;
-    c1 = nullptr;
-    c2 = nullptr;
-    c3 = nullptr;
-    c4 = nullptr;
-    c5 = nullptr;
-    c6 = nullptr;
-    c7 = nullptr;
-    c8 = nullptr;
+
     skysphere = nullptr;
     ramus = nullptr;
     baron = nullptr;
@@ -63,7 +56,7 @@ void TestLevel::Init()
     obj3->transform.Scale(glm::vec3(10.f));
     obj3->drawmode = 1;
 
-   
+
     obj5 = new Object("sphere from code");
     obj5->SetMeshGroup(GRAPHICS->GetMeshGroup("customsphere"));
     obj5->SetShader("texture");
@@ -73,34 +66,13 @@ void TestLevel::Init()
     obj5->texture.SetTexture("earth");
     obj5->drawmode = 1;
 
-    c1 = new Object("orbit_circle1");
-    c1->SetMeshGroup(GRAPHICS->GetMeshGroup("customsphere"));
-    c1->SetShader("light");
-    c1->SetColor(glm::vec3(0.3, 0.3, 0.1));
-    c1->transform.Translate(glm::vec3(7, -3, 0));
-    c1->transform.Scale(glm::vec3(0.2, 0.2, 0.2));
-    c1->drawmode = 1;
-
-    c2 = new Object("orbit_circle2", c1);
-    c2->SetColor(glm::vec3(0.4, 0.9, 0.1));
-
-    c3 = new Object("orbit_circle3", c1);
-    c3->SetColor(glm::vec3(0.8, 0.3, 0.8));
-
-    c4 = new Object("orbit_circle4", c1);
-    c4->SetColor(glm::vec3(0.9, 0.7, 0.8));
-
-    c5 = new Object("orbit_circle5", c1);
-    c5->SetColor(glm::vec3(0.8, 0.3, 0.8));
-
-    c6 = new Object("orbit_circle6", c1);
-    c6->SetColor(glm::vec3(0.9, 0.8, 0.6));
-
-    c7 = new Object("orbit_circle7", c1);
-    c7->SetColor(glm::vec3(0.9, 0.7, 0.8));
-
-    c8 = new Object("orbit_circle8", c1);
-    c8->SetColor(glm::vec3(1, 1, 1));
+    //default_light = new Object("defaultlight");
+    //default_light->SetMeshGroup(GRAPHICS->GetMeshGroup("customsphere"));
+    //default_light->SetShader("test");
+    //default_light->transform.Translate(glm::vec3(7, -3, 0));
+    //default_light->transform.Scale(glm::vec3(0.2, 0.2, 0.2));
+    //default_light->drawmode = 1;
+    //lights.push_back(default_light);
 
     baron = new Object("baron");
     baron->SetMeshGroup(GRAPHICS->GetMeshGroup("baron"));
@@ -164,28 +136,37 @@ void TestLevel::Update()
         obj1->transform.Move(glm::vec3(0, 0, 3));
     }
 
-    if (c8 != nullptr)
-        c8->transform.RotateMove(TIMEMANAGER->deltaTime * 40, glm::vec3(0.0f, 0.0f, 1.0f));
     if (obj5 != nullptr)
         obj5->transform.RotateMove(TIMEMANAGER->deltaTime * 50, glm::vec3(0.0f, 0.0f, 1.0f));
+    if (IMGUIMANAGER->lightNumberChanged)
+    {
+        for (auto light : lights)
+        {
+            light->alive = false;
+        }
+        lights.clear();
+        for (int i = 0; i < IMGUIMANAGER->lightNumber; i++)
+        {
+            Object* lightsource = new Object("light" + std::to_string(i));
+            lightsource->SetMeshGroup(GRAPHICS->GetMeshGroup("customsphere"));
+            lightsource->SetShader("light");
+            lightsource->transform.Scale(glm::vec3(0.2, 0.2, 0.2));
+            lightsource->drawmode = 1;
+            lights.push_back(lightsource);
+        }
+        for (int i = 0; i < lights.size(); i++)
+        {
+            lights[i]->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + (float)i * 6.3f / lights.size()) * 9, -3, sin(TIMEMANAGER->currentFrame + (float)i * 6.3f / lights.size()) * 9));
+        }
+        IMGUIMANAGER->lightNumberChanged = false;
+    }
     if (IMGUIMANAGER->shouldRotatelight)
     {
-        if (c1 != nullptr)
-            c1->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame) * 9, -3, sin(TIMEMANAGER->currentFrame) * 9));
-        if (c2 != nullptr)
-            c2->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + 0.76f) * 9, -3, sin(TIMEMANAGER->currentFrame + 0.76f) * 9));
-        if (c3 != nullptr)
-            c3->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + 2 * 0.76f) * 9, -3, sin(TIMEMANAGER->currentFrame + 2 * 0.76f) * 9));
-        if (c4 != nullptr)
-            c4->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + 3 * 0.76f) * 9, -3, sin(TIMEMANAGER->currentFrame + 3 * 0.76f) * 9));
-        if (c5 != nullptr)
-            c5->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + 4 * 0.76f) * 9, -3, sin(TIMEMANAGER->currentFrame + 4 * 0.76f) * 9));
-        if (c6 != nullptr)
-            c6->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + 5 * 0.76f) * 9, -3, sin(TIMEMANAGER->currentFrame + 5 * 0.76f) * 9));
-        if (c7 != nullptr)
-            c7->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + 6 * 0.76f) * 9, -3, sin(TIMEMANAGER->currentFrame + 6 * 0.76f) * 9));
-        if (c8 != nullptr)
-            c8->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + 7 * 0.76f) * 9, -3, sin(TIMEMANAGER->currentFrame + 7 * 0.76f) * 9));
+        
+        for (int i = 0; i < lights.size(); i++)
+        {
+            lights[i]->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + (float)i * 6.3f / lights.size()) * 9, -3, sin(TIMEMANAGER->currentFrame + (float)i * 6.3f / lights.size()) * 9));
+        }
     }
     if (ramus != nullptr)
     {

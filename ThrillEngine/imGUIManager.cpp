@@ -24,11 +24,16 @@ void imGUIManager::Update()
     ImGui_ImplGlfw_NewFrame();
 
     ImGui::NewFrame();
-    {   
+    {
         ImGui::Begin("GraphicsEngine GUI");
         if (ImGui::Button("Reload Shader"))
             GRAPHICS->ReLoadShader();
-        
+        prev_lightNumber = lightNumber;
+        ImGui::SliderInt("light number", &lightNumber, 1, 16);
+        if(prev_lightNumber!=lightNumber)
+        {
+            lightNumberChanged = true;
+        }
         ImGui::Checkbox("Rotate lights", &shouldRotatelight);
         
         glm::vec3 bgcolor=GRAPHICS->background_color;

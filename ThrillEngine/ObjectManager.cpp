@@ -33,7 +33,6 @@ void ObjectManager::Update()
         Object* deletethis = objects.find(obj)->second;
         objects.erase(obj);
         delete deletethis;
-        std::cout << "delete" << std::endl;
     }
     need_to_be_erased.clear();
 }
