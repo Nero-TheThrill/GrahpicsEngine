@@ -42,7 +42,7 @@ void TestLevel::Init()
 
     obj2 = new Object("statue");
     obj2->SetMeshGroup(GRAPHICS->GetMeshGroup("lucy_princeton"));
-    obj2->SetShader("light");
+    obj2->SetShader("phong_shading");
     obj2->transform.Translate(glm::vec3(3.7f, 1.8f, 0.f));
     obj2->transform.Rotate(35, glm::vec3(1, 1, -1));
     obj2->transform.Scale(glm::vec3(2.f));
@@ -50,7 +50,7 @@ void TestLevel::Init()
 
     obj3 = new Object("plane");
     obj3->SetMeshGroup(GRAPHICS->GetMeshGroup("quad"));
-    obj3->SetShader("light");
+    obj3->SetShader("phong_shading");
     obj3->transform.Translate(glm::vec3(0, -7, 0));
     obj3->transform.Rotate(-90, glm::vec3(1, 0, 0));
     obj3->transform.Scale(glm::vec3(10.f));

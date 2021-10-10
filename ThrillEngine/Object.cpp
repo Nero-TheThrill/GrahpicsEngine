@@ -60,26 +60,29 @@ void Object::SetMeshGroup(MeshGroup* input)
 
 void Object::Draw()
 {
-    mesh->ChangeMode(drawmode);
-    glUseProgram(shader.program_handle);
-    shader.set("model", transform.GetTransformMatrix());
-    shader.set("objectColor", color);
-    if (shader.name != "test")
+    if (mesh != nullptr)
     {
-        shader.set("viewPosition", GRAPHICS->camera.cam_position);
-        shader.set("lightPosition", GRAPHICS->light->transform.position);
-        shader.set("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-    }
-    texture.Update();
-    mesh->Draw();
-    glUseProgram(0);
-    if(shouldDrawNormals)
-    {
-        glUseProgram(draw_normal_shader.program_handle);
-        draw_normal_shader.set("model", transform.GetTransformMatrix());
-        draw_normal_shader.set("objectColor", glm::vec3(1));
-        mesh->DrawNormals();
+        mesh->ChangeMode(drawmode);
+        glUseProgram(shader.program_handle);
+        shader.set("model", transform.GetTransformMatrix());
+        shader.set("objectColor", color);
+        if (shader.name != "test")
+        {
+            shader.set("viewPosition", GRAPHICS->camera.cam_position);
+            shader.set("lightPosition", GRAPHICS->light->transform.position);
+            shader.set("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
+        }
+        texture.Update();
+        mesh->Draw();
         glUseProgram(0);
+        if (shouldDrawNormals)
+        {
+            glUseProgram(draw_normal_shader.program_handle);
+            draw_normal_shader.set("model", transform.GetTransformMatrix());
+            draw_normal_shader.set("objectColor", glm::vec3(1));
+            mesh->DrawNormals();
+            glUseProgram(0);
+        }
     }
 }
 

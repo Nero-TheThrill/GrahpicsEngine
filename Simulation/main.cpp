@@ -21,9 +21,26 @@ int main()
     GRAPHICS->LoadShader("../shaders/texture.frag", "texturefrag", ShaderType::FRAGMENT);
     GRAPHICS->CompileShader("texturevert", "texturefrag", "texture");
 
-    GRAPHICS->LoadShader("../shaders/light.vert", "lightvert", ShaderType::VERTEX);
-    GRAPHICS->LoadShader("../shaders/light.frag", "lightfrag", ShaderType::FRAGMENT);
-    GRAPHICS->CompileShader("lightvert", "lightfrag", "light");
+    GRAPHICS->LoadShader("../shaders/phong_shading.vert", "v_phong_shading", ShaderType::VERTEX);
+    GRAPHICS->LoadShader("../shaders/phong_shading.frag", "f_phong_shading", ShaderType::FRAGMENT);
+    GRAPHICS->CompileShader("v_phong_shading", "f_phong_shading", "phong_shading");
+
+
+    GRAPHICS->LoadShader("../shaders/phong_lighting.vert", "v_phong_lighting", ShaderType::VERTEX);
+    GRAPHICS->LoadShader("../shaders/phong_lighting.frag", "f_phong_lighting", ShaderType::FRAGMENT);
+    GRAPHICS->CompileShader("v_phong_lighting", "f_phong_lighting", "phong_lighting");
+
+    GRAPHICS->LoadShader("../shaders/blinn_shading.vert", "v_blinn_shading", ShaderType::VERTEX);
+    GRAPHICS->LoadShader("../shaders/blinn_shading.frag", "f_blinn_shading", ShaderType::FRAGMENT);
+    GRAPHICS->CompileShader("v_blinn_shading", "f_blinn_shading", "blinn_shading");
+
+
+    GRAPHICS->LoadShader("../shaders/light.vert", "v_light", ShaderType::VERTEX);
+    GRAPHICS->LoadShader("../shaders/light.frag", "f_light", ShaderType::FRAGMENT);
+    GRAPHICS->CompileShader("v_light", "f_light", "light");
+
+
+
 
     GRAPHICS->LoadTexture("../images/starwars.jpg", "starwars");
     GRAPHICS->LoadTexture("../images/earth.bmp", "earth");
