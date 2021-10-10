@@ -3,8 +3,11 @@ out vec4 FragColor;
 
 in vec3 Normal;
 in vec3 FragPosition;
+in vec2 TexCoord;
 
-//uniform sampler2D texture1;
+uniform bool item_selected;
+uniform bool texture_exists;
+uniform sampler2D texture1;
 uniform vec3 objectColor;
 uniform vec3 lightColor;
 uniform vec3 lightPosition;
@@ -29,5 +32,18 @@ void main()
 	float spec=pow(max(dot(viewDirection,reflectDirection),0.0),32);
 	vec3 specular = specularStrength*spec*lightColor;
 
-	FragColor = vec4((ambient+diffuse+specular)*objectColor,1.0);
+	if(item_selected)
+	{
+		if(texture_exists)
+			FragColor = texture(texture1,TexCoord)*vec4((ambient+diffuse+specular)*vec3(1,0.3,0.3),1.0);
+		else
+			FragColor = vec4((ambient+diffuse+specular)*vec3(1,0.3,0.3),1.0);
+	}
+	else
+	{
+		if(texture_exists)
+			FragColor = texture(texture1,TexCoord)*vec4((ambient+diffuse+specular)*objectColor,1.0);
+		else
+			FragColor = vec4((ambient+diffuse+specular)*objectColor,1.0);
+	}
 }

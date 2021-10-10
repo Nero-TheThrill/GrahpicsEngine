@@ -59,7 +59,7 @@ void TestLevel::Init()
 
     obj5 = new Object("sphere from code");
     obj5->SetMeshGroup(GRAPHICS->GetMeshGroup("customsphere"));
-    obj5->SetShader("texture");
+    obj5->SetShader("phong_shading");
     obj5->transform.Translate(glm::vec3(0, 5, 0));
     obj5->transform.Rotate(-231, glm::vec3(1, -1, 0.23));
     obj5->transform.Scale(glm::vec3(3, 3, 3));
@@ -76,7 +76,7 @@ void TestLevel::Init()
 
     baron = new Object("baron");
     baron->SetMeshGroup(GRAPHICS->GetMeshGroup("baron"));
-    baron->SetShader("texture");
+    baron->SetShader("phong_shading");
     baron->transform.Translate(glm::vec3(24.3f, -12.2f, -34.f));
     baron->transform.Scale(glm::vec3(20.f));
     baron->texture.SetTexture("baron");
@@ -84,7 +84,7 @@ void TestLevel::Init()
 
     ramus = new Object("ramus");
     ramus->SetMeshGroup(GRAPHICS->GetMeshGroup("ramus"));
-    ramus->SetShader("texture");
+    ramus->SetShader("phong_shading");
     ramus->transform.Translate(glm::vec3(0, -3.f, 0.0f));
     ramus->transform.Scale(glm::vec3(3.f));
     ramus->texture.SetTexture("ramus");
@@ -92,7 +92,7 @@ void TestLevel::Init()
 
     penguin = new Object("penguin");
     penguin->SetMeshGroup(GRAPHICS->GetMeshGroup("penguin"));
-    penguin->SetShader("texture");
+    penguin->SetShader("phong_shading");
     penguin->transform.Translate(glm::vec3(-24.3f, -12.2f, -34.f));
     penguin->transform.Scale(glm::vec3(10.f));
     penguin->texture.SetTexture("penguin");
@@ -100,7 +100,7 @@ void TestLevel::Init()
 
     skysphere = new Object("skysphere");
     skysphere->SetMeshGroup(GRAPHICS->GetMeshGroup("customsphere"));
-    skysphere->SetShader("texture");
+    skysphere->SetShader("phong_shading");
     skysphere->transform.Scale(glm::vec3(50, 50, 50));
     skysphere->texture.SetTexture("space");
     skysphere->drawmode = 1;
@@ -149,7 +149,7 @@ void TestLevel::Update()
         {
             Object* lightsource = new Object("light" + std::to_string(i));
             lightsource->SetMeshGroup(GRAPHICS->GetMeshGroup("customsphere"));
-            lightsource->SetShader("light");
+            lightsource->SetShader("phong_shading");
             lightsource->transform.Scale(glm::vec3(0.2, 0.2, 0.2));
             lightsource->drawmode = 1;
             lights.push_back(lightsource);

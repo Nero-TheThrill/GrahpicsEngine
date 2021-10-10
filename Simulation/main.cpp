@@ -17,10 +17,6 @@ int main()
     GRAPHICS->LoadShader("../shaders/test.frag", "testfrag", ShaderType::FRAGMENT);
     GRAPHICS->CompileShader("testvert", "testfrag", "test");
 
-    GRAPHICS->LoadShader("../shaders/texture.vert", "texturevert", ShaderType::VERTEX);
-    GRAPHICS->LoadShader("../shaders/texture.frag", "texturefrag", ShaderType::FRAGMENT);
-    GRAPHICS->CompileShader("texturevert", "texturefrag", "texture");
-
     GRAPHICS->LoadShader("../shaders/phong_shading.vert", "v_phong_shading", ShaderType::VERTEX);
     GRAPHICS->LoadShader("../shaders/phong_shading.frag", "f_phong_shading", ShaderType::FRAGMENT);
     GRAPHICS->CompileShader("v_phong_shading", "f_phong_shading", "phong_shading");

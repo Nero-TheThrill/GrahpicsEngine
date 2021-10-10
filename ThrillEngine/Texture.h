@@ -9,7 +9,8 @@ public:
     ~Texture();
     void Update();
     void SetTexture(const std::string& texture_id);
+    int texture = -1;
 private:
-    unsigned int texture;
+   
 };
 

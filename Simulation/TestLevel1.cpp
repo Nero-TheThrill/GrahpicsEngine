@@ -27,7 +27,7 @@ void TestLevel1::Init()
 
     obj2 = new Object("object22");
     obj2->SetMeshGroup(GRAPHICS->GetMeshGroup("ramus"));
-    obj2->SetShader("texture");
+    obj2->SetShader("phong_shading");
     obj2->texture.SetTexture("ramus");
     obj2->transform.Scale(glm::vec3(5, 5, 5));
     obj2->transform.Rotate(26, glm::vec3(-1, 0.24, -1));

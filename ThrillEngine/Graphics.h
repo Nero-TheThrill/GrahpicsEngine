@@ -32,8 +32,8 @@ public:
     void LoadShader(const std::string& path, const std::string& id, ShaderType type);
     void ReLoadShader();
 
-    void AddTexture(const std::string& texture_id, unsigned texture);
-    unsigned GetTexture(const std::string& texture_id);
+    void AddTexture(const std::string& texture_id, int texture);
+    int GetTexture(const std::string& texture_id);
 
     void AddMaterial(const std::string& material_id, Material* material);
     Material* GetMaterial(const std::string& material_id);
@@ -63,7 +63,7 @@ private:
     std::unordered_map<std::string /*id*/, std::pair<GLuint /*shader handle*/, std::string/*path*/>> vertex_shaders;
     std::string log_string; // log for OpenGL compiler and linker messages
     std::unordered_map < std::string /*id*/, std::pair<Shader/*shader*/,std::pair<std::string/*vertex_id*/, std::string/*frag_id*/>>> shaders;
-    std::unordered_map<std::string /*id*/, unsigned /*texture*/> textures;
+    std::unordered_map<std::string /*id*/, int /*texture*/> textures;
 
     unsigned int uboMatrices = 0;
 

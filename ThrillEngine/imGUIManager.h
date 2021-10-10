@@ -7,7 +7,7 @@ public:
     imGUIManager(GLFWwindow* window);
     void Update();
     ~imGUIManager();
-    Object* current_item = nullptr;
+    Object* current_item = nullptr,*prev_item=nullptr;
     bool shouldRotatelight = true;
     bool lightNumberChanged = true;
     int lightNumber = 1;

@@ -26,4 +26,5 @@ public:
     Texture texture;
     glm::vec3 color{ 1.0 };
     std::string name;
+    bool item_selected =false;
 };

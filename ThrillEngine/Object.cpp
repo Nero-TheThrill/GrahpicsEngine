@@ -66,6 +66,8 @@ void Object::Draw()
         glUseProgram(shader.program_handle);
         shader.set("model", transform.GetTransformMatrix());
         shader.set("objectColor", color);
+        shader.set("texture_exists", texture.texture != -1);
+        shader.set("item_selected", item_selected);
         if (shader.name != "test")
         {
             shader.set("viewPosition", GRAPHICS->camera.cam_position);

@@ -43,6 +43,9 @@ void imGUIManager::Update()
 
         if (ImGui::BeginCombo("select object", current_item != nullptr ? current_item->name.c_str() : ""))
         {
+
+            prev_item = current_item;
+
             for (auto obj : objects)
             {
                 if (obj.second != nullptr)
@@ -56,6 +59,18 @@ void imGUIManager::Update()
                         ImGui::SetItemDefaultFocus();
 
                 }
+            }
+            if (current_item != prev_item)
+            {
+                if(prev_item != nullptr)
+                {
+                    prev_item->item_selected = false;
+                }
+                if(current_item!=nullptr)
+                {
+                    current_item->item_selected = true;
+                }
+                
             }
             ImGui::EndCombo();
         }

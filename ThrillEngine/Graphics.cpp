@@ -236,11 +236,11 @@ void Graphics::ReLoadShader()
     }
 }
 
-unsigned Graphics::GetTexture(const std::string& texture_id)
+int Graphics::GetTexture(const std::string& texture_id)
 {
     if (textures.find(texture_id) == textures.end())
     {
-        return 0;
+        return -1;
     }
     else
     {
@@ -248,9 +248,9 @@ unsigned Graphics::GetTexture(const std::string& texture_id)
     }
 }
 
-void Graphics::AddTexture(const std::string& texture_id, unsigned texture)
+void Graphics::AddTexture(const std::string& texture_id, int texture)
 {
-    textures.insert(std::pair<std::string, unsigned>(texture_id, texture));
+    textures.insert(std::pair<std::string, int>(texture_id, texture));
 }
 
 void Graphics::LoadTexture(const std::string& path, const std::string& texture_id)
@@ -288,7 +288,7 @@ void Graphics::LoadTexture(const std::string& path, const std::string& texture_i
             return;
         }
         stbi_image_free(data);
-        GRAPHICS->AddTexture(texture_id, texture);
+        GRAPHICS->AddTexture(texture_id, static_cast<int>(texture));
     }
 }
 
