@@ -102,6 +102,7 @@
     <ClCompile Include="imGUIManager.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="LevelManager.cpp" />
+    <ClCompile Include="LightObject.cpp" />
     <ClCompile Include="LineMesh.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="ModelMesh.cpp" />
@@ -136,6 +137,7 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="LevelManager.h" />
     <ClInclude Include="LevelStructure.h" />
+    <ClInclude Include="LightObject.h" />
     <ClInclude Include="LineMesh.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />

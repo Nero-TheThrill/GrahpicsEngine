@@ -23,10 +23,9 @@ void Graphics::Init()
     camera.Projection(45, 0.1f, 200.f); //should update every screen size changes.
     camera.View(glm::vec3(0.0f, 0.0f, 20)); //should update every camera moves
     InitPVmatrices();
-    UpdatePVmatrices();
     LineMesh* linemesh = new LineMesh();
     linemesh->name = "linemesh";
-    MeshGroup* m_linemesh = new MeshGroup;
+    MeshGroup* m_linemesh = new MeshGroup();
     m_linemesh->name = "linemesh";
     m_linemesh->AddMesh(linemesh);
     m_linemesh->Init();
@@ -41,8 +40,8 @@ void Graphics::Update()
 
 
     UpdatePVmatrices();
-    //camera.MouseMoveUpdate();
-    camera.MouseScrollUpdate();
+    if(!ImGui::GetIO().WantCaptureMouse)
+        camera.MouseScrollUpdate();
 }
 
 Graphics::~Graphics()
@@ -70,20 +69,17 @@ void Graphics::InitPVmatrices()
     glGenBuffers(1, &uboMatrices);
     glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
     glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
-    glBindBuffer(GL_UNIFORM_BUFFER, 0);
     glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboMatrices, 0, 2 * sizeof(glm::mat4));
     
 }
 
 void Graphics::UpdatePVmatrices()
 {
-    glm::mat4 projection = camera.GetProjectionMatrix();
     glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
+    glm::mat4 projection = camera.GetProjectionMatrix();
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projection));
     glm::mat4 view = camera.GetViewMatrix();
     glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
-    glBindBuffer(GL_UNIFORM_BUFFER, 0);
-    glBindBufferBase(GL_UNIFORM_BUFFER, 0, uboMatrices);
 }
 
 void Graphics::CompileShader(const std::string& vertexshader_id, const std::string& fragmentshader_id, const std::string& program_id, bool is_ReCompile)

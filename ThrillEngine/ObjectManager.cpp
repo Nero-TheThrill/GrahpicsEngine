@@ -17,6 +17,22 @@ void ObjectManager::Init()
 
 void ObjectManager::Update()
 {
+    for (std::unordered_map<unsigned, LightObject*>::iterator light = lightobjects.begin(); light != lightobjects.end(); light++)
+    {
+        if (light->second->alive)
+        {
+            light->second->Update();
+        }
+        else
+        {
+            light_to_be_erased.push_back(light->first);
+        }
+    }
+    for (auto light : light_to_be_erased)
+    {
+        lightobjects.erase(light);
+    }
+
     for (std::unordered_map<unsigned, Object*>::iterator obj = objects.begin(); obj != objects.end(); obj++)
     {
         if (obj->second->alive)
@@ -35,14 +51,20 @@ void ObjectManager::Update()
         delete deletethis;
     }
     need_to_be_erased.clear();
+    light_to_be_erased.clear();
 }
 
 void ObjectManager::RegisterObject(Object* obj)
 {
-    // std::cout<<genObjectsNum<<std::endl;
+   
     genObjectsNum += 1;
-    objects[genObjectsNum] = obj;
+    objects.insert(std::make_pair(genObjectsNum, obj));
     obj->id = genObjectsNum;
+}
+
+void ObjectManager::RegisterLight(LightObject* light)
+{
+    lightobjects.insert(std::make_pair(light->id, light));
 }
 
 void ObjectManager::DeleteAll()
@@ -56,6 +78,11 @@ void ObjectManager::DeleteAll()
 std::unordered_map<unsigned, Object*> ObjectManager::GetAllObjects()
 {
     return  objects;
+}
+
+std::unordered_map<unsigned, LightObject*> ObjectManager::GetAllLights()
+{
+    return lightobjects;
 }
 
 

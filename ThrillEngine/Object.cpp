@@ -25,10 +25,12 @@ Object::Object(std::string n)
     OBJECTMANAGER->RegisterObject(this);
     name = n;
     draw_normal_shader = GRAPHICS->GetShader("test");
+    mesh = nullptr;
 }
 
 Object::Object(std::string n, Object* obj)
 {
+    id = 0;
     transform.Init();
     OBJECTMANAGER->RegisterObject(this);
     name = n;
@@ -68,12 +70,11 @@ void Object::Draw()
         shader.set("objectColor", color);
         shader.set("texture_exists", texture.texture != -1);
         shader.set("item_selected", item_selected);
-        if (shader.name != "test")
-        {
-            shader.set("viewPosition", GRAPHICS->camera.cam_position);
-            shader.set("lightPosition", GRAPHICS->light->transform.position);
-            shader.set("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-        }
+
+        shader.set("viewPosition", GRAPHICS->camera.cam_position);
+        shader.set("lightPosition", GRAPHICS->light->transform.position);
+        shader.set("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
+
         texture.Update();
         mesh->Draw();
         glUseProgram(0);

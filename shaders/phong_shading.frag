@@ -14,7 +14,13 @@ uniform vec3 lightPosition;
 uniform vec3 viewPosition;
 
 
-
+layout(std140, binding = 1) uniform LightInformation
+{
+	uint active_lights;
+	vec3 fog_color;
+	vec3 ambient_color;
+	float attenuation;
+};
 
 void main()
 {

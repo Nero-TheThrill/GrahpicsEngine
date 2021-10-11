@@ -3,6 +3,7 @@
 #include "Graphics.h"
 #include "ObjectManager.h"
 #include "imgui/imgui_impl_opengl3.h"
+
 imGUIManager* IMGUIMANAGER = nullptr;
 
 imGUIManager::imGUIManager(GLFWwindow* window)
@@ -14,7 +15,9 @@ imGUIManager::imGUIManager(GLFWwindow* window)
     ImGui::StyleColorsClassic();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 450");
-
+    light_type[0] = "POINT";
+    light_type[1] = "DIRECTIONAL";
+    light_type[2] = "SPOT";
     std::cout << "imGUI Initialize" << std::endl;
 }
 
@@ -25,20 +28,73 @@ void imGUIManager::Update()
 
     ImGui::NewFrame();
     {
+        ImGui::ShowDemoWindow();
         ImGui::Begin("GraphicsEngine GUI");
+
         if (ImGui::Button("Reload Shader"))
             GRAPHICS->ReLoadShader();
+        ImGui::SameLine();
+        if (ImGui::Button("Unselect All"))
+        {
+            if (current_item != nullptr)
+                current_item->item_selected = false;
+            current_light = nullptr;
+            current_item = nullptr;
+        }
+
         prev_lightNumber = lightNumber;
-        ImGui::SliderInt("light number", &lightNumber, 1, 16);
+        ImGui::SliderInt("light number", &lightNumber, 1, 100);
         if(prev_lightNumber!=lightNumber)
         {
             lightNumberChanged = true;
+            if(current_item!=nullptr)
+               current_item->item_selected = false;
+            current_light = nullptr;
+            current_item = nullptr;
         }
+
         ImGui::Checkbox("Rotate lights", &shouldRotatelight);
         
         glm::vec3 bgcolor=GRAPHICS->background_color;
         ImGui::DragFloat3("background color", glm::value_ptr(bgcolor), 0.01f, 0, 1);
         GRAPHICS->SetBackgroundColor(glm::vec4(bgcolor, 1.0f));
+
+        std::unordered_map<unsigned, LightObject*> lights = OBJECTMANAGER->GetAllLights();
+        if (ImGui::BeginCombo("select light", current_light != nullptr ? current_light->name.c_str() : ""))
+        {
+            for (auto light : lights)
+            {
+                if (light.second != nullptr)
+                {
+                    bool is_selected = (current_light == light.second);
+                    if (ImGui::Selectable(light.second->name.c_str(), is_selected))
+                    {
+                        current_light = light.second;
+                    }
+                    if (is_selected)
+                        ImGui::SetItemDefaultFocus();
+                }
+            }
+            ImGui::EndCombo();
+        }
+        if(current_light!=nullptr)
+        {
+            if (ImGui::BeginCombo("select light type", light_type[static_cast<int>(current_light->type)].c_str()))
+            {
+                for (int i=0;i<3;i++)
+                {
+                    bool is_selected = (i == static_cast<int>(current_light->type));
+                    if (ImGui::Selectable(light_type[i].c_str(), is_selected))
+                    {
+                        current_light->type = static_cast<LightType>(i);
+                    }
+                    if (is_selected)
+                        ImGui::SetItemDefaultFocus();
+                }
+                ImGui::EndCombo();
+            }
+        }
+        ImGui::NewLine();
         std::unordered_map<unsigned, Object*> objects = OBJECTMANAGER->GetAllObjects();
 
         if (ImGui::BeginCombo("select object", current_item != nullptr ? current_item->name.c_str() : ""))
@@ -93,7 +149,7 @@ void imGUIManager::Update()
             std::unordered_map < std::string, std::pair<Shader, std::pair<std::string, std::string>>> shaders = GRAPHICS->GetAllShaders();
             std::string current_shader = current_item->shader.name;
 
-            if (ImGui::BeginCombo("select_shader", current_shader.c_str()))
+            if (ImGui::BeginCombo("select shader", current_shader.c_str()))
             {
                  for (auto shader : shaders)
                 {
@@ -111,7 +167,7 @@ void imGUIManager::Update()
 
             std::unordered_map<std::string, MeshGroup*> meshes = GRAPHICS->GetAllMeshGroups();
             std::string current_mesh = current_item->mesh->name;
-            if (ImGui::BeginCombo("select_mesh", current_mesh.c_str()))
+            if (ImGui::BeginCombo("select mesh", current_mesh.c_str()))
             {
                 for (auto mesh : meshes)
                 {

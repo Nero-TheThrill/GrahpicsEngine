@@ -5,7 +5,6 @@
 #include "LevelManager.h"
 #include "ObjectManager.h"
 #include "TimeManager.h"
-
 TestLevel::TestLevel()
 {
     orbit = nullptr;
@@ -66,13 +65,6 @@ void TestLevel::Init()
     obj5->texture.SetTexture("earth");
     obj5->drawmode = 1;
 
-    //default_light = new Object("defaultlight");
-    //default_light->SetMeshGroup(GRAPHICS->GetMeshGroup("customsphere"));
-    //default_light->SetShader("test");
-    //default_light->transform.Translate(glm::vec3(7, -3, 0));
-    //default_light->transform.Scale(glm::vec3(0.2, 0.2, 0.2));
-    //default_light->drawmode = 1;
-    //lights.push_back(default_light);
 
     baron = new Object("baron");
     baron->SetMeshGroup(GRAPHICS->GetMeshGroup("baron"));
@@ -147,7 +139,7 @@ void TestLevel::Update()
         lights.clear();
         for (int i = 0; i < IMGUIMANAGER->lightNumber; i++)
         {
-            Object* lightsource = new Object("light" + std::to_string(i));
+            LightObject* lightsource = new LightObject("light" + std::to_string(i));
             lightsource->SetMeshGroup(GRAPHICS->GetMeshGroup("customsphere"));
             lightsource->SetShader("phong_shading");
             lightsource->transform.Scale(glm::vec3(0.2, 0.2, 0.2));
@@ -156,7 +148,7 @@ void TestLevel::Update()
         }
         for (int i = 0; i < lights.size(); i++)
         {
-            lights[i]->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + (float)i * 6.3f / lights.size()) * 9, -3, sin(TIMEMANAGER->currentFrame + (float)i * 6.3f / lights.size()) * 9));
+            lights[i]->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + (float)i * 6.28f / lights.size()) * 9, -3, sin(TIMEMANAGER->currentFrame + (float)i * 6.28f / lights.size()) * 9));
         }
         IMGUIMANAGER->lightNumberChanged = false;
     }
@@ -165,7 +157,7 @@ void TestLevel::Update()
         
         for (int i = 0; i < lights.size(); i++)
         {
-            lights[i]->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + (float)i * 6.3f / lights.size()) * 9, -3, sin(TIMEMANAGER->currentFrame + (float)i * 6.3f / lights.size()) * 9));
+            lights[i]->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + (float)i * 6.28f / lights.size()) * 9, -3, sin(TIMEMANAGER->currentFrame + (float)i * 6.28f / lights.size()) * 9));
         }
     }
     if (ramus != nullptr)

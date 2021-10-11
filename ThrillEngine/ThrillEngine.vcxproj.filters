@@ -70,6 +70,9 @@
     <Filter Include="Object\ObjectLoader">
       <UniqueIdentifier>{d9d2697e-f553-4635-bc55-78d717df9ef9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\LightObject">
+      <UniqueIdentifier>{816be4fe-81f2-459a-be87-b952bf871eac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -153,6 +156,9 @@
     </ClCompile>
     <ClCompile Include="ObjectLoader.cpp">
       <Filter>Object\ObjectLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="LightObject.cpp">
+      <Filter>Object\LightObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -251,6 +257,9 @@
     </ClInclude>
     <ClInclude Include="ObjectLoader.h">
       <Filter>Object\ObjectLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="LightObject.h">
+      <Filter>Object\LightObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
