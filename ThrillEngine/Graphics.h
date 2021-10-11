@@ -27,6 +27,9 @@ public:
     void InitPVmatrices();
     void UpdatePVmatrices();
 
+    void InitLightInfo();
+    void UpdateLightInfo();
+
     void CompileShader(const std::string& vertexshader_id, const std::string& fragmentshader_id, const std::string& program_id, bool is_ReCompile=false);
     Shader GetShader(const std::string& id);
     void LoadShader(const std::string& path, const std::string& id, ShaderType type);

@@ -28,7 +28,6 @@ void imGUIManager::Update()
 
     ImGui::NewFrame();
     {
-        ImGui::ShowDemoWindow();
         ImGui::Begin("GraphicsEngine GUI");
 
         if (ImGui::Button("Reload Shader"))
@@ -41,9 +40,11 @@ void imGUIManager::Update()
             current_light = nullptr;
             current_item = nullptr;
         }
-
+        ImGui::NewLine();
+        ImGui::Separator();
+        ImGui::NewLine();
         prev_lightNumber = lightNumber;
-        ImGui::SliderInt("light number", &lightNumber, 1, 100);
+        ImGui::SliderInt("light number", &lightNumber, 1, 16);
         if(prev_lightNumber!=lightNumber)
         {
             lightNumberChanged = true;
@@ -54,10 +55,12 @@ void imGUIManager::Update()
         }
 
         ImGui::Checkbox("Rotate lights", &shouldRotatelight);
-        
-        glm::vec3 bgcolor=GRAPHICS->background_color;
+        ImGui::NewLine();
+        ImGui::Separator();
+        ImGui::NewLine();
+       /* glm::vec3 bgcolor=GRAPHICS->background_color;
         ImGui::DragFloat3("background color", glm::value_ptr(bgcolor), 0.01f, 0, 1);
-        GRAPHICS->SetBackgroundColor(glm::vec4(bgcolor, 1.0f));
+        GRAPHICS->SetBackgroundColor(glm::vec4(bgcolor, 1.0f));*/
 
         std::unordered_map<unsigned, LightObject*> lights = OBJECTMANAGER->GetAllLights();
         if (ImGui::BeginCombo("select light", current_light != nullptr ? current_light->name.c_str() : ""))
@@ -94,6 +97,8 @@ void imGUIManager::Update()
                 ImGui::EndCombo();
             }
         }
+        ImGui::NewLine();
+        ImGui::Separator();
         ImGui::NewLine();
         std::unordered_map<unsigned, Object*> objects = OBJECTMANAGER->GetAllObjects();
 

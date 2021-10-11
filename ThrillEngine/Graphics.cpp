@@ -20,8 +20,8 @@ Graphics::Graphics()
 
 void Graphics::Init()
 {
-    camera.Projection(45, 0.1f, 200.f); //should update every screen size changes.
-    camera.View(glm::vec3(0.0f, 0.0f, 20)); //should update every camera moves
+    camera.Projection(45, 0.1f, 200.f); 
+    camera.View(glm::vec3(0.0f, 0.0f, 20)); 
     InitPVmatrices();
     LineMesh* linemesh = new LineMesh();
     linemesh->name = "linemesh";
@@ -80,6 +80,14 @@ void Graphics::UpdatePVmatrices()
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projection));
     glm::mat4 view = camera.GetViewMatrix();
     glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
+}
+
+void Graphics::InitLightInfo()
+{
+}
+
+void Graphics::UpdateLightInfo()
+{
 }
 
 void Graphics::CompileShader(const std::string& vertexshader_id, const std::string& fragmentshader_id, const std::string& program_id, bool is_ReCompile)
