@@ -7,6 +7,7 @@ class imGUIManager
 public:
     imGUIManager(GLFWwindow* window);
     void Update();
+    void Init();
     ~imGUIManager();
     Object* current_item = nullptr,*prev_item=nullptr;
     LightObject* current_light = nullptr;

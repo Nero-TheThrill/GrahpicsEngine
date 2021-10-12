@@ -203,6 +203,16 @@ void imGUIManager::Update()
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
+void imGUIManager::Init()
+{
+    lightNumberChanged = true;
+    current_light = nullptr;
+    current_item = nullptr;
+    prev_item = nullptr;
+    shouldRotatelight = true;
+    lightNumber = 1;
+}
+
 imGUIManager::~imGUIManager()
 {
     ImGui_ImplOpenGL3_Shutdown();

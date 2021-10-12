@@ -13,13 +13,48 @@ uniform vec3 lightColor;
 uniform vec3 lightPosition;
 uniform vec3 viewPosition;
 
+struct DirLight {
+    vec3 direction;
+
+	//color
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+};
+
+struct PointLight {
+    vec3 position;
+
+	//color
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+};
+
+struct SpotLight {
+    vec3 position;
+    vec3 direction;
+    
+    float inner_angle;
+    float outer_angle;
+    float falloff;
+    //color
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+};
+
 
 layout(std140, binding = 1) uniform LightInformation
 {
 	uint active_lights;
 	vec3 fog_color;
 	vec3 ambient_color;
-	float attenuation;
+
+	//attenuation
+    float constant;
+    float linear;
+    float quadratic;
 };
 
 void main()

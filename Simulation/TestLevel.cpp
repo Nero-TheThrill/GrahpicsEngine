@@ -22,6 +22,7 @@ TestLevel::TestLevel()
 
 void TestLevel::Init()
 {
+    
     GRAPHICS->SetBackgroundColor(glm::vec4(0.f, 0.f, 0.f, 1.0f));
     orbit = new Object("orbit");
     orbit->SetMeshGroup(GRAPHICS->GetMeshGroup("line"));
@@ -39,8 +40,8 @@ void TestLevel::Init()
     obj1->texture.SetTexture("moon");
 
 
-    obj2 = new Object("statue");
-    obj2->SetMeshGroup(GRAPHICS->GetMeshGroup("lucy_princeton"));
+    obj2 = new Object("starwars");
+    obj2->SetMeshGroup(GRAPHICS->GetMeshGroup("starwars"));
     obj2->SetShader("phong_shading");
     obj2->transform.Translate(glm::vec3(3.7f, 1.8f, 0.f));
     obj2->transform.Rotate(35, glm::vec3(1, 1, -1));
@@ -99,6 +100,7 @@ void TestLevel::Init()
 
 
     GRAPHICS->SetLightObject(obj1);
+    IMGUIMANAGER->Init();
 }
 
 void TestLevel::Update()
@@ -141,7 +143,7 @@ void TestLevel::Update()
         {
             LightObject* lightsource = new LightObject("light" + std::to_string(i));
             lightsource->SetMeshGroup(GRAPHICS->GetMeshGroup("customsphere"));
-            lightsource->SetShader("phong_shading");
+            lightsource->SetShader("light");
             lightsource->transform.Scale(glm::vec3(0.2, 0.2, 0.2));
             lightsource->drawmode = 1;
             lights.push_back(lightsource);

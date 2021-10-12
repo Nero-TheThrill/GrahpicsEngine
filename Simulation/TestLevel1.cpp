@@ -33,6 +33,7 @@ void TestLevel1::Init()
     obj2->transform.Rotate(26, glm::vec3(-1, 0.24, -1));
 
     GRAPHICS->SetLightObject(obj1);
+    IMGUIMANAGER->Init();
 }
 
 void TestLevel1::Update()

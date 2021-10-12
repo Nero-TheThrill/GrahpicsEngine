@@ -19,11 +19,7 @@ void ObjectManager::Update()
 {
     for (std::unordered_map<unsigned, LightObject*>::iterator light = lightobjects.begin(); light != lightobjects.end(); light++)
     {
-        if (light->second->alive)
-        {
-            light->second->Update();
-        }
-        else
+        if (!light->second->alive)
         {
             light_to_be_erased.push_back(light->first);
         }
@@ -72,6 +68,10 @@ void ObjectManager::DeleteAll()
     for (std::unordered_map<unsigned, Object*>::iterator obj = objects.begin(); obj != objects.end(); obj++)
     {
         need_to_be_erased.push_back(obj->first);
+    }
+    for (std::unordered_map<unsigned, LightObject*>::iterator light = lightobjects.begin(); light != lightobjects.end(); light++)
+    {
+        light_to_be_erased.push_back(light->first);
     }
 }
 
