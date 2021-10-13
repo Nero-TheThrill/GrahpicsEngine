@@ -18,6 +18,7 @@ TestLevel::TestLevel()
     ramus = nullptr;
     baron = nullptr;
     penguin = nullptr;
+    time_count = 0;
 }
 
 void TestLevel::Init()
@@ -150,16 +151,16 @@ void TestLevel::Update()
         }
         for (int i = 0; i < lights.size(); i++)
         {
-            lights[i]->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + (float)i * 6.28f / lights.size()) * 9, -3, sin(TIMEMANAGER->currentFrame + (float)i * 6.28f / lights.size()) * 9));
+            lights[i]->transform.Translate(glm::vec3(cos(time_count + (float)i * 6.28f / lights.size()) * 9, -3, sin(time_count + (float)i * 6.28f / lights.size()) * 9));
         }
         IMGUIMANAGER->lightNumberChanged = false;
     }
     if (IMGUIMANAGER->shouldRotatelight)
     {
-        
+        time_count += TIMEMANAGER->deltaTime;
         for (int i = 0; i < lights.size(); i++)
         {
-            lights[i]->transform.Translate(glm::vec3(cos(TIMEMANAGER->currentFrame + (float)i * 6.28f / lights.size()) * 9, -3, sin(TIMEMANAGER->currentFrame + (float)i * 6.28f / lights.size()) * 9));
+            lights[i]->transform.Translate(glm::vec3(cos(time_count + (float)i * 6.28f / lights.size()) * 9, -3, sin(time_count + (float)i * 6.28f / lights.size()) * 9));
         }
     }
     if (ramus != nullptr)

@@ -14,6 +14,6 @@ private:
     Object* obj1, * obj2, * obj3, * obj4, * obj5, *orbit ,* ramus,*baron,*penguin,*default_light;
     std::vector<LightObject*> lights;
     Object* skysphere;
-
+    float time_count;
 };
 

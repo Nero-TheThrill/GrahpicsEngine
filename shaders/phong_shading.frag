@@ -34,7 +34,6 @@ struct PointLight {
 struct SpotLight {
     vec3 position;
     vec3 direction;
-    
     float inner_angle;
     float outer_angle;
     float falloff;
@@ -43,6 +42,7 @@ struct SpotLight {
     vec3 diffuse;
     vec3 specular;
 };
+
 
 
 layout(std140, binding = 1) uniform LightInformation
