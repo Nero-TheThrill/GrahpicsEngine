@@ -219,7 +219,7 @@ void ModelMesh::BindData()
         if (!positions.empty())
         {
             glBindBuffer(GL_ARRAY_BUFFER, VBO_positions);
-            glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 3 * positions.size()), &positions[0], GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 3 * positions.size()), positions.data(), GL_STATIC_DRAW);
             glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
             glEnableVertexAttribArray(0);
         }

@@ -99,8 +99,6 @@ void TestLevel::Init()
     skysphere->texture.SetTexture("space");
     skysphere->drawmode = 1;
 
-
-    GRAPHICS->SetLightObject(obj1);
     IMGUIMANAGER->Init();
 }
 

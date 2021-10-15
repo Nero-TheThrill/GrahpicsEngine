@@ -13,78 +13,74 @@ uniform vec3 lightColor;
 uniform vec3 lightPosition;
 uniform vec3 viewPosition;
 
-struct DirLight {
-    vec3 direction;
 
-	//color
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
+struct Light
+{
+	uint lighttype;    //            0
+	vec3 direction;    // D          16
+	vec3 position;     // P,S        32
+
+	vec3 ambient;      // D,P,S      48
+	vec3 diffuse;      // D,P,S      64
+	vec3 specular;     // D,P,S      80
+
+	float inner_angle; // S          96
+	float outer_angle; // S          112
+	float falloff;     // S          128
 };
-
-struct PointLight {
-    vec3 position;
-
-	//color
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
-};
-
-struct SpotLight {
-    vec3 position;
-    vec3 direction;
-    float inner_angle;
-    float outer_angle;
-    float falloff;
-    //color
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
-};
-
-
 
 layout(std140, binding = 1) uniform LightInformation
-{
-	uint active_lights;
+{	
+	uint light_number;	
+	vec3 view_position;
 	vec3 fog_color;
-	vec3 ambient_color;
-
-	//attenuation
-    float constant;
-    float linear;
-    float quadratic;
+	vec3 global_ambient_color;
+	float near;
+	float far;
+	float attenuation;
+	Light lights[16];
 };
+
+vec3 CalculateLight(Light light)
+{
+	float ambientStrength=0.05;
+	vec3 ambient = ambientStrength * light.ambient;
+
+	vec3 norm=normalize(Normal);
+	vec3 light_vector = normalize(light.position-FragPosition);
+	float diff=max(dot(norm,light_vector),0.0);
+	vec3 diffuse = diff*light.diffuse;
+
+	float specularStrength=0.2;
+	vec3 viewDirection=normalize(view_position-FragPosition);
+	vec3 reflectDirection = reflect(-light_vector,norm);
+	float spec=pow(max(dot(viewDirection,reflectDirection),0.0),32);
+	vec3 specular = specularStrength*spec*light.specular;
+	return (ambient+diffuse+specular);
+}
 
 void main()
 {
-	float ambientStrength=0.1;
-	vec3 ambient = ambientStrength * lightColor;
+	vec3 result=vec3(0);
+	for(int i=0;i<light_number;i++)
+	{
+		result+=CalculateLight(lights[i]);
+	}
 
-	vec3 norm=normalize(Normal);
-	vec3 lightDirection = normalize(lightPosition-FragPosition);
-	float diff=max(dot(norm,lightDirection),0.0);
-	vec3 diffuse = diff*lightColor;
-
-	float specularStrength=0.2;
-	vec3 viewDirection=normalize(viewPosition-FragPosition);
-	vec3 reflectDirection = reflect(-lightDirection,norm);
-	float spec=pow(max(dot(viewDirection,reflectDirection),0.0),32);
-	vec3 specular = specularStrength*spec*lightColor;
 
 	if(item_selected)
 	{
 		if(texture_exists)
-			FragColor = texture(texture1,TexCoord)*vec4((ambient+diffuse+specular)*vec3(1,0.3,0.3),1.0);
+			FragColor = texture(texture1,TexCoord)*vec4(result*vec3(1,0.3,0.3),0.5);
 		else
-			FragColor = vec4((ambient+diffuse+specular)*vec3(1,0.3,0.3),1.0);
+			FragColor = vec4(result*vec3(1,0.3,0.3),0.5);
 	}
 	else
 	{
 		if(texture_exists)
-			FragColor = texture(texture1,TexCoord)*vec4((ambient+diffuse+specular)*objectColor,1.0);
+			FragColor = texture(texture1,TexCoord)*vec4(result*objectColor,1.0);
 		else
-			FragColor = vec4((ambient+diffuse+specular)*objectColor,1.0);
+			FragColor = vec4(result*objectColor,1.0);
 	}
+	
 }

@@ -15,6 +15,7 @@ public:
     void MouseMoveUpdate();
     void MouseScrollUpdate();
     glm::vec3 cam_position = glm::vec3(0.0f, 0.0f, 3.0f);
+    float near = 0.1f, far = 100;
 private:
     glm::mat4 view = glm::mat4(1.0f), projection = glm::mat4(1.0f);
 
@@ -26,6 +27,6 @@ private:
     float pitch = 0.0f;
     float lastX = 800.0f / 2.0;
     float lastY = 600.0 / 2.0;
-    float near=0.1f, far=100;
+
 };
 

@@ -70,9 +70,7 @@ void Object::Draw()
         shader.set("objectColor", color);
         shader.set("texture_exists", texture.texture != -1);
         shader.set("item_selected", item_selected);
-
         shader.set("viewPosition", GRAPHICS->camera.cam_position);
-        shader.set("lightPosition", GRAPHICS->light->transform.position);
         shader.set("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
 
         texture.Update();

@@ -8,6 +8,7 @@
 #include "Input.h"
 #include "LineMesh.h"
 #include "ModelMesh.h"
+#include "ObjectManager.h"
 #include "SphereMesh.h"
 
 Graphics* GRAPHICS = nullptr;
@@ -20,9 +21,10 @@ Graphics::Graphics()
 
 void Graphics::Init()
 {
-    camera.Projection(45, 0.1f, 200.f); 
-    camera.View(glm::vec3(0.0f, 0.0f, 20)); 
+    camera.Projection(45, 0.1f, 200.f);
+    camera.View(glm::vec3(0.0f, 0.0f, 20));
     InitPVmatrices();
+    InitLightInfo();
     LineMesh* linemesh = new LineMesh();
     linemesh->name = "linemesh";
     MeshGroup* m_linemesh = new MeshGroup();
@@ -38,9 +40,10 @@ void Graphics::Update()
     glClearColor(background_color.x, background_color.y, background_color.z, background_color.w);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
     UpdatePVmatrices();
-    if(!ImGui::GetIO().WantCaptureMouse)
+    UpdateLightInfo();
+
+    if (!ImGui::GetIO().WantCaptureMouse)
         camera.MouseScrollUpdate();
 }
 
@@ -68,9 +71,10 @@ void Graphics::InitPVmatrices()
 
     glGenBuffers(1, &uboMatrices);
     glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
-    glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
+    glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
     glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboMatrices, 0, 2 * sizeof(glm::mat4));
-    
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
 }
 
 void Graphics::UpdatePVmatrices()
@@ -80,14 +84,49 @@ void Graphics::UpdatePVmatrices()
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projection));
     glm::mat4 view = camera.GetViewMatrix();
     glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
+    glBindBuffer(GL_UNIFORM_BUFFER,0);
 }
 
 void Graphics::InitLightInfo()
 {
+    GLsizeiptr size = 112 * 16 + 80;// 16 * (sizeof(unsigned) + 5 * sizeof(glm::vec3) + 3 * sizeof(float)) + sizeof(unsigned)+3 * sizeof(float) + 3 * sizeof(glm::vec3);
+    glGenBuffers(1, &uboLight);
+    glBindBuffer(GL_UNIFORM_BUFFER, uboLight);
+    glBufferData(GL_UNIFORM_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
+    glBindBufferRange(GL_UNIFORM_BUFFER, 1, uboLight, 0, size);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
 void Graphics::UpdateLightInfo()
 {
+    glBindBuffer(GL_UNIFORM_BUFFER, uboLight);
+    std::unordered_map<unsigned, LightObject*>lights = OBJECTMANAGER->GetAllLights();
+    auto lightnumber = static_cast<unsigned>(IMGUIMANAGER->lightNumber);
+    GLsizeiptr lightstride = 112;// (sizeof(unsigned) + 5 * sizeof(glm::vec3) + 3 * sizeof(float));
+    int iter = 0;
+    
+
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(unsigned), &lightnumber);
+    glBufferSubData(GL_UNIFORM_BUFFER, 16, sizeof(glm::vec3), glm::value_ptr(camera.cam_position));
+    glBufferSubData(GL_UNIFORM_BUFFER, 32, sizeof(glm::vec3), glm::value_ptr(fog_color));
+    glBufferSubData(GL_UNIFORM_BUFFER, 48, sizeof(glm::vec3), glm::value_ptr(global_ambient_color));
+    glBufferSubData(GL_UNIFORM_BUFFER, 60, sizeof(float), &(camera.near));
+    glBufferSubData(GL_UNIFORM_BUFFER, 64, sizeof(float), &(camera.far));
+    glBufferSubData(GL_UNIFORM_BUFFER, 68, sizeof(float), &(attenuation));
+    for (auto light : lights)
+    {
+        glBufferSubData(GL_UNIFORM_BUFFER, 80 + iter * lightstride, sizeof(unsigned), &(light.second->type));
+        glBufferSubData(GL_UNIFORM_BUFFER, 80 + iter * lightstride + 16, sizeof(glm::vec3), glm::value_ptr(light.second->direction));
+        glBufferSubData(GL_UNIFORM_BUFFER, 80 + iter * lightstride + 32, sizeof(glm::vec3), glm::value_ptr(light.second->transform.position));
+        glBufferSubData(GL_UNIFORM_BUFFER, 80 + iter * lightstride + 48, sizeof(glm::vec3), glm::value_ptr(light.second->ambient));
+        glBufferSubData(GL_UNIFORM_BUFFER, 80 + iter * lightstride + 64, sizeof(glm::vec3), glm::value_ptr(light.second->diffuse));
+        glBufferSubData(GL_UNIFORM_BUFFER, 80 + iter * lightstride + 80, sizeof(glm::vec3), glm::value_ptr(light.second->specular));
+        glBufferSubData(GL_UNIFORM_BUFFER, 80 + iter * lightstride + 92, sizeof(float), &(light.second->inner_angle));
+        glBufferSubData(GL_UNIFORM_BUFFER, 80 + iter * lightstride + 96, sizeof(float), &(light.second->outer_angle));
+        glBufferSubData(GL_UNIFORM_BUFFER, 80 + iter * lightstride + 100, sizeof(float), &(light.second->falloff));
+        iter++;
+    }
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
 void Graphics::CompileShader(const std::string& vertexshader_id, const std::string& fragmentshader_id, const std::string& program_id, bool is_ReCompile)
@@ -100,7 +139,7 @@ void Graphics::CompileShader(const std::string& vertexshader_id, const std::stri
             log_string = "Cannot create program handle";
             return;
         }
-      
+
     }
     else
     {
@@ -156,11 +195,11 @@ void Graphics::LoadShader(const std::string& path, const std::string& id, Shader
 
 
     std::string stringbuffer = buffer.str();
-    if (type == ShaderType::FRAGMENT||type==ShaderType::RELOAD_FRAGMENT)
+    if (type == ShaderType::FRAGMENT || type == ShaderType::RELOAD_FRAGMENT)
     {
         GLuint fragmentshader_handle;
         GLint  fragmentshader_result;
- 
+
         GLchar const* fragmentshader[] = { stringbuffer.c_str() };
         if (type == ShaderType::FRAGMENT)
             fragmentshader_handle = glCreateShader(GL_FRAGMENT_SHADER);
@@ -188,7 +227,7 @@ void Graphics::LoadShader(const std::string& path, const std::string& id, Shader
         else
             fragment_shaders[id].first = fragmentshader_handle;
     }
-    else if (type == ShaderType::VERTEX||type==ShaderType::RELOAD_VERTEX)
+    else if (type == ShaderType::VERTEX || type == ShaderType::RELOAD_VERTEX)
     {
         GLuint vertexshader_handle;
         GLint vertexshader_result;
@@ -204,7 +243,7 @@ void Graphics::LoadShader(const std::string& path, const std::string& id, Shader
         glGetShaderiv(vertexshader_handle, GL_COMPILE_STATUS, &vertexshader_result);
         if (!vertexshader_result)
         {
-            log_string = id+ " vertex shader compilation failed\n";
+            log_string = id + " vertex shader compilation failed\n";
             GLint log_len;
             glGetShaderiv(vertexshader_handle, GL_INFO_LOG_LENGTH, &log_len);
             if (log_len > 0) {
@@ -220,7 +259,7 @@ void Graphics::LoadShader(const std::string& path, const std::string& id, Shader
             vertex_shaders.insert(std::pair<std::string, std::pair<GLuint, std::string>>(id, std::make_pair(vertexshader_handle, path)));
         else
             vertex_shaders[id].first = vertexshader_handle;
-      
+
     }
 }
 
@@ -379,10 +418,6 @@ void Graphics::SetBackgroundColor(glm::vec4 bgcolor)
     background_color = bgcolor;
 }
 
-void Graphics::SetLightObject(Object* obj)
-{
-    light = obj;
-}
 
 void Graphics::AddMaterial(const std::string& material_id, Material* material)
 {

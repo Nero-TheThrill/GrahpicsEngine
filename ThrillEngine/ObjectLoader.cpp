@@ -16,7 +16,6 @@ void ObjectLoader::loadObject(const std::string& path, const std::string& mesh_i
     pos_texcoord_norm_indices.clear();
 
     bool using_group = false;
-    int vertexcount = 0;
 
     meshgroup = new MeshGroup();
     mesh = new ModelMesh();

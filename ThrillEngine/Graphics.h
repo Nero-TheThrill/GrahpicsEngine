@@ -50,15 +50,12 @@ public:
 
     void SetBackgroundColor(glm::vec4 bgcolor);
 
-    void SetLightObject(Object* obj);
-
 
     glm::vec4 background_color = glm::vec4(0.61f, 0.61f, 0.9f, 1.0f);
     std::unordered_map<std::string, Material* > GetAllMaterial();
     std::unordered_map<std::string , MeshGroup*> GetAllMeshGroups();
     std::unordered_map < std::string, std::pair<Shader, std::pair<std::string, std::string>>> GetAllShaders();
     Camera camera;
-    Object* light=nullptr;
 private:
     std::unordered_map<std::string /*id*/, Material* /*material*/> materials;
     std::unordered_map<std::string /*id*/, MeshGroup* /*mesh*/> meshgroups;
@@ -68,8 +65,10 @@ private:
     std::unordered_map < std::string /*id*/, std::pair<Shader/*shader*/,std::pair<std::string/*vertex_id*/, std::string/*frag_id*/>>> shaders;
     std::unordered_map<std::string /*id*/, int /*texture*/> textures;
 
-    unsigned int uboMatrices = 0;
+    unsigned int uboMatrices = 0,uboLight=0;
 
+    glm::vec3 fog_color = glm::vec3(0.5, 0.5, 0.5) , global_ambient_color = glm::vec3(0.3, 0.3, 0.8);
+    float attenuation=0.5f;
 
 };
 
