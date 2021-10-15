@@ -81,7 +81,7 @@ void TestLevel::Init()
     ramus->SetShader("phong_shading");
     ramus->transform.Translate(glm::vec3(0, -3.f, 0.0f));
     ramus->transform.Scale(glm::vec3(3.f));
-    ramus->texture.SetTexture("ramus");
+    //ramus->texture.SetTexture("ramus");
     ramus->transform.Rotate(26, glm::vec3(-1, 0.24, -1));
 
     penguin = new Object("penguin");
