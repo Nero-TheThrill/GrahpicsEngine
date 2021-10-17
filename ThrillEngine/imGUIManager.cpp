@@ -25,7 +25,6 @@ void imGUIManager::Update()
 {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
-
     ImGui::NewFrame();
     {
         ImGui::Begin("GraphicsEngine GUI");
@@ -37,69 +36,21 @@ void imGUIManager::Update()
         {
             if (current_item != nullptr)
                 current_item->item_selected = false;
+            if (current_light != nullptr)
+                current_light->item_selected = false;
             current_light = nullptr;
             current_item = nullptr;
+            
         }
         ImGui::NewLine();
         ImGui::Separator();
         ImGui::NewLine();
-        prev_lightNumber = lightNumber;
-        ImGui::SliderInt("light number", &lightNumber, 1, 16);
-        if(prev_lightNumber!=lightNumber)
-        {
-            lightNumberChanged = true;
-            if(current_item!=nullptr)
-               current_item->item_selected = false;
-            current_light = nullptr;
-            current_item = nullptr;
-        }
+      
+        /* glm::vec3 bgcolor=GRAPHICS->background_color;
+         ImGui::DragFloat3("background color", glm::value_ptr(bgcolor), 0.01f, 0, 1);
+         GRAPHICS->SetBackgroundColor(glm::vec4(bgcolor, 1.0f));*/
+        
 
-        ImGui::Checkbox("Rotate lights", &shouldRotatelight);
-        ImGui::NewLine();
-        ImGui::Separator();
-        ImGui::NewLine();
-       /* glm::vec3 bgcolor=GRAPHICS->background_color;
-        ImGui::DragFloat3("background color", glm::value_ptr(bgcolor), 0.01f, 0, 1);
-        GRAPHICS->SetBackgroundColor(glm::vec4(bgcolor, 1.0f));*/
-
-        std::unordered_map<unsigned, LightObject*> lights = OBJECTMANAGER->GetAllLights();
-        if (ImGui::BeginCombo("select light", current_light != nullptr ? current_light->name.c_str() : ""))
-        {
-            for (auto light : lights)
-            {
-                if (light.second != nullptr)
-                {
-                    bool is_selected = (current_light == light.second);
-                    if (ImGui::Selectable(light.second->name.c_str(), is_selected))
-                    {
-                        current_light = light.second;
-                    }
-                    if (is_selected)
-                        ImGui::SetItemDefaultFocus();
-                }
-            }
-            ImGui::EndCombo();
-        }
-        if(current_light!=nullptr)
-        {
-            if (ImGui::BeginCombo("select light type", light_type[static_cast<int>(current_light->type)].c_str()))
-            {
-                for (int i=0;i<3;i++)
-                {
-                    bool is_selected = (i == static_cast<int>(current_light->type));
-                    if (ImGui::Selectable(light_type[i].c_str(), is_selected))
-                    {
-                        current_light->type = static_cast<LightType>(i);
-                    }
-                    if (is_selected)
-                        ImGui::SetItemDefaultFocus();
-                }
-                ImGui::EndCombo();
-            }
-        }
-        ImGui::NewLine();
-        ImGui::Separator();
-        ImGui::NewLine();
         std::unordered_map<unsigned, Object*> objects = OBJECTMANAGER->GetAllObjects();
 
         if (ImGui::BeginCombo("select object", current_item != nullptr ? current_item->name.c_str() : ""))
@@ -123,15 +74,15 @@ void imGUIManager::Update()
             }
             if (current_item != prev_item)
             {
-                if(prev_item != nullptr)
+                if (prev_item != nullptr)
                 {
                     prev_item->item_selected = false;
                 }
-                if(current_item!=nullptr)
+                if (current_item != nullptr)
                 {
                     current_item->item_selected = true;
                 }
-                
+
             }
             ImGui::EndCombo();
         }
@@ -142,12 +93,12 @@ void imGUIManager::Update()
             current_item->transform.Translate(pos);
 
             glm::vec3 scale = current_item->transform.current_scale;
-            ImGui::DragFloat3("scale", glm::value_ptr(scale),0.1f, -FLT_MAX, FLT_MAX);
+            ImGui::DragFloat3("scale", glm::value_ptr(scale), 0.1f, -FLT_MAX, FLT_MAX);
             current_item->transform.Scale(scale);
 
             glm::vec3 rotate = current_item->transform.current_rotate_axis;
             float degree = current_item->transform.current_rotate_degree;
-            ImGui::DragFloat3("rotate axis", glm::value_ptr(rotate), 0.01f, -1,1);
+            ImGui::DragFloat3("rotate axis", glm::value_ptr(rotate), 0.01f, -1, 1);
             ImGui::DragFloat("degree", &degree);
             current_item->transform.Rotate(degree, rotate);
 
@@ -156,7 +107,7 @@ void imGUIManager::Update()
 
             if (ImGui::BeginCombo("select shader", current_shader.c_str()))
             {
-                 for (auto shader : shaders)
+                for (auto shader : shaders)
                 {
                     bool is_selected = (current_shader == shader.second.first.name);
                     if (ImGui::Selectable(shader.second.first.name.c_str(), is_selected))
@@ -193,12 +144,165 @@ void imGUIManager::Update()
             current_item->drawmode = mode;
             bool drawnormal = current_item->shouldDrawNormals;
             ImGui::Checkbox("draw normals", &drawnormal);
-            current_item->shouldDrawNormals=drawnormal;
+            current_item->shouldDrawNormals = drawnormal;
         }
 
         ImGui::End();
     }
 
+    {
+        ImGui::Begin("Light Manager");
+        prev_lightNumber = lightNumber;
+        ImGui::SliderInt("light number", &lightNumber, 1, 16);
+        if (prev_lightNumber != lightNumber)
+        {
+            lightNumberChanged = true;
+            if (current_item != nullptr)
+                current_item->item_selected = false;
+            current_light = nullptr;
+            current_item = nullptr;
+        }
+
+        ImGui::Checkbox("Rotate lights", &shouldRotatelight);
+        ImGui::NewLine();
+        ImGui::Separator();
+        ImGui::NewLine();
+
+        ImGui::RadioButton("light option a", &lightoption, 0); ImGui::SameLine();
+        ImGui::RadioButton("light option b", &lightoption, 1); ImGui::SameLine();
+        ImGui::RadioButton("light option c", &lightoption, 2);
+        std::unordered_map<unsigned, LightObject*> lights = OBJECTMANAGER->GetAllLights();
+        if(lightoption==0&&!lights.empty())
+        {
+            if (ImGui::BeginCombo("all light type", light_type[static_cast<int>(lights.begin()->second->type)].c_str()))
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    bool is_selected = (i == static_cast<int>(lights.begin()->second->type));
+                    if (ImGui::Selectable(light_type[i].c_str(), is_selected))
+                    {
+                        for (auto light : lights)
+                            light.second->type = static_cast<LightType>(i);
+                    }
+                    if (is_selected)
+                        ImGui::SetItemDefaultFocus();
+                }
+                ImGui::EndCombo();
+            }
+            for (auto light : lights)
+            {
+                light.second->ambient = glm::vec3(0.7f,0.7f,1.0f);
+                light.second->diffuse = glm::vec3(1,1,1);
+                light.second->specular = glm::vec3(1, 1, 1);
+            }
+        }
+        else if(lightoption==1&&!lights.empty())
+        {
+            if (ImGui::BeginCombo("all light type", light_type[static_cast<int>(lights.begin()->second->type)].c_str()))
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    bool is_selected = (i == static_cast<int>(lights.begin()->second->type));
+                    if (ImGui::Selectable(light_type[i].c_str(), is_selected))
+                    {
+                        for (auto light : lights)
+                            light.second->type = static_cast<LightType>(i);
+                    }
+                    if (is_selected)
+                        ImGui::SetItemDefaultFocus();
+                }
+                ImGui::EndCombo();
+            }
+            int iter = 1;
+            for (auto light : lights)
+            {
+                if (iter % 2 == 0)
+                {
+                    light.second->ambient = glm::vec3(0.3f, 0.5f,1.f);
+                    light.second->diffuse = glm::vec3(0.3f, 0.5f, 1.f);
+                    light.second->specular = glm::vec3(0.3f, 0.5f, 1.f);
+                }
+                else
+                {
+                    light.second->ambient = glm::vec3(1.f, 0.5f, 0.3f);
+                    light.second->diffuse = glm::vec3(1.f, 0.5f, 0.3f);
+                    light.second->specular = glm::vec3(1.f, 0.5f, 0.3f);
+                }
+                iter += 1;
+            }
+        }
+        else
+        {
+            
+        }
+
+        ImGui::NewLine();
+        ImGui::Separator();
+        ImGui::NewLine();
+
+      
+
+        if (ImGui::BeginCombo("select light", current_light != nullptr ? current_light->name.c_str() : ""))
+        {
+            prev_light = current_light;
+            for (auto light : lights)
+            {
+                if (light.second != nullptr)
+                {
+                    bool is_selected = (current_light == light.second);
+                    if (ImGui::Selectable(light.second->name.c_str(), is_selected))
+                    {
+                        current_light = light.second;
+                    }
+                    if (is_selected)
+                        ImGui::SetItemDefaultFocus();
+                }
+            }
+            if (current_light != prev_light)
+            {
+                if (prev_light != nullptr)
+                {
+                    prev_light->item_selected = false;
+                }
+                if (current_light != nullptr)
+                {
+                    current_light->item_selected = true;
+                }
+
+            }
+            ImGui::EndCombo();
+        }
+        if (current_light != nullptr)
+        {
+            if (ImGui::BeginCombo("light type", light_type[static_cast<int>(current_light->type)].c_str()))
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    bool is_selected = (i == static_cast<int>(current_light->type));
+                    if (ImGui::Selectable(light_type[i].c_str(), is_selected))
+                    {
+                        current_light->type = static_cast<LightType>(i);
+                    }
+                    if (is_selected)
+                        ImGui::SetItemDefaultFocus();
+                }
+                ImGui::EndCombo();
+            }
+            if (current_light->type == LightType::POINT)
+            {
+
+            }
+            else if (current_light->type == LightType::DIRECTIONAL)
+            {
+            }
+            else
+            {
+
+            }
+        }
+    ImGui::End();
+    }
+    ImGui::ShowDemoWindow();
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }

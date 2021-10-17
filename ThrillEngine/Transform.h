@@ -18,7 +18,8 @@ public:
     glm::vec3 current_scale = glm::vec3(1.0f, 1.0f, 1.0f);
     glm::vec3 current_rotate_axis = glm::vec3(1.0f);
     float current_rotate_degree = 0;
+    glm::mat4 transform = glm::mat4(1.0f);
 private:
-    glm::mat4 transform = glm::mat4(1.0f), translate = glm::mat4(1.0f), rotate = glm::mat4(1.0f), scale = glm::mat4(1.0f);
+    glm::mat4 translate = glm::mat4(1.0f), rotate = glm::mat4(1.0f), scale = glm::mat4(1.0f);
 };
 

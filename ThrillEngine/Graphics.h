@@ -56,6 +56,7 @@ public:
     std::unordered_map<std::string , MeshGroup*> GetAllMeshGroups();
     std::unordered_map < std::string, std::pair<Shader, std::pair<std::string, std::string>>> GetAllShaders();
     Camera camera;
+    Object* centerobj;
 private:
     std::unordered_map<std::string /*id*/, Material* /*material*/> materials;
     std::unordered_map<std::string /*id*/, MeshGroup* /*mesh*/> meshgroups;
@@ -67,8 +68,8 @@ private:
 
     unsigned int uboMatrices = 0,uboLight=0;
 
-    glm::vec3 fog_color = glm::vec3(0.01, 0.01, 0.01) , global_ambient_color = glm::vec3(1, 1, 1);
-    float attenuation=0.3f;
+    glm::vec3 fog_color = glm::vec3(0.5, 0.5, 0.8) , global_ambient_color = glm::vec3(1, 1, 1);
+    glm::vec3 attenuation= glm::vec3(0.1, 0.05, 0.025);
 
 };
 

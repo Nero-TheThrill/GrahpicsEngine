@@ -5,7 +5,7 @@
 #include "LevelManager.h"
 #include "ObjectManager.h"
 #include "TimeManager.h"
-
+#include<algorithm>
 
 TestLevel1::TestLevel1()
 {
@@ -16,21 +16,21 @@ TestLevel1::TestLevel1()
 
 void TestLevel1::Init()
 {
-    GRAPHICS->SetBackgroundColor(glm::vec4(1));
-    obj1 = new Object("object11");
-    obj1->SetMeshGroup(GRAPHICS->GetMeshGroup("cube"));
-    obj1->SetShader("test");
-    obj1->SetColor(glm::vec3(1, 1, 1));
-    obj1->transform.Translate(glm::vec3(6, 4, 3));
-    obj1->transform.Scale(glm::vec3(0.6, 0.6, 0.6));
+    //GRAPHICS->SetBackgroundColor(glm::vec4(1));
+    //obj1 = new Object("object11");
+    //obj1->SetMeshGroup(GRAPHICS->GetMeshGroup("cube"));
+    //obj1->SetShader("test");
+    //obj1->SetColor(glm::vec3(1, 1, 1));
+    //obj1->transform.Translate(glm::vec3(6, 4, 3));
+    //obj1->transform.Scale(glm::vec3(0.6, 0.6, 0.6));
 
 
-    obj2 = new Object("object22");
-    obj2->SetMeshGroup(GRAPHICS->GetMeshGroup("ramus"));
-    obj2->SetShader("phong_shading");
-    obj2->texture.SetTexture("ramus");
-    obj2->transform.Scale(glm::vec3(5, 5, 5));
-    obj2->transform.Rotate(26, glm::vec3(-1, 0.24, -1));
+    //obj2 = new Object("object22");
+    //obj2->SetMeshGroup(GRAPHICS->GetMeshGroup("ramus"));
+    //obj2->SetShader("phong_shading");
+    //obj2->texture.SetTexture("ramus");
+    //obj2->transform.Scale(glm::vec3(5, 5, 5));
+    //obj2->transform.Rotate(26, glm::vec3(-1, 0.24, -1));
 
     IMGUIMANAGER->Init();
 }

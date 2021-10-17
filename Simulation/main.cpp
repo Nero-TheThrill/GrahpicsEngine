@@ -48,23 +48,23 @@ int main()
     GRAPHICS->LoadTexture("../images/baron.png", "baron");
     GRAPHICS->LoadTexture("../images/penguin.png", "penguin");
 
-    objloader.loadObject("../models/human.obj", "human");
-    objloader.loadObject("../models/ramus.obj", "ramus");
-    objloader.loadObject("../models/rhino.obj", "rhino");
-    objloader.loadObject("../models/starwars1.obj", "starwars");
-    objloader.loadObject("../models/sphere.obj", "sphere");
+    //objloader.loadObject("../models/human.obj", "human");
+    //objloader.loadObject("../models/ramus.obj", "ramus");
+    //objloader.loadObject("../models/rhino.obj", "rhino");
+    //objloader.loadObject("../models/starwars1.obj", "starwars");
+    //objloader.loadObject("../models/sphere.obj", "sphere");
     objloader.loadObject("../models/cube2.obj", "cube2");
-    objloader.loadObject("../models/cube.obj", "cube");
-    objloader.loadObject("../models/bunny.obj", "bunny");
+    //objloader.loadObject("../models/cube.obj", "cube");
+    //objloader.loadObject("../models/bunny.obj", "bunny");
     objloader.loadObject("../models/bunny_high_poly.obj", "bunny_high_poly");
     objloader.loadObject("../models/4Sphere.obj", "4Sphere");
-    objloader.loadObject("../models/sphere_modified.obj", "sphere_modified");
-    objloader.loadObject("../models/lucy_princeton.obj", "lucy_princeton");
-    objloader.loadObject("../models/cup.obj", "cup");
+    //objloader.loadObject("../models/sphere_modified.obj", "sphere_modified");
+    //objloader.loadObject("../models/lucy_princeton.obj", "lucy_princeton");
+    //objloader.loadObject("../models/cup.obj", "cup");
     objloader.loadObject("../models/quad.obj", "quad");
-    objloader.loadObject("../models/triangle.obj", "triangle");
+    //objloader.loadObject("../models/triangle.obj", "triangle");
     objloader.loadObject("../models/baron.obj", "baron");
-    objloader.loadObject("../models/penguin.obj", "penguin");
+    //objloader.loadObject("../models/penguin.obj", "penguin");
 
     GRAPHICS->AddSphereMesh();
 

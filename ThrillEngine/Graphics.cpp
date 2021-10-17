@@ -107,15 +107,18 @@ void Graphics::UpdateLightInfo()
     
 
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(unsigned), &lightnumber);
+    glBufferSubData(GL_UNIFORM_BUFFER, 4, sizeof(float), &(camera.near));
+    glBufferSubData(GL_UNIFORM_BUFFER, 8, sizeof(float), &(camera.far));
     glBufferSubData(GL_UNIFORM_BUFFER, 16, sizeof(glm::vec3), glm::value_ptr(camera.cam_position));
     glBufferSubData(GL_UNIFORM_BUFFER, 32, sizeof(glm::vec3), glm::value_ptr(fog_color));
     glBufferSubData(GL_UNIFORM_BUFFER, 48, sizeof(glm::vec3), glm::value_ptr(global_ambient_color));
-    glBufferSubData(GL_UNIFORM_BUFFER, 60, sizeof(float), &(camera.near));
-    glBufferSubData(GL_UNIFORM_BUFFER, 64, sizeof(float), &(camera.far));
-    glBufferSubData(GL_UNIFORM_BUFFER, 68, sizeof(float), &(attenuation));
+    glBufferSubData(GL_UNIFORM_BUFFER, 64, sizeof(glm::vec3), glm::value_ptr(attenuation));
+
+
     for (auto light : lights)
     {
         glBufferSubData(GL_UNIFORM_BUFFER, 80 + iter * lightstride, sizeof(unsigned), &(light.second->type));
+        light.second->direction = light.second->transform.position-centerobj->transform.position;
         glBufferSubData(GL_UNIFORM_BUFFER, 80 + iter * lightstride + 16, sizeof(glm::vec3), glm::value_ptr(light.second->direction));
         glBufferSubData(GL_UNIFORM_BUFFER, 80 + iter * lightstride + 32, sizeof(glm::vec3), glm::value_ptr(light.second->transform.position));
         glBufferSubData(GL_UNIFORM_BUFFER, 80 + iter * lightstride + 48, sizeof(glm::vec3), glm::value_ptr(light.second->ambient));
