@@ -118,12 +118,15 @@ void Camera::MouseMoveUpdate()
 
 void Camera::MouseScrollUpdate()
 {
-    float scroll = Input::GetScroll();
-    fov -= scroll;
-    if (fov < 1.0f)
-        fov = 1.0f;
-    if (fov > 45.0f)
-        fov = 45.0f;
+    if (!ImGui::GetIO().WantCaptureMouse)
+    {
+        float scroll = Input::GetScroll();
+        fov -= scroll;
+        if (fov < 1.0f)
+            fov = 1.0f;
+        if (fov > 45.0f)
+            fov = 45.0f;
+    }
     glm::vec2 window_size = APPLICATION->GetWindowSize();
     if (window_size.y != 0.0f)
         projection = glm::perspective(glm::radians(fov), window_size.x / window_size.y, near, far);

@@ -36,10 +36,10 @@ private:
     int tmp_glInt_n1 = 0, tmp_glInt_n2 = 0, tmp_glInt_n3 = 0;
     int tmp_glInt_t1 = 0, tmp_glInt_t2 = 0, tmp_glInt_t3 = 0;
 
-    float min_val_x = FLT_MAX;
-    float max_val_x = FLT_MIN;
-    float max_val_y = max_val_x, min_val_y = min_val_x;
-    float max_val_z = max_val_x, min_val_z = min_val_x;
+    double min_val_x = DBL_MAX;
+    double max_val_x = DBL_MIN;
+    double max_val_y = max_val_x, min_val_y = min_val_x;
+    double max_val_z = max_val_x, min_val_z = min_val_x;
 
     std::stringstream ss;
 };

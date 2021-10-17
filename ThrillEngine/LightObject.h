@@ -14,6 +14,6 @@ public:
     LightType type = LightType::POINT;
     glm::vec3 direction=glm::vec3{1,0,0}; //Directional
     glm::vec3 ambient = glm::vec3{ 0.7f,0.7f,1.0f }, diffuse = glm::vec3{ 1,1,1 }, specular = glm::vec3{ 1,1,1 };//All
-    float inner_angle=0.999f, outer_angle=0.95f, falloff=2;
+    float inner_angle=10.f, outer_angle=12.f, falloff=5;
 };
 

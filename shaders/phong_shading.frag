@@ -93,17 +93,17 @@ vec3 CalculateLight(Light light)
 
 		float alpha = dot(light_vector, normalize(light.direction)); 
     	float spotlighteffect=0;
-    	if(alpha<light.outer_angle)
+    	if(alpha<cos(light.outer_angle))
     	{
     		spotlighteffect=0;
     	}
-    	else if(alpha>light.inner_angle)
+    	else if(alpha>cos(light.inner_angle))
     	{
     		spotlighteffect=1;
     	}
     	else
     	{
-    		spotlighteffect=pow((cos(alpha)-cos(light.outer_angle))/(cos(light.inner_angle)-cos(light.outer_angle)),light.falloff);
+    		spotlighteffect=pow((alpha-cos(light.outer_angle))/(cos(light.inner_angle)-cos(light.outer_angle)),light.falloff);
     	}
 		float light_length=length(light.position-FragPosition);
 		float attenuation=min(1/(c.x+c.y*light_length+c.z*light_length*light_length),1);

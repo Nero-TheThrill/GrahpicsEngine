@@ -43,8 +43,8 @@ void Graphics::Update()
     UpdatePVmatrices();
     UpdateLightInfo();
 
-    if (!ImGui::GetIO().WantCaptureMouse)
-        camera.MouseScrollUpdate();
+
+    camera.MouseScrollUpdate();
 }
 
 Graphics::~Graphics()

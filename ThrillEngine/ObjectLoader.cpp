@@ -45,6 +45,7 @@ void ObjectLoader::loadObject(const std::string& path, const std::string& mesh_i
         std::string prefix = "";
         glm::vec3 tmp_vec3;
         glm::vec2 tmp_vec2;
+        double x, y, z;
         ss.clear();
         ss.str(line);
         ss >> prefix;
@@ -85,16 +86,16 @@ void ObjectLoader::loadObject(const std::string& path, const std::string& mesh_i
         }
         else if (prefix == "v") // position
         {
-            ss >> tmp_vec3.x >> tmp_vec3.y >> tmp_vec3.z;
-            tmp_positions.push_back(tmp_vec3);
-            min_val_x = std::min(tmp_vec3.x, min_val_x);
-            max_val_x = std::max(tmp_vec3.x, max_val_x);
+            ss >> x >> y >> z;
+            tmp_positions.push_back(glm::vec3(x,y,z));
+            min_val_x = std::min(x, min_val_x);
+            max_val_x = std::max(x, max_val_x);
 
-            min_val_y = std::min(tmp_vec3.y, min_val_y);
-            max_val_y = std::max(tmp_vec3.y, max_val_y);
+            min_val_y = std::min(y, min_val_y);
+            max_val_y = std::max(y, max_val_y);
 
-            min_val_z = std::min(tmp_vec3.z, min_val_z);
-            max_val_z = std::max(tmp_vec3.z, max_val_z);
+            min_val_z = std::min(z, min_val_z);
+            max_val_z = std::max(z, max_val_z);
         }
         else if (prefix == "vt") // texture
         {
@@ -103,8 +104,8 @@ void ObjectLoader::loadObject(const std::string& path, const std::string& mesh_i
         }
         else if (prefix == "vn") // normal
         {
-            ss >> tmp_vec3.x >> tmp_vec3.y >> tmp_vec3.z;
-            tmp_normals.push_back(tmp_vec3);
+            ss >> x >> y >> z;
+            tmp_normals.push_back(glm::vec3(x, y, z));
         }
         else if (prefix == "f") // faces
         {
@@ -326,21 +327,21 @@ void ObjectLoader::reArrangeData()
 
 void ObjectLoader::reSizeObject()
 {
-    float gap_x = max_val_x - min_val_x;
-    float gap_y = max_val_y - min_val_y;
-    float gap_z = max_val_z - min_val_z;
-    float denominator = std::max(std::max(gap_x, gap_y), gap_z) / 2.f;
+    double gap_x = max_val_x - min_val_x;
+    double gap_y = max_val_y - min_val_y;
+    double gap_z = max_val_z - min_val_z;
+    double denominator = std::max(std::max(gap_x, gap_y), gap_z) / 2.f;
 
-    float subtract_x = gap_x / 2.f + min_val_x;
-    float subtract_y = gap_y / 2.f + min_val_y;
-    float subtract_z = gap_z / 2.f + min_val_z;
+    double subtract_x = gap_x / 2.0 + min_val_x;
+    double subtract_y = gap_y / 2.0 + min_val_y;
+    double subtract_z = gap_z / 2.0 + min_val_z;
     
     for (auto m_mesh : meshgroup->model_meshes)
     {
         int iterator = 0;
         for (auto p : m_mesh->positions_use_indices)
         {
-            m_mesh->positions_use_indices[iterator] = glm::vec3((p.x - subtract_x) / denominator, (p.y - subtract_y) / denominator, (p.z - subtract_z) / denominator);
+            m_mesh->positions_use_indices[iterator] = glm::vec3((double(p.x) - subtract_x) / denominator, (double(p.y) - subtract_y) / denominator, (double(p.z) - subtract_z) / denominator);
             iterator++;
         }
     }
