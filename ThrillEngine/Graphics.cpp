@@ -118,7 +118,7 @@ void Graphics::UpdateLightInfo()
     for (auto light : lights)
     {
         glBufferSubData(GL_UNIFORM_BUFFER, 80 + iter * lightstride, sizeof(unsigned), &(light.second->type));
-        light.second->direction = light.second->transform.position-centerobj->transform.position;
+        light.second->direction = centerobj->transform.position-light.second->transform.position;
         glBufferSubData(GL_UNIFORM_BUFFER, 80 + iter * lightstride + 16, sizeof(glm::vec3), glm::value_ptr(light.second->direction));
         glBufferSubData(GL_UNIFORM_BUFFER, 80 + iter * lightstride + 32, sizeof(glm::vec3), glm::value_ptr(light.second->transform.position));
         glBufferSubData(GL_UNIFORM_BUFFER, 80 + iter * lightstride + 48, sizeof(glm::vec3), glm::value_ptr(light.second->ambient));

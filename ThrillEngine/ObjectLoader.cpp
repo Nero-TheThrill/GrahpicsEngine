@@ -87,7 +87,7 @@ void ObjectLoader::loadObject(const std::string& path, const std::string& mesh_i
         else if (prefix == "v") // position
         {
             ss >> x >> y >> z;
-            tmp_positions.push_back(glm::vec3(x,y,z));
+            tmp_positions.emplace_back(glm::vec3(x,y,z));
             min_val_x = std::min(x, min_val_x);
             max_val_x = std::max(x, max_val_x);
 
@@ -105,7 +105,7 @@ void ObjectLoader::loadObject(const std::string& path, const std::string& mesh_i
         else if (prefix == "vn") // normal
         {
             ss >> x >> y >> z;
-            tmp_normals.push_back(glm::vec3(x, y, z));
+            tmp_normals.emplace_back(glm::vec3(x, y, z));
         }
         else if (prefix == "f") // faces
         {

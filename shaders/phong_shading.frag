@@ -91,7 +91,7 @@ vec3 CalculateLight(Light light)
 		vec3 reflectDirection = reflect(-light_vector,n_normal);
 		vec3 I_s = k_s*light.specular*pow(max(dot(view_vector,reflectDirection),0.0),32);
 
-		float alpha = dot(light_vector, normalize(light.direction)); 
+		float alpha = dot(-light_vector, normalize(light.direction)); 
     	float spotlighteffect=0;
     	if(alpha<cos(light.outer_angle))
     	{
@@ -103,7 +103,7 @@ vec3 CalculateLight(Light light)
     	}
     	else
     	{
-    		spotlighteffect=pow((alpha-cos(light.outer_angle))/(cos(light.inner_angle)-cos(light.outer_angle)),light.falloff);
+    		spotlighteffect=pow((alpha-cos(light.outer_angle))/(cos(light.inner_angle)-cos(light.outer_angle)),0.001);
     	}
 		float light_length=length(light.position-FragPosition);
 		float attenuation=min(1/(c.x+c.y*light_length+c.z*light_length*light_length),1);

@@ -95,7 +95,8 @@ vec3 CalculateLight(Light light)
 		vec3 reflectDirection = reflect(-light_vector,n_normal);
 		vec3 I_s = k_s*light.specular*pow(max(dot(view_vector,reflectDirection),0.0),32);
 
-		float alpha = dot(light_vector, normalize(light.direction)); 
+
+		float alpha = dot(-light_vector, normalize(light.direction)); 
     	float spotlighteffect=0;
     	if(alpha<cos(light.outer_angle))
     	{

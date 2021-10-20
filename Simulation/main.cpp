@@ -54,7 +54,7 @@ int main()
     //objloader.loadObject("../models/starwars1.obj", "starwars");
     //objloader.loadObject("../models/sphere.obj", "sphere");
     objloader.loadObject("../models/cube2.obj", "cube2");
-    //objloader.loadObject("../models/cube.obj", "cube");
+    objloader.loadObject("../models/cube.obj", "cube");
     //objloader.loadObject("../models/bunny.obj", "bunny");
     objloader.loadObject("../models/bunny_high_poly.obj", "bunny_high_poly");
     objloader.loadObject("../models/4Sphere.obj", "4Sphere");
