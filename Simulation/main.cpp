@@ -49,7 +49,7 @@ int main()
     GRAPHICS->LoadTexture("../images/penguin.png", "penguin");
 
     //objloader.loadObject("../models/human.obj", "human");
-    //objloader.loadObject("../models/ramus.obj", "ramus");
+    objloader.loadObject("../models/ramus.obj", "ramus");
     //objloader.loadObject("../models/rhino.obj", "rhino");
     //objloader.loadObject("../models/starwars1.obj", "starwars");
     //objloader.loadObject("../models/sphere.obj", "sphere");

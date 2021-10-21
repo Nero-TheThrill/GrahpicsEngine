@@ -43,7 +43,6 @@ void ObjectLoader::loadObject(const std::string& path, const std::string& mesh_i
     while (std::getline(in_file, line))
     {
         std::string prefix = "";
-        glm::vec3 tmp_vec3;
         glm::vec2 tmp_vec2;
         double x, y, z;
         ss.clear();

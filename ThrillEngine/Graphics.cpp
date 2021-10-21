@@ -358,8 +358,8 @@ void Graphics::AddSphereMesh()
     SphereMesh* sphere = new SphereMesh();
     float x, y, z, xy;
     float s, t;
-    int sectorCount = 50;
-    int stackCount = 50;
+    int sectorCount = 20;
+    int stackCount = 20;
     float sectorStep = 2.f * PI / static_cast<float>(sectorCount);
     float stackStep = PI / static_cast<float>(stackCount);
     float sectorAngle, stackAngle;

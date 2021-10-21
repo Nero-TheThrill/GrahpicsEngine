@@ -23,8 +23,8 @@ TestLevel::TestLevel()
 
 void TestLevel::Init()
 {
-    
-    GRAPHICS->SetBackgroundColor(glm::vec4(0.f, 0.f, 0.f, 1.0f));
+    GRAPHICS->SetBackgroundColor(glm::vec4(0.6,0.65,0.7,1.0));
+
     orbit = new Object("orbit");
     orbit->SetMeshGroup(GRAPHICS->GetMeshGroup("line"));
     orbit->SetShader("test");
@@ -81,6 +81,7 @@ void TestLevel::Init()
     centerobj->SetShader("phong_shading");
     centerobj->transform.Translate(glm::vec3(0, -3.f, 0.0f));
     centerobj->transform.Scale(glm::vec3(3.f));
+   // centerobj->texture.SetTexture("ramus");
    // centerobj->transform.Rotate(26, glm::vec3(-1, 0.24, -1));
     centerobj->drawmode = 1;
     GRAPHICS->centerobj = centerobj;
@@ -93,12 +94,12 @@ void TestLevel::Init()
     //penguin->texture.SetTexture("penguin");
     //penguin->transform.Rotate(77, glm::vec3(0, 1, 0));
 
-    skysphere = new Object("skysphere");
-    skysphere->SetMeshGroup(GRAPHICS->GetMeshGroup("customsphere"));
-    skysphere->SetShader("phong_shading");
-    skysphere->transform.Scale(glm::vec3(50, 50, 50));
-    skysphere->texture.SetTexture("space");
-    skysphere->drawmode = 1;
+    //skysphere = new Object("skysphere");
+    //skysphere->SetMeshGroup(GRAPHICS->GetMeshGroup("customsphere"));
+    //skysphere->SetShader("phong_shading");
+    //skysphere->transform.Scale(glm::vec3(50, 50, 50));
+    //skysphere->texture.SetTexture("space");
+    //skysphere->drawmode = 1;
 
     IMGUIMANAGER->Init();
 }

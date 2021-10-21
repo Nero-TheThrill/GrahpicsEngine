@@ -24,8 +24,6 @@ public:
     std::vector<glm::vec3> vertex_normals;
 
     std::vector<int> indices;
-    std::vector<int> normal_indices;
-    std::vector<int> texture_indices;
 
     std::vector<glm::vec3> positions;
     std::vector<glm::vec2> texcoords;

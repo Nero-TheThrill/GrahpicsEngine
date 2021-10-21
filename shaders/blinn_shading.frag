@@ -10,8 +10,8 @@ uniform bool texture_exists;
 uniform sampler2D texture1;
 uniform vec3 objectColor;
 
-float k_a=0.1;
-float k_d=0.25;
+float k_a=0.05;
+float k_d=0.12;
 float k_s=0.1;
 struct Light
 {
@@ -42,18 +42,18 @@ layout(std140, binding = 1) uniform LightInformation
 
 vec3 CalculateLight(Light light)
 {
+	vec3 I_a=k_a * light.ambient;
+	vec3 I_d, I_s;
 	if(light.type==0)
 	{
-		vec3 I_a = k_a * light.ambient;
-
 		vec3 n_normal=normalize(Normal);
 		vec3 light_vector = normalize(light.position-FragPosition);
 
-		vec3 I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0);
+		I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0);
 
 		vec3 view_vector=normalize(view_position-FragPosition);
 		vec3 HalfVector = normalize(light_vector+view_vector);
-		vec3 I_s = k_s*light.specular*pow(max(dot(n_normal,HalfVector),0.0),32);
+		I_s = k_s*light.specular*pow(max(dot(n_normal,HalfVector),0.0),32);
 
 		
 		float light_length=length(light.position-FragPosition);
@@ -63,33 +63,28 @@ vec3 CalculateLight(Light light)
 	}
 	else if(light.type==1)
 	{
-		vec3 I_a = k_a * light.ambient;
-
 		vec3 n_normal=normalize(Normal);
-		vec3 light_vector = normalize(light.direction);
+		vec3 light_vector = normalize(-light.direction);
 
-		vec3 I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0);
+		I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0);
 
 		vec3 view_vector=normalize(view_position-FragPosition);
 		vec3 HalfVector = normalize(light_vector+view_vector);
-		vec3 I_s = k_s*light.specular*pow(max(dot(n_normal,HalfVector),0.0),32);
+		I_s = k_s*light.specular*pow(max(dot(n_normal,HalfVector),0.0),32);
 
 		vec3 I_local = (I_a+I_d+I_s);
 		return I_local;
 	}
 	else
 	{
-		
-		vec3 I_a = k_a * light.ambient;
-
 		vec3 n_normal=normalize(Normal);
 		vec3 light_vector = normalize(light.position-FragPosition);
 
-		vec3 I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0);
+		I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0);
 
 		vec3 view_vector=normalize(view_position-FragPosition);
 		vec3 HalfVector = normalize(light_vector+view_vector);
-		vec3 I_s = k_s*light.specular*pow(max(dot(n_normal,HalfVector),0.0),32);
+		I_s = k_s*light.specular*pow(max(dot(n_normal,HalfVector),0.0),32);
 
 		float alpha = dot(-light_vector, normalize(light.direction)); 
     	float spotlighteffect=0;

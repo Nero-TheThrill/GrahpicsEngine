@@ -288,16 +288,22 @@ void imGUIManager::Update()
                 }
                 ImGui::EndCombo();
             }
-            if (current_light->type == LightType::POINT)
+            if (current_light->type == LightType::SPOT)
             {
+                float inner_radian = current_light->inner_angle;
+                ImGui::DragFloat("inner_angle(radian)", &inner_radian, 0.01f,0,current_light->outer_angle);
+                current_light->inner_angle=inner_radian;
 
-            }
-            else if (current_light->type == LightType::DIRECTIONAL)
-            {
-            }
-            else
-            {
-
+                float outer_radian = current_light->outer_angle;
+                ImGui::DragFloat("outer_angle(radian)", &outer_radian, 0.01f,0,1.57f);
+                current_light->outer_angle = outer_radian;
+                if(current_light->outer_angle<current_light->inner_angle)
+                {
+                    current_light->inner_angle = current_light->outer_angle;
+                }
+                float falloff_val = current_light->falloff;
+                ImGui::DragFloat("falloff value", &falloff_val,0.01f,0,1);
+                current_light->falloff = falloff_val;
             }
         }
     ImGui::End();
