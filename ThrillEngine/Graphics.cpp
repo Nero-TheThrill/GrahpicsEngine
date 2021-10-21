@@ -354,7 +354,7 @@ MeshGroup* Graphics::GetMeshGroup(const std::string& mesh_id)
 void Graphics::AddSphereMesh()
 {
     MeshGroup* m_sphere = new MeshGroup();
-    float PI = 22.f / 7.f;
+    float PI = acos(-1);
     SphereMesh* sphere = new SphereMesh();
     float x, y, z, xy;
     float s, t;

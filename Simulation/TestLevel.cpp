@@ -77,11 +77,11 @@ void TestLevel::Init()
     //baron->transform.Rotate(-42, glm::vec3(0, 1, 0));
 
     centerobj = new Object("centerobject");
-    centerobj->SetMeshGroup(GRAPHICS->GetMeshGroup("bunny_high_poly"));
+    centerobj->SetMeshGroup(GRAPHICS->GetMeshGroup("cube"));
     centerobj->SetShader("phong_shading");
     centerobj->transform.Translate(glm::vec3(0, -3.f, 0.0f));
     centerobj->transform.Scale(glm::vec3(3.f));
-   // centerobj->texture.SetTexture("ramus");
+    //centerobj->texture.SetTexture("test");
    // centerobj->transform.Rotate(26, glm::vec3(-1, 0.24, -1));
     centerobj->drawmode = 1;
     GRAPHICS->centerobj = centerobj;

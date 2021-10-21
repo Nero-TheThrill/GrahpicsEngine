@@ -47,12 +47,15 @@ int main()
     GRAPHICS->LoadTexture("../images/ramus.png", "ramus");
     GRAPHICS->LoadTexture("../images/baron.png", "baron");
     GRAPHICS->LoadTexture("../images/penguin.png", "penguin");
+    GRAPHICS->LoadTexture("../images/test.png", "test");
 
+
+    objloader.loadObject("../models/cube.obj", "cube");
     //objloader.loadObject("../models/human.obj", "human");
     objloader.loadObject("../models/ramus.obj", "ramus");
     //objloader.loadObject("../models/rhino.obj", "rhino");
     //objloader.loadObject("../models/starwars1.obj", "starwars");
-    //objloader.loadObject("../models/sphere.obj", "sphere");
+    objloader.loadObject("../models/sphere.obj", "sphere");
     objloader.loadObject("../models/cube2.obj", "cube2");
     objloader.loadObject("../models/cube.obj", "cube");
     //objloader.loadObject("../models/bunny.obj", "bunny");

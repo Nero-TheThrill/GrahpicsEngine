@@ -1,7 +1,7 @@
 #include "ObjectLoader.h"
 #include <algorithm>
 #include "Graphics.h"
-
+#include <cmath>
 
 void ObjectLoader::loadObject(const std::string& path, const std::string& mesh_id)
 {
@@ -340,7 +340,12 @@ void ObjectLoader::reSizeObject()
         int iterator = 0;
         for (auto p : m_mesh->positions_use_indices)
         {
-            m_mesh->positions_use_indices[iterator] = glm::vec3((double(p.x) - subtract_x) / denominator, (double(p.y) - subtract_y) / denominator, (double(p.z) - subtract_z) / denominator);
+            m_mesh->spherical_texcoords_use_indices.push_back(glm::vec2((atan(m_mesh->positions_use_indices[iterator].y / m_mesh->positions_use_indices[iterator].x) * 180.f / acos(-1)) / 360.f, (acos(m_mesh->positions_use_indices[iterator].z / (sqrt(m_mesh->positions_use_indices[iterator].x * m_mesh->positions_use_indices[iterator].x + m_mesh->positions_use_indices[iterator].y * m_mesh->positions_use_indices[iterator].y + m_mesh->positions_use_indices[iterator].z * m_mesh->positions_use_indices[iterator].z))) * 180.f / acos(-1)) / 180.f));
+
+
+            m_mesh->positions_use_indices[iterator] = glm::vec3((double(p.x) - subtract_x) / denominator, (double(p.y) - subtract_y) / denominator, (double(p.z) - subtract_z) / denominator);;
+         
+          
             iterator++;
         }
     }

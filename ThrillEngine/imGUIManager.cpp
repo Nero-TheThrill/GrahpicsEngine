@@ -291,18 +291,18 @@ void imGUIManager::Update()
             if (current_light->type == LightType::SPOT)
             {
                 float inner_radian = current_light->inner_angle;
-                ImGui::DragFloat("inner_angle(radian)", &inner_radian, 0.01f,0,current_light->outer_angle);
+                ImGui::DragFloat("inner_angle(radian)", &inner_radian, 0.001f,0,current_light->outer_angle-0.001f);
                 current_light->inner_angle=inner_radian;
 
                 float outer_radian = current_light->outer_angle;
-                ImGui::DragFloat("outer_angle(radian)", &outer_radian, 0.01f,0,1.57f);
+                ImGui::DragFloat("outer_angle(radian)", &outer_radian, 0.001f,0.01f,1.57f);
                 current_light->outer_angle = outer_radian;
                 if(current_light->outer_angle<current_light->inner_angle)
                 {
-                    current_light->inner_angle = current_light->outer_angle;
+                    current_light->inner_angle = current_light->outer_angle-0.001f;
                 }
                 float falloff_val = current_light->falloff;
-                ImGui::DragFloat("falloff value", &falloff_val,0.01f,0,1);
+                ImGui::DragFloat("falloff value", &falloff_val,0.001f,0,1);
                 current_light->falloff = falloff_val;
             }
         }

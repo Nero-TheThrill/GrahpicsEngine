@@ -20,6 +20,11 @@ public:
     virtual void DrawNormals();
     std::vector<glm::vec3> positions_use_indices;
     std::vector<glm::vec2> texcoords_use_indices;
+
+    std::vector<glm::vec2> planar_texcoords_use_indices;
+    std::vector<glm::vec2> spherical_texcoords_use_indices;
+    std::vector<glm::vec2> cylindrical_texcoords_use_indices;
+
     std::vector<glm::vec3> face_normals;
     std::vector<glm::vec3> vertex_normals;
 
@@ -28,10 +33,13 @@ public:
     std::vector<glm::vec3> positions;
     std::vector<glm::vec2> texcoords;
 
+    std::vector<glm::vec2> planar_texcoords;
+    std::vector<glm::vec2> spherical_texcoords;
+    std::vector<glm::vec2> cylindrical_texcoords;
+
     std::vector<glm::vec3> face_normal_lines;
     std::vector<glm::vec3> vertex_normal_lines;
 
-    std::vector<glm::vec3> positions_normals;//use indices
     int face_stride=0;
     std::string name;
     int n_mode = 0; // 0 : face  1 : vertex
@@ -56,7 +64,6 @@ inline Mesh::~Mesh()
     face_normal_lines.clear();
     indices.clear();
     positions.clear();
-    positions_normals.clear();
 }
 
 inline void Mesh::ChangeMode(int mode)
