@@ -9,7 +9,7 @@ public:
     void Update();
     void Init();
     ~imGUIManager();
-    Object* current_item = nullptr,*prev_item=nullptr;
+    Object* current_item = nullptr,*prev_item=nullptr,*center_obj=nullptr;
     LightObject* current_light = nullptr,*prev_light=nullptr;
     bool shouldRotatelight = true;
     bool lightNumberChanged = true;
@@ -17,5 +17,7 @@ public:
     int prev_lightNumber = 1;
     std::string light_type[3];
     int lightoption = 0;
+    int mapping_option = 0;
+    bool should_mapping_on_gpu = true;
 };
 extern imGUIManager* IMGUIMANAGER;

@@ -1,5 +1,6 @@
 #pragma once
 #include "Mesh.h"
+#include "Shader.h"
 
 class SphereMesh : public Mesh
 {
@@ -8,7 +9,7 @@ public:
     void Init() override;
     void Bind() override;
     void UnBind() override;
-    void Draw() override;
+    void Draw(Shader shader) override;
     void GenerateNormals();
     void GenerateNormalLines();
     ~SphereMesh() override;

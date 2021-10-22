@@ -337,15 +337,27 @@ void ObjectLoader::reSizeObject()
     
     for (auto m_mesh : meshgroup->model_meshes)
     {
+        m_mesh->maxYval =(max_val_y - subtract_y) / denominator;
+        m_mesh->minYval = (min_val_y - subtract_y) / denominator;
         int iterator = 0;
         for (auto p : m_mesh->positions_use_indices)
         {
-            m_mesh->spherical_texcoords_use_indices.push_back(glm::vec2((atan(m_mesh->positions_use_indices[iterator].y / m_mesh->positions_use_indices[iterator].x) * 180.f / acos(-1)) / 360.f, (acos(m_mesh->positions_use_indices[iterator].z / (sqrt(m_mesh->positions_use_indices[iterator].x * m_mesh->positions_use_indices[iterator].x + m_mesh->positions_use_indices[iterator].y * m_mesh->positions_use_indices[iterator].y + m_mesh->positions_use_indices[iterator].z * m_mesh->positions_use_indices[iterator].z))) * 180.f / acos(-1)) / 180.f));
+            glm::vec3 resizedVec= glm::vec3((double(p.x) - subtract_x) / denominator, (double(p.y) - subtract_y) / denominator, (double(p.z) - subtract_z) / denominator);
+            m_mesh->positions_use_indices[iterator] = resizedVec;
+        
+            float val1 = atan(resizedVec.z / resizedVec.x) * 180.f / acos(-1);
+            if (resizedVec.x < 0 && resizedVec.z>0)
+                val1 -= 180;
+            if (resizedVec.x < 0 && resizedVec.z < 0)
+                val1 -= 180;
+            if (val1 < 0)
+                val1 += 360;
 
+            float val2 = 180 - (acos(resizedVec.y / (sqrt(resizedVec.x * resizedVec.x + resizedVec.y * resizedVec.y + resizedVec.z * resizedVec.z))) * 180.f / acos(-1));
 
-            m_mesh->positions_use_indices[iterator] = glm::vec3((double(p.x) - subtract_x) / denominator, (double(p.y) - subtract_y) / denominator, (double(p.z) - subtract_z) / denominator);;
-         
-          
+            float val3 = (resizedVec.y - (min_val_y - subtract_y) / denominator) / ((max_val_y - subtract_y) / denominator - (min_val_y - subtract_y) / denominator);
+            m_mesh->spherical_texcoords_use_indices.push_back(glm::vec2(val1 / 360.f, val2 / 180.f));
+            m_mesh->cylindrical_texcoords_use_indices.push_back(glm::vec2(val1 / 360.f, val3));
             iterator++;
         }
     }

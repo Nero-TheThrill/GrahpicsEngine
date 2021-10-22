@@ -28,10 +28,8 @@ void ModelMesh::Init()
     {
         glGenBuffers(1, &VBO_normals);
     }
-    if (!texcoords_use_indices.empty())
-    {
-        glGenBuffers(1, &VBO_texcoords);
-    }
+    glGenBuffers(1, &VBO_texcoords);
+
 
     BindData();
 
@@ -39,75 +37,44 @@ void ModelMesh::Init()
 
 void ModelMesh::Bind()
 {
-    if (n_mode == 0)
+    if (!positions.empty() || !positions_use_indices.empty())
     {
-        if (!positions.empty())
-        {
-            glEnableVertexAttribArray(0);
-        }
-        if (!face_normals.empty())
-        {
-            glEnableVertexAttribArray(1);
-        }
-        if (!texcoords.empty())
-        {
-            glEnableVertexAttribArray(2);
-        }
+        glEnableVertexAttribArray(0);
     }
-    else if (n_mode == 1)
+    if (!face_normals.empty() || !vertex_normals.empty())
     {
-        if (!positions_use_indices.empty())
-        {
-            glEnableVertexAttribArray(0);
-        }
-        if (!vertex_normals.empty())
-        {
-            glEnableVertexAttribArray(1);
-        }
-        if (!texcoords_use_indices.empty())
-        {
-            glEnableVertexAttribArray(2);
-        }
+        glEnableVertexAttribArray(1);
+    }
+    if (mapping_mode == 0 && (!texcoords.empty() || !texcoords_use_indices.empty()) || mapping_mode != 0)
+    {
+        glEnableVertexAttribArray(2);
     }
 }
 
 void ModelMesh::UnBind()
 {
-    if (n_mode == 0)
+    if (!positions.empty()||!positions_use_indices.empty())
     {
-        if (!positions.empty())
-        {
-            glDisableVertexAttribArray(0);
-        }
-        if (!face_normals.empty())
-        {
-            glDisableVertexAttribArray(1);
-        }
-        if (!texcoords.empty())
-        {
-            glDisableVertexAttribArray(2);
-        }
+        glDisableVertexAttribArray(0);
     }
-    else if (n_mode == 1)
+    if (!face_normals.empty()||!vertex_normals.empty())
     {
-        if (!positions_use_indices.empty())
-        {
-            glDisableVertexAttribArray(0);
-        }
-        if (!vertex_normals.empty())
-        {
-            glDisableVertexAttribArray(1);
-        }
-        if (!texcoords_use_indices.empty())
-        {
-            glDisableVertexAttribArray(2);
-        }
+        glDisableVertexAttribArray(1);
+    }
+    if (mapping_mode == 0 && (!texcoords.empty() || !texcoords_use_indices.empty()) || mapping_mode != 0)
+    {
+        glDisableVertexAttribArray(2);
     }
 }
 
-void ModelMesh::Draw()
+void ModelMesh::Draw(Shader shader)
 {
     BindData();
+    shader.set("maxYval", maxYval);
+    shader.set("minYval", minYval);
+    shader.set("mapping_mode", mapping_mode);
+    shader.set("should_use_gpuside_uv", should_calculate_uv_in_gpu);
+    shader.set("mapping_with_normal", mapping_with_normal);
     if (n_mode == 0)
     {
 
@@ -127,10 +94,7 @@ ModelMesh::~ModelMesh()
 {
     glDeleteBuffers(1, &VBO_positions);
     glDeleteBuffers(1, &VBO_normals);
-    if (!texcoords_use_indices.empty())
-    {
-        glDeleteBuffers(1, &VBO_texcoords);
-    }
+    glDeleteBuffers(1, &VBO_texcoords);
     glDeleteBuffers(1, &EBO);
 
 }
@@ -148,9 +112,14 @@ void ModelMesh::GeneratePositionsWithIndices()
             texcoords.push_back(texcoords_use_indices[indices[i]]);
         }
     }
+
     for (int i = 0; i < static_cast<int>(indices.size()); i++)
     {
         spherical_texcoords.push_back(spherical_texcoords_use_indices[indices[i]]);
+    }
+    for (int i = 0; i < static_cast<int>(indices.size()); i++)
+    {
+        cylindrical_texcoords.push_back(cylindrical_texcoords_use_indices[indices[i]]);
     }
 }
 
@@ -234,11 +203,25 @@ void ModelMesh::BindData()
             glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
             glEnableVertexAttribArray(1);
         }
-        if (!texcoords.empty())
+        if (mapping_mode == 0)
         {
-           
+            if (!texcoords_use_indices.empty())
+            {
+                glBindBuffer(GL_ARRAY_BUFFER, VBO_texcoords);
+                glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * texcoords.size()), texcoords.data(), GL_STATIC_DRAW);
+                glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+                glEnableVertexAttribArray(2);
+            }
+        }
+        else
+        {
             glBindBuffer(GL_ARRAY_BUFFER, VBO_texcoords);
-            glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * texcoords.size()), &texcoords[0], GL_STATIC_DRAW);
+            if (mapping_mode == 1)
+                glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * spherical_texcoords.size()), spherical_texcoords.data(), GL_STATIC_DRAW);
+            else if (mapping_mode == 2)
+                glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * cylindrical_texcoords.size()), cylindrical_texcoords.data(), GL_STATIC_DRAW);
+            else
+                glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * planar_texcoords.size()), planar_texcoords.data(), GL_STATIC_DRAW);
             glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
             glEnableVertexAttribArray(2);
         }
@@ -260,14 +243,28 @@ void ModelMesh::BindData()
                 glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
                 glEnableVertexAttribArray(1);
             }
-            if (!texcoords_use_indices.empty())
+            if (mapping_mode == 0)
+            {
+                if (!texcoords_use_indices.empty())
+                {
+                    glBindBuffer(GL_ARRAY_BUFFER, VBO_texcoords);
+                    glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * texcoords_use_indices.size()), texcoords_use_indices.data(), GL_STATIC_DRAW);
+                    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+                    glEnableVertexAttribArray(2);
+                }
+            }
+            else
             {
                 glBindBuffer(GL_ARRAY_BUFFER, VBO_texcoords);
-                glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * texcoords_use_indices.size()), &texcoords_use_indices[0], GL_STATIC_DRAW);
+                if(mapping_mode==1)
+                    glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * spherical_texcoords_use_indices.size()), spherical_texcoords_use_indices.data(), GL_STATIC_DRAW);
+                else if(mapping_mode==2)
+                    glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * cylindrical_texcoords_use_indices.size()), cylindrical_texcoords_use_indices.data(), GL_STATIC_DRAW);
+                else
+                    glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * planar_texcoords_use_indices.size()), planar_texcoords_use_indices.data(), GL_STATIC_DRAW);
                 glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
                 glEnableVertexAttribArray(2);
             }
-
 
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(int) * indices.size()), &indices[0], GL_STATIC_DRAW);
@@ -278,35 +275,17 @@ void ModelMesh::BindData()
 
 void ModelMesh::UnBindData()
 {
-    if(n_mode==0)
+    if (!positions.empty() || !positions_use_indices.empty())
     {
-        if (!positions.empty())
-        {
-            glDisableVertexAttribArray(0);
-        }
-        if (!face_normals.empty())
-        {
-            glDisableVertexAttribArray(1);
-        }
-        if (!texcoords.empty())
-        {
-            glDisableVertexAttribArray(2);
-        }
+        glDisableVertexAttribArray(0);
     }
-    else if (n_mode == 1)
+    if (!face_normals.empty() || !vertex_normals.empty())
     {
-        if (!positions_use_indices.empty())
-        {
-            glDisableVertexAttribArray(0);
-        }
-        if (!vertex_normals.empty())
-        {
-            glDisableVertexAttribArray(1);
-        }
-        if (!texcoords_use_indices.empty())
-        {
-            glDisableVertexAttribArray(2);
-        }
+        glDisableVertexAttribArray(1);
+    }
+    if (mapping_mode == 0&&(!texcoords.empty() || !texcoords_use_indices.empty())||mapping_mode!=0)
+    {
+        glDisableVertexAttribArray(2);
     }
 }
 

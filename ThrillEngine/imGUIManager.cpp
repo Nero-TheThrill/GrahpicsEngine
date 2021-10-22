@@ -308,6 +308,90 @@ void imGUIManager::Update()
         }
     ImGui::End();
     }
+
+
+    center_obj = OBJECTMANAGER->GetObject("centerobject");
+    if (center_obj != nullptr)
+    {
+        {
+            ImGui::Begin("CenterObject Manager");
+
+            glm::vec3 pos = center_obj->transform.position;
+            ImGui::DragFloat3("translation", glm::value_ptr(pos), 0.1f, -FLT_MAX, FLT_MAX);
+            center_obj->transform.Translate(pos);
+
+            glm::vec3 scale = center_obj->transform.current_scale;
+            ImGui::DragFloat3("scale", glm::value_ptr(scale), 0.1f, -FLT_MAX, FLT_MAX);
+            center_obj->transform.Scale(scale);
+
+            glm::vec3 rotate = center_obj->transform.current_rotate_axis;
+            float degree = center_obj->transform.current_rotate_degree;
+            ImGui::DragFloat3("rotate axis", glm::value_ptr(rotate), 0.01f, -1, 1);
+            ImGui::DragFloat("degree", &degree);
+            center_obj->transform.Rotate(degree, rotate);
+
+            std::unordered_map < std::string, std::pair<Shader, std::pair<std::string, std::string>>> shaders = GRAPHICS->GetAllShaders();
+            std::string current_shader = center_obj->shader.name;
+
+            if (ImGui::BeginCombo("select shader", current_shader.c_str()))
+            {
+                for (auto shader : shaders)
+                {
+                    bool is_selected = (current_shader == shader.second.first.name);
+                    if (ImGui::Selectable(shader.second.first.name.c_str(), is_selected))
+                    {
+                        current_shader = shader.second.first.name;
+                        center_obj->SetShader(shader.second.first.name);
+                    }
+                    if (is_selected)
+                        ImGui::SetItemDefaultFocus();
+                }
+                ImGui::EndCombo();
+            }
+
+            std::unordered_map<std::string, MeshGroup*> meshes = GRAPHICS->GetAllMeshGroups();
+            std::string current_mesh = center_obj->mesh->name;
+            if (ImGui::BeginCombo("select mesh", current_mesh.c_str()))
+            {
+                for (auto mesh : meshes)
+                {
+                    bool is_selected = (current_mesh == mesh.second->name);
+                    if (ImGui::Selectable(mesh.second->name.c_str(), is_selected))
+                    {
+                        current_mesh = mesh.second->name;
+                        center_obj->SetMeshGroup(mesh.second);
+                    }
+                    if (is_selected)
+                        ImGui::SetItemDefaultFocus();
+                }
+                ImGui::EndCombo();
+            }
+            int mode = center_obj->drawmode;
+            ImGui::RadioButton("face normal", &mode, 0); ImGui::SameLine();
+            ImGui::RadioButton("vertex normal", &mode, 1);
+            center_obj->drawmode = mode;
+            bool drawnormal = center_obj->shouldDrawNormals;
+            ImGui::Checkbox("draw normals", &drawnormal);
+            center_obj->shouldDrawNormals = drawnormal;
+
+            mapping_option = center_obj->mesh->mapping_mode;
+            ImGui::RadioButton("default mapping", &mapping_option, 0); ImGui::SameLine();
+            ImGui::RadioButton("spherical mapping", &mapping_option, 1); ImGui::SameLine();
+            ImGui::RadioButton("cylindrical mapping", &mapping_option, 2); ImGui::SameLine();
+            ImGui::RadioButton("planar mapping", &mapping_option, 3);
+            center_obj->mesh->mapping_mode = mapping_option;
+
+            bool mapping_with_normal = center_obj->mesh->mapping_with_normal;
+            ImGui::Checkbox("mapping with normal?", &mapping_with_normal);
+            center_obj->mesh->mapping_with_normal = mapping_with_normal;
+
+            bool calculate_in_gpu = center_obj->mesh->should_calculate_uv_in_gpu;
+            ImGui::Checkbox("calculate in gpu?", &calculate_in_gpu);
+            center_obj->mesh->should_calculate_uv_in_gpu = calculate_in_gpu;
+
+            ImGui::End();
+        }
+    }
     ImGui::ShowDemoWindow();
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

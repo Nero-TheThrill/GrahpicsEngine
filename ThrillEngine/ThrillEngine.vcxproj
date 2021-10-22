@@ -111,7 +111,6 @@
     <ClCompile Include="ObjectLoader.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="SphereMesh.cpp" />
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TimeManager.cpp" />
@@ -147,7 +146,6 @@
     <ClInclude Include="ObjectLoader.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Shader.h" />
-    <ClInclude Include="SphereMesh.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TimeManager.h" />
     <ClInclude Include="Transform.h" />

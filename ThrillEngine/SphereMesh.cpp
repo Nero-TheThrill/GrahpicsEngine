@@ -44,7 +44,7 @@ void SphereMesh::UnBind()
     glDisableVertexAttribArray(2);
 }
 
-void SphereMesh::Draw()
+void SphereMesh::Draw(Shader shader)
 {
     Bind();
     if (n_mode == 0)

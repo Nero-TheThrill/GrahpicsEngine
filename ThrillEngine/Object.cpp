@@ -74,7 +74,7 @@ void Object::Draw()
         shader.set("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
 
         texture.Update();
-        mesh->Draw();
+        mesh->Draw(shader);
         glUseProgram(0);
         if (shouldDrawNormals)
         {

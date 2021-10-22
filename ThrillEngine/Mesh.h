@@ -5,13 +5,14 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include "Component.h"
+#include "Shader.h"
 
 class Mesh : public Component
 {
 public:
     virtual void Init()=0;
     virtual void Bind()=0;
-    virtual void Draw()=0;
+    virtual void Draw(Shader shader)=0;
     virtual void UnBind()=0;
     virtual void UnBindData();
     virtual void BindData();
@@ -39,10 +40,13 @@ public:
 
     std::vector<glm::vec3> face_normal_lines;
     std::vector<glm::vec3> vertex_normal_lines;
-
+    float maxYval, minYval;
     int face_stride=0;
     std::string name;
     int n_mode = 0; // 0 : face  1 : vertex
+    int mapping_mode = 0; // 0: default, 1: spherical, 2: cylindrical, 3: planar
+    bool should_calculate_uv_in_gpu = true;
+    bool mapping_with_normal = false;
 };
 
 inline void Mesh::UnBindData()

@@ -9,7 +9,6 @@
 #include "LineMesh.h"
 #include "ModelMesh.h"
 #include "ObjectManager.h"
-#include "SphereMesh.h"
 
 Graphics* GRAPHICS = nullptr;
 
@@ -310,8 +309,8 @@ void Graphics::LoadTexture(const std::string& path, const std::string& texture_i
         glGenTextures(1, &texture);
         glBindTexture(GL_TEXTURE_2D, texture);
         // set the texture wrapping parameters
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);	// set texture wrapping to GL_REPEAT (default wrapping method)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         // set texture filtering parameters
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -355,11 +354,11 @@ void Graphics::AddSphereMesh()
 {
     MeshGroup* m_sphere = new MeshGroup();
     float PI = acos(-1);
-    SphereMesh* sphere = new SphereMesh();
+    ModelMesh* sphere = new ModelMesh();
     float x, y, z, xy;
     float s, t;
-    int sectorCount = 20;
-    int stackCount = 20;
+    int sectorCount = 50;
+    int stackCount = 50;
     float sectorStep = 2.f * PI / static_cast<float>(sectorCount);
     float stackStep = PI / static_cast<float>(stackCount);
     float sectorAngle, stackAngle;
@@ -377,11 +376,28 @@ void Graphics::AddSphereMesh()
 
             x = xy * cos(sectorAngle);
             y = xy * sin(sectorAngle);
-            sphere->positions_use_indices.push_back(glm::vec3(x, y, z));
-            sphere->vertex_normals.push_back(glm::vec3(x, y, z));
+            sphere->positions_use_indices.push_back(glm::vec3(x, z, y));
+            sphere->vertex_normals.push_back(glm::vec3(x, z, y));
             s = static_cast<float>(j) / static_cast<float>(sectorCount);
             t = static_cast<float>(i) / static_cast<float>(stackCount);
             sphere->texcoords_use_indices.push_back(glm::vec2(1 - s, t));
+
+
+            float val1 = atan(y / x) * 180.f / acos(-1);
+            if (x < 0 && y>0)
+                val1 -= 180;
+            if (x < 0 && y < 0)
+                val1 -= 180;
+            if (val1 < 0)
+                val1 += 360;
+
+            float val2 = 180 - (acos(z / (sqrt(x * x + y * y + z * z))) * 180.f / acos(-1));
+
+            float val3 = (y +1.f) / 2.f;
+            sphere->spherical_texcoords_use_indices.push_back(glm::vec2(val1 / 360.f, val2 / 180.f));
+            sphere->cylindrical_texcoords_use_indices.push_back(glm::vec2(val1 / 360.f, val3));
+
+
         }
     }
     int k1, k2;

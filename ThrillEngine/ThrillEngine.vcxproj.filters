@@ -58,9 +58,6 @@
     <Filter Include="Object\Component\MeshGroup\Mesh">
       <UniqueIdentifier>{dc375ce1-294a-43c8-be7d-e3587c25f0e5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Object\Component\MeshGroup\Mesh\SphereMesh">
-      <UniqueIdentifier>{bc1afe3a-ca3f-48c2-b874-8afb8e2c4d50}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Object\Component\MeshGroup\Mesh\ModelMesh">
       <UniqueIdentifier>{4f86f282-ce10-4560-88be-9c2dc9fbc593}</UniqueIdentifier>
     </Filter>
@@ -144,9 +141,6 @@
     </ClCompile>
     <ClCompile Include="ModelMesh.cpp">
       <Filter>Object\Component\MeshGroup\Mesh\ModelMesh</Filter>
-    </ClCompile>
-    <ClCompile Include="SphereMesh.cpp">
-      <Filter>Object\Component\MeshGroup\Mesh\SphereMesh</Filter>
     </ClCompile>
     <ClCompile Include="LineMesh.cpp">
       <Filter>Object\Component\MeshGroup\Mesh\LineMesh</Filter>
@@ -245,9 +239,6 @@
     </ClInclude>
     <ClInclude Include="ModelMesh.h">
       <Filter>Object\Component\MeshGroup\Mesh\ModelMesh</Filter>
-    </ClInclude>
-    <ClInclude Include="SphereMesh.h">
-      <Filter>Object\Component\MeshGroup\Mesh\SphereMesh</Filter>
     </ClInclude>
     <ClInclude Include="LineMesh.h">
       <Filter>Object\Component\MeshGroup\Mesh\LineMesh</Filter>

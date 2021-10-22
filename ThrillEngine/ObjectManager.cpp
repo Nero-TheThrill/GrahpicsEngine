@@ -75,6 +75,19 @@ void ObjectManager::DeleteAll()
     }
 }
 
+Object* ObjectManager::GetObject(std::string id)
+{
+    Object* result = nullptr;
+    for (std::unordered_map<unsigned, Object*>::iterator obj = objects.begin(); obj != objects.end(); obj++)
+    {
+        if(obj->second->name==id)
+        {
+            result = obj->second;
+        }
+    }
+    return result;
+}
+
 std::unordered_map<unsigned, Object*> ObjectManager::GetAllObjects()
 {
     return  objects;

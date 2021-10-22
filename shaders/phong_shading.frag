@@ -4,15 +4,24 @@ out vec4 FragColor;
 in vec3 Normal;
 in vec3 FragPosition;
 in vec2 TexCoord;
+in vec3 pos;
 
 uniform bool item_selected;
 uniform bool texture_exists;
+uniform bool should_use_gpuside_uv;
+uniform bool mapping_with_normal;
+uniform int mapping_mode;
 uniform sampler2D texture1;
 uniform vec3 objectColor;
+uniform float maxYval;
+uniform float minYval;
 
-float k_a=0.02;
+float k_a=0.05;
 float k_d=0.12;
-float k_s=0.05;
+float k_s=0.1;
+vec3 n_normal=normalize(Normal);
+vec2 realTexCoord;
+
 struct Light
 {
 	uint type;    //            0
@@ -44,20 +53,20 @@ vec3 CalculateLight(Light light)
 {	
 	vec3 texture_vec3=vec3(1,1,1);
 	if(texture_exists)
-		texture_vec3= vec3(texture(texture1,TexCoord));
+		texture_vec3= vec3(texture(texture1,realTexCoord));
 	vec3 I_a=k_a * light.ambient * texture_vec3;
 	vec3 I_d, I_s;
 	if(light.type==0)
 	{
-		vec3 n_normal=normalize(Normal);
 		vec3 light_vector = normalize(light.position-FragPosition);
 
 		I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0)* texture_vec3;
 
 		vec3 view_vector=normalize(view_position-FragPosition);
 		vec3 reflectDirection = 2*dot(n_normal,light_vector)*n_normal-light_vector;
-		I_s = k_s*light.specular*max(dot(n_normal,light_vector),0.0)*pow(max(dot(view_vector,reflectDirection),0.0),32);
 
+		
+		I_s = k_s*light.specular*pow(max(dot(view_vector,reflectDirection),0.0),32); 
 		
 		float light_length=length(light.position-FragPosition);
 		float attenuation=min(1/(c.x+c.y*light_length+c.z*light_length*light_length),1);
@@ -66,7 +75,6 @@ vec3 CalculateLight(Light light)
 	}
 	else if(light.type==1)
 	{
-		vec3 n_normal=normalize(Normal);
 		vec3 light_vector = normalize(-light.direction);
 
 		I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0)* texture_vec3;
@@ -79,8 +87,8 @@ vec3 CalculateLight(Light light)
 		return I_local;
 	}
 	else
-	{
-		vec3 n_normal=normalize(Normal);
+	{ 
+
 		vec3 light_vector = normalize(light.position-FragPosition);
 
 		I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0)* texture_vec3;
@@ -112,6 +120,52 @@ vec3 CalculateLight(Light light)
 
 void main()
 {
+	if(should_use_gpuside_uv)
+	{
+		vec3 tmpVec3;
+		float u,v;
+		if(mapping_with_normal)
+			tmpVec3=n_normal;
+		else
+			tmpVec3=pos;
+		switch(mapping_mode)
+		{
+			case 0:
+				realTexCoord=TexCoord;
+				break;
+			case 1:
+			    u = (atan(tmpVec3.z / tmpVec3.x) * 180.f / acos(-1));
+ 				if(tmpVec3.x<0&&tmpVec3.z>0)
+ 					u-=180;
+ 				else if(tmpVec3.x<0&&tmpVec3.z<0)
+ 					u-=180;
+    			if(u<0)
+    				u+=360;
+
+   				 v = 180-(acos(tmpVec3.y / (sqrt(tmpVec3.x * tmpVec3.x + tmpVec3.y * tmpVec3.y + tmpVec3.z * tmpVec3.z))) * 180.f / acos(-1)) ;
+           
+				realTexCoord = vec2(1-u / 360.f, v / 180.f);
+				break;
+			case 2:
+				u = (atan(tmpVec3.z / tmpVec3.x) * 180.f / acos(-1));
+ 				if(tmpVec3.x<0&&tmpVec3.z>0)
+ 					u-=180;
+ 				else if(tmpVec3.x<0&&tmpVec3.z<0)
+ 					u-=180;
+  				if(u<0)
+   			 		u+=360;
+   				v = (tmpVec3.y-minYval)/(maxYval-minYval);
+   				realTexCoord = vec2(1-u/360.f,v);
+   				break;
+   			case 3:
+   				break;
+   			default:
+   				break;
+		}
+	}
+	else
+		realTexCoord=TexCoord;
+
 	vec3 result=vec3(0);
 	for(int i=0;i<light_number;i++)
 	{

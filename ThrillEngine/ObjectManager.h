@@ -13,6 +13,7 @@ public:
     void RegisterObject(Object* obj);
     void RegisterLight(LightObject* light);
     void DeleteAll();
+    Object* GetObject(std::string id);
     std::unordered_map<unsigned, Object*> GetAllObjects();
     std::unordered_map<unsigned, LightObject*> GetAllLights();
 private:
