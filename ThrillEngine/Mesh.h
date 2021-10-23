@@ -27,9 +27,10 @@ public:
     std::vector<glm::vec2> spherical_texcoords_use_indices;
     std::vector<glm::vec2> cylindrical_texcoords_use_indices;
 
-    std::vector<glm::vec2> planar_texcoords_use_indices_with_normal;
-    std::vector<glm::vec2> spherical_texcoords_use_indices_with_normal;
-    std::vector<glm::vec2> cylindrical_texcoords_use_indices_with_normal;
+    std::vector<glm::vec2> planar_texcoords_use_indices_with_vertex_normal;
+    std::vector<glm::vec2> spherical_texcoords_use_indices_with_vertex_normal;
+    std::vector<glm::vec2> cylindrical_texcoords_use_indices_with_vertex_normal;
+
 
 
     std::vector<glm::vec3> face_normals;
@@ -45,10 +46,10 @@ public:
     std::vector<glm::vec2> spherical_texcoords;
     std::vector<glm::vec2> cylindrical_texcoords;
 
-    std::vector<glm::vec2> planar_texcoordss_with_normal;
-    std::vector<glm::vec2> spherical_texcoordss_with_normal;
-    std::vector<glm::vec2> cylindrical_texcoordss_with_normal;
 
+    std::vector<glm::vec2> planar_texcoords_with_face_normal;
+    std::vector<glm::vec2> spherical_texcoords_with_face_normal;
+    std::vector<glm::vec2> cylindrical_texcoords_with_face_normal;
 
     std::vector<glm::vec3> face_normal_lines;
     std::vector<glm::vec3> vertex_normal_lines;

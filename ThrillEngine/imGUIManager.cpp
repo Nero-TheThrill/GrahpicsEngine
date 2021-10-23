@@ -374,6 +374,10 @@ void imGUIManager::Update()
             ImGui::Checkbox("draw normals", &drawnormal);
             center_obj->shouldDrawNormals = drawnormal;
 
+            ImGui::NewLine();
+            ImGui::Separator();
+            ImGui::NewLine();
+
             mapping_option = center_obj->mesh->mapping_mode;
             ImGui::RadioButton("default mapping", &mapping_option, 0); ImGui::SameLine();
             ImGui::RadioButton("spherical mapping", &mapping_option, 1); ImGui::SameLine();
@@ -381,13 +385,19 @@ void imGUIManager::Update()
             ImGui::RadioButton("planar mapping", &mapping_option, 3);
             center_obj->mesh->mapping_mode = mapping_option;
 
-            bool mapping_with_normal = center_obj->mesh->mapping_with_normal;
-            ImGui::Checkbox("mapping with normal?", &mapping_with_normal);
-            center_obj->mesh->mapping_with_normal = mapping_with_normal;
+            ImGui::Separator();
 
-            bool calculate_in_gpu = center_obj->mesh->should_calculate_uv_in_gpu;
-            ImGui::Checkbox("calculate in gpu?", &calculate_in_gpu);
-            center_obj->mesh->should_calculate_uv_in_gpu = calculate_in_gpu;
+            int mapping_with_what = center_obj->mesh->mapping_with_normal ? 1 : 0;
+            ImGui::RadioButton("mapping with position", &mapping_with_what, 0); ImGui::SameLine();
+            ImGui::RadioButton("mapping with normal", &mapping_with_what, 1); 
+            center_obj->mesh->mapping_with_normal = (mapping_with_what == 1);
+
+            ImGui::Separator();
+
+            int where_to_calculate = center_obj->mesh->should_calculate_uv_in_gpu ? 0 : 1;
+            ImGui::RadioButton("calculate in gpu", &where_to_calculate, 0); ImGui::SameLine();
+            ImGui::RadioButton("calculate in cpu", &where_to_calculate, 1); 
+            center_obj->mesh->should_calculate_uv_in_gpu = (where_to_calculate == 0);
 
             ImGui::End();
         }

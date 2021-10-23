@@ -345,12 +345,7 @@ void ObjectLoader::reSizeObject()
         int iterator = 0;
         for (auto p : m_mesh->positions_use_indices)
         {
-            glm::vec3 resizedVec= glm::vec3((double(p.x) - subtract_x) / denominator, (double(p.y) - subtract_y) / denominator, (double(p.z) - subtract_z) / denominator);
-            m_mesh->positions_use_indices[iterator] = resizedVec;
-
-            m_mesh->spherical_texcoords_use_indices.push_back(GenerateSphericalUV(resizedVec));
-            m_mesh->cylindrical_texcoords_use_indices.push_back(GenerateCylindricalUV(resizedVec,m_mesh->maxYval,m_mesh->minYval));
-            m_mesh->planar_texcoords_use_indices.push_back(GeneratePlanarUV(resizedVec));
+            m_mesh->positions_use_indices[iterator] = glm::vec3((double(p.x) - subtract_x) / denominator, (double(p.y) - subtract_y) / denominator, (double(p.z) - subtract_z) / denominator);
             iterator++;
         }
     }

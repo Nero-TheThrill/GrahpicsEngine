@@ -181,18 +181,32 @@ void ModelMesh::GenerateNormalLines()
 
 void ModelMesh::GenerateTexcoords()
 {
-    
+    for(auto n:vertex_normals)
+    {
+        spherical_texcoords_use_indices_with_vertex_normal.push_back(GenerateSphericalUV(n));
+        cylindrical_texcoords_use_indices_with_vertex_normal.push_back(GenerateCylindricalUV(n, maxYval, minYval));
+        planar_texcoords_use_indices_with_vertex_normal.push_back(GeneratePlanarUV(n));
+    }
+    for (auto n:face_normals)
+    {
+        spherical_texcoords_with_face_normal.push_back(GenerateSphericalUV(n));
+        cylindrical_texcoords_with_face_normal.push_back(GenerateCylindricalUV(n, maxYval, minYval));
+        planar_texcoords_with_face_normal.push_back(GeneratePlanarUV(n));
+    }
+    for(auto p:positions_use_indices)
+    {
+        spherical_texcoords_use_indices.push_back(GenerateSphericalUV(p));
+        cylindrical_texcoords_use_indices.push_back(GenerateCylindricalUV(p, maxYval, minYval));
+        planar_texcoords_use_indices.push_back(GeneratePlanarUV(p));
+    }
     for (int i = 0; i < static_cast<int>(indices.size()); i++)
     {
         spherical_texcoords.push_back(spherical_texcoords_use_indices[indices[i]]);
-    }
-    for (int i = 0; i < static_cast<int>(indices.size()); i++)
-    {
+
         cylindrical_texcoords.push_back(cylindrical_texcoords_use_indices[indices[i]]);
-    }
-    for (int i = 0; i < static_cast<int>(indices.size()); i++)
-    {
+
         planar_texcoords.push_back(planar_texcoords_use_indices[indices[i]]);
+
     }
 }
 
@@ -228,11 +242,26 @@ void ModelMesh::BindData()
         {
             glBindBuffer(GL_ARRAY_BUFFER, VBO_texcoords);
             if (mapping_mode == 1)
-                glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * spherical_texcoords.size()), spherical_texcoords.data(), GL_STATIC_DRAW);
+            {
+                if(mapping_with_normal)
+                    glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * spherical_texcoords_with_face_normal.size()), spherical_texcoords_with_face_normal.data(), GL_STATIC_DRAW);
+                else
+                    glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * spherical_texcoords.size()), spherical_texcoords.data(), GL_STATIC_DRAW);
+            }
             else if (mapping_mode == 2)
-                glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * cylindrical_texcoords.size()), cylindrical_texcoords.data(), GL_STATIC_DRAW);
+            {
+                if(mapping_with_normal)
+                    glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * cylindrical_texcoords_with_face_normal.size()), cylindrical_texcoords_with_face_normal.data(), GL_STATIC_DRAW);
+                else
+                    glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * cylindrical_texcoords.size()), cylindrical_texcoords.data(), GL_STATIC_DRAW);
+            }
             else
-                glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * planar_texcoords.size()), planar_texcoords.data(), GL_STATIC_DRAW);
+            {
+                if(mapping_with_normal)
+                    glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * planar_texcoords_with_face_normal.size()), planar_texcoords_with_face_normal.data(), GL_STATIC_DRAW);
+                else
+                    glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * planar_texcoords.size()), planar_texcoords.data(), GL_STATIC_DRAW);
+            }
             glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
             glEnableVertexAttribArray(2);
         }
@@ -267,12 +296,27 @@ void ModelMesh::BindData()
             else
             {
                 glBindBuffer(GL_ARRAY_BUFFER, VBO_texcoords);
-                if(mapping_mode==1)
-                    glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * spherical_texcoords_use_indices.size()), spherical_texcoords_use_indices.data(), GL_STATIC_DRAW);
-                else if(mapping_mode==2)
-                    glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * cylindrical_texcoords_use_indices.size()), cylindrical_texcoords_use_indices.data(), GL_STATIC_DRAW);
+                if (mapping_mode == 1)
+                {
+                    if(mapping_with_normal)
+                        glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * spherical_texcoords_use_indices_with_vertex_normal.size()), spherical_texcoords_use_indices_with_vertex_normal.data(), GL_STATIC_DRAW);
+                    else
+                        glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * spherical_texcoords_use_indices.size()), spherical_texcoords_use_indices.data(), GL_STATIC_DRAW);
+                }
+                else if (mapping_mode == 2)
+                {
+                    if(mapping_with_normal)
+                        glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * cylindrical_texcoords_use_indices_with_vertex_normal.size()), cylindrical_texcoords_use_indices_with_vertex_normal.data(), GL_STATIC_DRAW);
+                    else
+                        glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * cylindrical_texcoords_use_indices.size()), cylindrical_texcoords_use_indices.data(), GL_STATIC_DRAW);
+                }
                 else
-                    glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * planar_texcoords_use_indices.size()), planar_texcoords_use_indices.data(), GL_STATIC_DRAW);
+                {
+                    if(mapping_with_normal)
+                        glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * planar_texcoords_use_indices_with_vertex_normal.size()), planar_texcoords_use_indices_with_vertex_normal.data(), GL_STATIC_DRAW);
+                    else
+                        glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * planar_texcoords_use_indices.size()), planar_texcoords_use_indices.data(), GL_STATIC_DRAW);
+                }
                 glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
                 glEnableVertexAttribArray(2);
             }
