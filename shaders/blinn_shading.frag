@@ -6,27 +6,43 @@ in vec3 FragPosition;
 in vec2 TexCoord;
 in vec3 pos;
 in vec3 norm;
+
 uniform bool item_selected;
-uniform bool texture_exists;
+
+uniform bool default_texture_exists;
+uniform bool ambient_texture_exists;
+uniform bool diffuse_texture_exists;
+uniform bool specular_texture_exists;
+
+uniform sampler2D default_texture;
+uniform sampler2D ambient_texture;
+uniform sampler2D diffuse_texture;
+uniform sampler2D specular_texture;
+
+
 uniform bool should_use_gpuside_uv;
 uniform bool mapping_with_normal;
 uniform int mapping_mode;
-uniform sampler2D texture1;
+
+
+
 uniform vec3 objectColor;
+
 uniform float maxYval;
 uniform float minYval;
 
-float k_a=0.05;
-float k_d=0.12;
-float k_s=0.1;
+uniform float k_a;
+uniform float k_d;
+uniform float k_s;
+
 vec3 n_normal=normalize(Normal);
 vec2 realTexCoord;
-	
+vec3 I_a,I_d,I_s;
 struct Light
 {
-	uint type;    //            0
-	vec3 direction;    // D,S          16
-	vec3 position;     // P        32
+	uint type;    	   //            0
+	vec3 direction;    // D,S        16
+	vec3 position;     // P          32
 
 	vec3 ambient;      // D,P,S      48
 	vec3 diffuse;      // D,P,S      64
@@ -51,41 +67,56 @@ layout(std140, binding = 1) uniform LightInformation
 
 vec3 CalculateLight(Light light)
 {	
-	vec3 texture_vec3=vec3(1,1,1);
-	if(texture_exists)
-		texture_vec3= vec3(texture(texture1,realTexCoord));
-	vec3 I_a=k_a * light.ambient * texture_vec3;
-	vec3 I_d, I_s;
+	if(ambient_texture_exists)
+		I_a= light.ambient * vec3(texture(ambient_texture,realTexCoord))/16;
+	else 
+		I_a=k_a * light.ambient;
 	if(light.type==0)
 	{
 		vec3 light_vector = normalize(light.position-FragPosition);
 
-		I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0)* texture_vec3;
+		if(diffuse_texture_exists)
+			I_d = light.diffuse*max(dot(n_normal,light_vector),0.0)* vec3(texture(diffuse_texture,realTexCoord))/2;
+		else
+			I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0);
 
 		vec3 view_vector=normalize(view_position-FragPosition);
-		vec3 HalfVector = normalize(light_vector+view_vector);
+				vec3 HalfVector = normalize(light_vector+view_vector);
 
 		if(dot(n_normal,light_vector)>0.0)
-			I_s = k_s*light.specular*pow(max(dot(n_normal,HalfVector),0.0),32); 
+		{
+			if(specular_texture_exists)
+				I_s = light.specular*pow(max(dot(n_normal,HalfVector),0.0),32)* vec3(texture(specular_texture,realTexCoord))/3; 
+			else
+				I_s = k_s*light.specular*pow(max(dot(n_normal,HalfVector),0.0),32); 
+		}
 		else
 			I_s=vec3(0,0,0);
 		
 		float light_length=length(light.position-FragPosition);
 		float attenuation=min(1/(c.x+c.y*light_length+c.z*light_length*light_length),1);
-		vec3 I_local = (I_a+I_d+I_s);
+		vec3 I_local = attenuation*(I_a+I_d+I_s);
 		return I_local;
 	}
 	else if(light.type==1)
 	{
 		vec3 light_vector = normalize(-light.direction);
 
-		I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0)* texture_vec3;
+		if(diffuse_texture_exists)
+			I_d = light.diffuse*max(dot(n_normal,light_vector),0.0)* vec3(texture(diffuse_texture,realTexCoord))/2;
+		else
+			I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0);
 
 		vec3 view_vector=normalize(view_position-FragPosition);
 		vec3 HalfVector = normalize(light_vector+view_vector);
 
 		if(dot(n_normal,light_vector)>0.0)
-			I_s = k_s*light.specular*pow(max(dot(n_normal,HalfVector),0.0),32); 
+		{
+			if(specular_texture_exists)
+				I_s = light.specular*pow(max(dot(n_normal,HalfVector),0.0),32)* vec3(texture(specular_texture,realTexCoord))/3; 
+			else
+				I_s = k_s*light.specular*pow(max(dot(n_normal,HalfVector),0.0),32); 
+		}
 		else
 			I_s=vec3(0,0,0);
 
@@ -97,13 +128,21 @@ vec3 CalculateLight(Light light)
 
 		vec3 light_vector = normalize(light.position-FragPosition);
 
-		I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0)* texture_vec3;
+		if(diffuse_texture_exists)
+			I_d = light.diffuse*max(dot(n_normal,light_vector),0.0)* vec3(texture(diffuse_texture,realTexCoord))/2;
+		else
+			I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0);
 
 		vec3 view_vector=normalize(view_position-FragPosition);
 		vec3 HalfVector = normalize(light_vector+view_vector);
 
 		if(dot(n_normal,light_vector)>0.0)
-			I_s = k_s*light.specular*pow(max(dot(n_normal,HalfVector),0.0),32); 
+		{
+			if(specular_texture_exists)
+				I_s = light.specular*pow(max(dot(n_normal,HalfVector),0.0),32)* vec3(texture(specular_texture,realTexCoord))/3; 
+			else
+				I_s = k_s*light.specular*pow(max(dot(n_normal,HalfVector),0.0),32); 
+		}
 		else
 			I_s=vec3(0,0,0);
 
@@ -196,22 +235,19 @@ void main()
 	{
 		result+=CalculateLight(lights[i]);
 	}
+	if(default_texture_exists)
+		result*=texture(default_texture,TexCoord).xyz;
+	
 	result+=global_ambient_color*k_a;
 	float fog_factor=(far-length(view_position-FragPosition))/(far-near);
 	result =  fog_factor*result+(1-fog_factor)*fog_color;
 	result=vec3(min(result.x,1),min(result.y,1),min(result.z,1));
 	if(item_selected)
 	{
-		if(texture_exists)
-			FragColor = texture(texture1,TexCoord)*vec4(result*vec3(1,0.3,0.3),0.5);
-		else
-			FragColor = vec4(result*vec3(1,0.3,0.3),0.5);
+		FragColor = vec4(result*vec3(1,0.3,0.3),1.0);		
 	}
 	else
 	{
-		if(texture_exists)
-			FragColor = vec4(result*objectColor,1.0);
-		else
-			FragColor = vec4(result*objectColor,1.0);
+		FragColor = vec4(result*objectColor,1.0);
 	}
 }

@@ -12,31 +12,53 @@ Material::Material(const std::string& id)
 
 Material::~Material()
 {
-    std::cout << "Material<"<<name<<"> Destructor Called" << std::endl;
+    //std::cout << "Material<"<<name<<"> Destructor Called" << std::endl;
 }
 
 void Material::Use()
 {
-    glUseProgram(shader.program_handle);
+   
 }
 
 void Material::UnUse()
 {
-    glUseProgram(0);
+    
 }
 
-void Material::Update()
+void Material::Update(Shader shader)
 {
+    shader.set("k_a", ka);
+    shader.set("k_d", kd);
+    shader.set("k_s", ks);
+
+    texture.Update(shader);
+
     for(auto v:set_values_v3)
+    {
+        shader.set(v.first, v.second);
+    }
+    for (auto v : set_values_v4)
+    {
+        shader.set(v.first, v.second);
+    }
+    for (auto v : set_values_m4)
+    {
+        shader.set(v.first, v.second);
+    }
+    for (auto v : set_values_float)
+    {
+        shader.set(v.first, v.second);
+    }
+    for (auto v : set_values_int)
+    {
+        shader.set(v.first, v.second);
+    }
+    for (auto v : set_values_bool)
     {
         shader.set(v.first, v.second);
     }
 }
 
-void Material::PickShader(const std::string& input_program)
-{
-    shader = GRAPHICS->GetShader(input_program);
-}
 
 void Material::set(const std::string& value_id, glm::vec3 input)
 {
@@ -112,11 +134,6 @@ void Material::set(const std::string& value_id, glm::mat4 input)
 }
 
 
-
-GLuint Material::GetProgramHandle()
-{
-    return shader.program_handle;
-}
 
 
 //should make a unordered_map and store "value_name" and "uniform location" so that reduce calling "glGetUniformLocation"

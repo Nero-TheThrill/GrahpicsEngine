@@ -20,7 +20,7 @@ public:
     void ChangeMode(int mode) override;
     void DrawNormals() override;
 private:
-    Material* material;
+ 
     GLuint VBO_positions, VBO_normals, VBO_texcoords;
     GLuint EBO;
     int index_size;

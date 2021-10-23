@@ -378,31 +378,30 @@ void imGUIManager::Update()
             ImGui::Separator();
             ImGui::NewLine();
 
-            mapping_option = center_obj->mesh->mapping_mode;
+            mapping_option = center_obj->mapping_mode;
             ImGui::RadioButton("default mapping", &mapping_option, 0); ImGui::SameLine();
             ImGui::RadioButton("spherical mapping", &mapping_option, 1); ImGui::SameLine();
             ImGui::RadioButton("cylindrical mapping", &mapping_option, 2); ImGui::SameLine();
             ImGui::RadioButton("planar mapping", &mapping_option, 3);
-            center_obj->mesh->mapping_mode = mapping_option;
+            center_obj->mapping_mode = mapping_option;
 
             ImGui::Separator();
 
-            int mapping_with_what = center_obj->mesh->mapping_with_normal ? 1 : 0;
+            int mapping_with_what = center_obj->mapping_with_normal ? 1 : 0;
             ImGui::RadioButton("mapping with position", &mapping_with_what, 0); ImGui::SameLine();
             ImGui::RadioButton("mapping with normal", &mapping_with_what, 1); 
-            center_obj->mesh->mapping_with_normal = (mapping_with_what == 1);
+            center_obj->mapping_with_normal = (mapping_with_what == 1);
 
             ImGui::Separator();
 
-            int where_to_calculate = center_obj->mesh->should_calculate_uv_in_gpu ? 0 : 1;
+            int where_to_calculate = center_obj->should_calculate_uv_in_gpu ? 0 : 1;
             ImGui::RadioButton("calculate in gpu", &where_to_calculate, 0); ImGui::SameLine();
             ImGui::RadioButton("calculate in cpu", &where_to_calculate, 1); 
-            center_obj->mesh->should_calculate_uv_in_gpu = (where_to_calculate == 0);
+            center_obj->should_calculate_uv_in_gpu = (where_to_calculate == 0);
 
             ImGui::End();
         }
     }
-    ImGui::ShowDemoWindow();
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
@@ -415,6 +414,7 @@ void imGUIManager::Init()
     prev_item = nullptr;
     shouldRotatelight = true;
     lightNumber = 1;
+
 }
 
 imGUIManager::~imGUIManager()

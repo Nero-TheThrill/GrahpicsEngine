@@ -6,7 +6,6 @@
 #include "UVGenerator.h"
 ModelMesh::ModelMesh()
 {
-    material=nullptr;
     VBO_positions = 0;
     VBO_normals = 0;
     EBO = 0;
@@ -76,6 +75,9 @@ void ModelMesh::Draw(Shader shader)
     shader.set("mapping_mode", mapping_mode);
     shader.set("should_use_gpuside_uv", should_calculate_uv_in_gpu);
     shader.set("mapping_with_normal", mapping_with_normal);
+  
+    material.Update(shader);
+
     if (n_mode == 0)
     {
 
@@ -230,13 +232,13 @@ void ModelMesh::BindData()
         }
         if (mapping_mode == 0)
         {
+            glBindBuffer(GL_ARRAY_BUFFER, VBO_texcoords);
             if (!texcoords_use_indices.empty())
-            {
-                glBindBuffer(GL_ARRAY_BUFFER, VBO_texcoords);
                 glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * texcoords.size()), texcoords.data(), GL_STATIC_DRAW);
-                glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-                glEnableVertexAttribArray(2);
-            }
+            else
+                glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * spherical_texcoords.size()), spherical_texcoords.data(), GL_STATIC_DRAW);
+            glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+            glEnableVertexAttribArray(2);
         }
         else
         {
@@ -285,13 +287,13 @@ void ModelMesh::BindData()
             }
             if (mapping_mode == 0)
             {
+                glBindBuffer(GL_ARRAY_BUFFER, VBO_texcoords);
                 if (!texcoords_use_indices.empty())
-                {
-                    glBindBuffer(GL_ARRAY_BUFFER, VBO_texcoords);
                     glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * texcoords_use_indices.size()), texcoords_use_indices.data(), GL_STATIC_DRAW);
-                    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-                    glEnableVertexAttribArray(2);
-                }
+                else
+                    glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(float) * 2 * spherical_texcoords_use_indices.size()), spherical_texcoords_use_indices.data(), GL_STATIC_DRAW);
+                glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+                glEnableVertexAttribArray(2);
             }
             else
             {
@@ -380,3 +382,4 @@ void ModelMesh::DrawNormals()
         BindData();
     }
 }
+

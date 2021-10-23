@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 #include "Component.h"
 #include "Shader.h"
+#include "Material.h"
 
 class Mesh : public Component
 {
@@ -19,6 +20,7 @@ public:
     virtual ~Mesh();
     virtual void ChangeMode(int mode);
     virtual void DrawNormals();
+    void SetMaterial(Material mat);
     std::vector<glm::vec3> positions_use_indices;
     std::vector<glm::vec2> texcoords_use_indices;
 
@@ -60,6 +62,7 @@ public:
     int mapping_mode = 0; // 0: default, 1: spherical, 2: cylindrical, 3: planar
     bool should_calculate_uv_in_gpu = true;
     bool mapping_with_normal = false;
+    Material material;
 };
 
 inline void Mesh::UnBindData()
@@ -89,5 +92,10 @@ inline void Mesh::ChangeMode(int mode)
 
 inline void Mesh::DrawNormals()
 {
+}
+
+inline void Mesh::SetMaterial(Material mat)
+{
+    material = mat;
 }
 

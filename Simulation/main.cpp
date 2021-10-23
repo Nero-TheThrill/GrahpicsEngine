@@ -37,18 +37,12 @@ int main()
 
 
 
-
-    GRAPHICS->LoadTexture("../images/starwars.jpg", "starwars");
-    GRAPHICS->LoadTexture("../images/earth.bmp", "earth");
-    GRAPHICS->LoadTexture("../images/moon.bmp", "moon");
-    GRAPHICS->LoadTexture("../images/camo.jpg", "camo");
-    GRAPHICS->LoadTexture("../images/graycamo.png", "graycamo");
+    GRAPHICS->LoadTexture("../images/me.jpg", "me");
     GRAPHICS->LoadTexture("../images/space.png", "space");
     GRAPHICS->LoadTexture("../images/ramus.png", "ramus");
-    GRAPHICS->LoadTexture("../images/baron.png", "baron");
-    GRAPHICS->LoadTexture("../images/penguin.png", "penguin");
     GRAPHICS->LoadTexture("../images/test.png", "test");
-    GRAPHICS->LoadTexture("../images/boxboundary.png", "bb");
+    GRAPHICS->LoadTexture("../images/metal_roof_diff_512x512.png", "roofdiff");
+    GRAPHICS->LoadTexture("../images/metal_roof_spec_512x512.png", "roofspec");
 
     objloader.loadObject("../models/cube.obj", "cube");
     //objloader.loadObject("../models/human.obj", "human");

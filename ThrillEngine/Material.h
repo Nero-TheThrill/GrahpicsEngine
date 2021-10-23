@@ -11,13 +11,13 @@
 class Material
 {
 public:
+    Material()=default;
     Material(const std::string& id);
     ~Material();
 
     void Use();
     void UnUse();
-    void Update();
-    void PickShader(const std::string& input_program);
+    void Update(Shader shader);
     void set(const std::string& value_id, glm::vec3 input);
     void set(const std::string& value_id, glm::vec4 input);
     void set(const std::string& value_id, float input);
@@ -26,12 +26,9 @@ public:
     void set(const std::string& value_id, glm::mat4 input);
 
 
-
-    GLuint GetProgramHandle();
-
     Texture texture;
-    Shader shader;
     std::string name;
+    float ka = 0.05f, kd = 0.09f, ks = 0.05f;
 private:
     std::unordered_map<std::string, glm::vec3> set_values_v3;
     std::unordered_map<std::string, glm::vec4> set_values_v4;

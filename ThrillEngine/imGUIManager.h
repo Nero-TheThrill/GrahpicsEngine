@@ -2,6 +2,7 @@
 #include "LightObject.h"
 #include "Object.h"
 #include "imgui/imgui_impl_glfw.h"
+#include "Material.h"
 class imGUIManager
 {
 public:

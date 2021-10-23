@@ -10,6 +10,10 @@
 
 void Object::Update()
 {
+    mesh->n_mode=n_mode;
+    mesh->mapping_mode = mapping_mode;
+    mesh->should_calculate_uv_in_gpu = should_calculate_uv_in_gpu;
+    mesh->mapping_with_normal = mapping_with_normal;
     Draw();
 }
 
@@ -64,16 +68,13 @@ void Object::Draw()
 {
     if (mesh != nullptr)
     {
+        mesh->SetMaterial(material);
         mesh->ChangeMode(drawmode);
         glUseProgram(shader.program_handle);
         shader.set("model", transform.GetTransformMatrix());
         shader.set("objectColor", color);
-        shader.set("texture_exists", texture.texture != -1);
         shader.set("item_selected", item_selected);
-        shader.set("viewPosition", GRAPHICS->camera.cam_position);
-        shader.set("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
 
-        texture.Update();
         mesh->Draw(shader);
         glUseProgram(0);
         if (shouldDrawNormals)
