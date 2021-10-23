@@ -154,6 +154,9 @@
     <ClCompile Include="LightObject.cpp">
       <Filter>Object\LightObject</Filter>
     </ClCompile>
+    <ClCompile Include="UVGenerator.cpp">
+      <Filter>Object\ObjectLoader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -251,6 +254,9 @@
     </ClInclude>
     <ClInclude Include="LightObject.h">
       <Filter>Object\LightObject</Filter>
+    </ClInclude>
+    <ClInclude Include="UVGenerator.h">
+      <Filter>Object\ObjectLoader</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

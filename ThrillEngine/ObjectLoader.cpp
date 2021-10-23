@@ -3,6 +3,8 @@
 #include "Graphics.h"
 #include <cmath>
 
+#include "UVGenerator.h"
+
 void ObjectLoader::loadObject(const std::string& path, const std::string& mesh_id)
 {
     tmp_positions.clear();
@@ -337,27 +339,18 @@ void ObjectLoader::reSizeObject()
     
     for (auto m_mesh : meshgroup->model_meshes)
     {
-        m_mesh->maxYval =(max_val_y - subtract_y) / denominator;
+        m_mesh->maxYval = (max_val_y - subtract_y) / denominator;
         m_mesh->minYval = (min_val_y - subtract_y) / denominator;
+
         int iterator = 0;
         for (auto p : m_mesh->positions_use_indices)
         {
             glm::vec3 resizedVec= glm::vec3((double(p.x) - subtract_x) / denominator, (double(p.y) - subtract_y) / denominator, (double(p.z) - subtract_z) / denominator);
             m_mesh->positions_use_indices[iterator] = resizedVec;
-        
-            float val1 = atan(resizedVec.z / resizedVec.x) * 180.f / acos(-1);
-            if (resizedVec.x < 0 && resizedVec.z>0)
-                val1 -= 180;
-            if (resizedVec.x < 0 && resizedVec.z < 0)
-                val1 -= 180;
-            if (val1 < 0)
-                val1 += 360;
 
-            float val2 = 180 - (acos(resizedVec.y / (sqrt(resizedVec.x * resizedVec.x + resizedVec.y * resizedVec.y + resizedVec.z * resizedVec.z))) * 180.f / acos(-1));
-
-            float val3 = (resizedVec.y - (min_val_y - subtract_y) / denominator) / ((max_val_y - subtract_y) / denominator - (min_val_y - subtract_y) / denominator);
-            m_mesh->spherical_texcoords_use_indices.push_back(glm::vec2(val1 / 360.f, val2 / 180.f));
-            m_mesh->cylindrical_texcoords_use_indices.push_back(glm::vec2(val1 / 360.f, val3));
+            m_mesh->spherical_texcoords_use_indices.push_back(GenerateSphericalUV(resizedVec));
+            m_mesh->cylindrical_texcoords_use_indices.push_back(GenerateCylindricalUV(resizedVec,m_mesh->maxYval,m_mesh->minYval));
+            m_mesh->planar_texcoords_use_indices.push_back(GeneratePlanarUV(resizedVec));
             iterator++;
         }
     }

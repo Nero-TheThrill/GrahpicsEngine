@@ -14,6 +14,7 @@ public:
     void GeneratePositionsWithIndices();
     void GenerateNormals();
     void GenerateNormalLines();
+    void GenerateTexcoords();
     void BindData();
     void UnBindData();
     void ChangeMode(int mode) override;

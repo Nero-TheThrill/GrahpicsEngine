@@ -5,7 +5,7 @@ in vec3 Normal;
 in vec3 FragPosition;
 in vec2 TexCoord;
 in vec3 pos;
-
+in vec3 norm;
 uniform bool item_selected;
 uniform bool texture_exists;
 uniform bool should_use_gpuside_uv;
@@ -65,8 +65,10 @@ vec3 CalculateLight(Light light)
 		vec3 view_vector=normalize(view_position-FragPosition);
 		vec3 reflectDirection = 2*dot(n_normal,light_vector)*n_normal-light_vector;
 
-		
-		I_s = k_s*light.specular*pow(max(dot(view_vector,reflectDirection),0.0),32); 
+		if(dot(n_normal,light_vector)>0.0)
+			I_s = k_s*light.specular*pow(max(dot(view_vector,reflectDirection),0.0),32); 
+		else
+			I_s=vec3(0,0,0);
 		
 		float light_length=length(light.position-FragPosition);
 		float attenuation=min(1/(c.x+c.y*light_length+c.z*light_length*light_length),1);
@@ -80,8 +82,12 @@ vec3 CalculateLight(Light light)
 		I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0)* texture_vec3;
 
 		vec3 view_vector=normalize(view_position-FragPosition);
-		vec3 reflectDirection = 2*dot(n_normal,light_vector)*n_normal-light_vector;
-		I_s = k_s*light.specular*max(dot(n_normal,light_vector),0.0)*pow(max(dot(view_vector,reflectDirection),0.0),32);
+			vec3 reflectDirection = 2*dot(n_normal,light_vector)*n_normal-light_vector;
+
+		if(dot(n_normal,light_vector)>0.0)
+			I_s = k_s*light.specular*pow(max(dot(view_vector,reflectDirection),0.0),32); 
+		else
+			I_s=vec3(0,0,0);
 
 		vec3 I_local = (I_a+I_d+I_s);
 		return I_local;
@@ -95,7 +101,11 @@ vec3 CalculateLight(Light light)
 
 		vec3 view_vector=normalize(view_position-FragPosition);
 		vec3 reflectDirection = 2*dot(n_normal,light_vector)*n_normal-light_vector;
-		I_s = k_s*light.specular*max(dot(n_normal,light_vector),0.0)*pow(max(dot(view_vector,reflectDirection),0.0),32);
+
+		if(dot(n_normal,light_vector)>0.0)
+			I_s = k_s*light.specular*pow(max(dot(view_vector,reflectDirection),0.0),32); 
+		else
+			I_s=vec3(0,0,0);
 
 		float alpha = dot(-light_vector, normalize(light.direction)); 
     	float spotlighteffect=0;
@@ -122,42 +132,57 @@ void main()
 {
 	if(should_use_gpuside_uv)
 	{
-		vec3 tmpVec3;
+		vec3 tmpVec3,abstmpVec3;
 		float u,v;
 		if(mapping_with_normal)
-			tmpVec3=n_normal;
+			tmpVec3=normalize(norm);
 		else
 			tmpVec3=pos;
+		abstmpVec3=abs(tmpVec3);
 		switch(mapping_mode)
 		{
 			case 0:
 				realTexCoord=TexCoord;
 				break;
 			case 1:
-			    u = (atan(tmpVec3.z / tmpVec3.x) * 180.f / acos(-1));
- 				if(tmpVec3.x<0&&tmpVec3.z>0)
- 					u-=180;
- 				else if(tmpVec3.x<0&&tmpVec3.z<0)
- 					u-=180;
-    			if(u<0)
-    				u+=360;
-
-   				 v = 180-(acos(tmpVec3.y / (sqrt(tmpVec3.x * tmpVec3.x + tmpVec3.y * tmpVec3.y + tmpVec3.z * tmpVec3.z))) * 180.f / acos(-1)) ;
+			    u = degrees(atan(tmpVec3.z , tmpVec3.x));
+    			u+=180;
+   				v = 180-(acos(tmpVec3.y / (sqrt(tmpVec3.x * tmpVec3.x + tmpVec3.y * tmpVec3.y + tmpVec3.z * tmpVec3.z))) * 180.f / acos(-1)) ;
            
 				realTexCoord = vec2(1-u / 360.f, v / 180.f);
 				break;
 			case 2:
-				u = (atan(tmpVec3.z / tmpVec3.x) * 180.f / acos(-1));
- 				if(tmpVec3.x<0&&tmpVec3.z>0)
- 					u-=180;
- 				else if(tmpVec3.x<0&&tmpVec3.z<0)
- 					u-=180;
-  				if(u<0)
-   			 		u+=360;
+			    u = degrees(atan(tmpVec3.z , tmpVec3.x));
+				u+=180;
    				v = (tmpVec3.y-minYval)/(maxYval-minYval);
    				realTexCoord = vec2(1-u/360.f,v);
    				break;
    			case 3:
+           		if (abstmpVec3.x >= abstmpVec3.y && abstmpVec3.x >= abstmpVec3.z)
+            	{
+                	if(tmpVec3.x < 0)
+                		realTexCoord.x = tmpVec3.z/abstmpVec3.x;
+                	else
+                		realTexCoord.x = -tmpVec3.z/abstmpVec3.x;
+                	realTexCoord.y = tmpVec3.y/abstmpVec3.x;
+	            }
+	            if (abstmpVec3.y >= abstmpVec3.x && abstmpVec3.y >= abstmpVec3.z)
+	            {
+	                if(tmpVec3.y < 0)
+	                	realTexCoord.x = tmpVec3.x/abstmpVec3.y;
+	                else
+	                	realTexCoord.x = -tmpVec3.x/abstmpVec3.y;
+	                realTexCoord.y = tmpVec3.z/abstmpVec3.y;
+	            }
+	            if (abstmpVec3.z >= abstmpVec3.y && abstmpVec3.z >= abstmpVec3.x)
+	            {
+	                if(tmpVec3.z < 0) 
+	                	realTexCoord.x = -tmpVec3.x/abstmpVec3.z;
+	                else
+	                	realTexCoord.x = tmpVec3.x/abstmpVec3.z;
+	                realTexCoord.y = tmpVec3.y/abstmpVec3.z;
+	            }
+	            realTexCoord=(realTexCoord+vec2(1))/2;
    				break;
    			default:
    				break;

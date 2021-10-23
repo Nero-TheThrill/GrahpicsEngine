@@ -362,7 +362,8 @@ void Graphics::AddSphereMesh()
     float sectorStep = 2.f * PI / static_cast<float>(sectorCount);
     float stackStep = PI / static_cast<float>(stackCount);
     float sectorAngle, stackAngle;
-
+    sphere->maxYval = 1;
+    sphere->minYval = -1;
     for (int i = 0; i <= stackCount; ++i)
     {
         stackAngle = PI / 2.f - static_cast<float>(i) * stackStep;
@@ -376,27 +377,40 @@ void Graphics::AddSphereMesh()
 
             x = xy * cos(sectorAngle);
             y = xy * sin(sectorAngle);
-            sphere->positions_use_indices.push_back(glm::vec3(x, z, y));
-            sphere->vertex_normals.push_back(glm::vec3(x, z, y));
+            sphere->positions_use_indices.push_back(glm::vec3(x, y, z));
+            sphere->vertex_normals.push_back(glm::vec3(x, y, z));
             s = static_cast<float>(j) / static_cast<float>(sectorCount);
             t = static_cast<float>(i) / static_cast<float>(stackCount);
-            sphere->texcoords_use_indices.push_back(glm::vec2(1 - s, t));
+            sphere->texcoords_use_indices.push_back(glm::vec2(1 - s, 1-t));
 
+            float u_sc = glm::degrees(atan2(y, x));
+            u_sc += 180;
 
-            float val1 = atan(y / x) * 180.f / acos(-1);
-            if (x < 0 && y>0)
-                val1 -= 180;
-            if (x < 0 && y < 0)
-                val1 -= 180;
-            if (val1 < 0)
-                val1 += 360;
+            float v_s = 180 - glm::degrees(acos(z / (sqrt(x * x + y * y + z * z))));
 
-            float val2 = 180 - (acos(z / (sqrt(x * x + y * y + z * z))) * 180.f / acos(-1));
+            float v_c = (z + 1) / 2.f;
+            glm::vec3 Vec=glm::vec3(x, y, z);
+            glm::vec3 absVec = abs(glm::vec3(x, y, z));
+            glm::vec2 planar_uv;
+            if (absVec.x >= absVec.y && absVec.x >= absVec.z)
+            {
+                Vec.x < 0 ? planar_uv.x = Vec.z / absVec.x : planar_uv.x = -Vec.z / absVec.x;
+                planar_uv.y = Vec.y / absVec.x;
+            }
+            if (absVec.y >= absVec.x && absVec.y >= absVec.z)
+            {
+                Vec.y < 0 ? planar_uv.x = Vec.x / absVec.y : planar_uv.x = -Vec.x / absVec.y;
+                planar_uv.y = Vec.z / absVec.y;
+            }
+            if (absVec.z >= absVec.y && absVec.z >= absVec.x)
+            {
+                Vec.z < 0 ? planar_uv.x = -Vec.x / absVec.z : planar_uv.x = Vec.x / absVec.z;
+                planar_uv.y = Vec.y / absVec.z;
+            }
 
-            float val3 = (y +1.f) / 2.f;
-            sphere->spherical_texcoords_use_indices.push_back(glm::vec2(val1 / 360.f, val2 / 180.f));
-            sphere->cylindrical_texcoords_use_indices.push_back(glm::vec2(val1 / 360.f, val3));
-
+            sphere->spherical_texcoords_use_indices.push_back(glm::vec2(1 - u_sc / 360.f, v_s / 180.f));
+            sphere->cylindrical_texcoords_use_indices.push_back(glm::vec2(1 - u_sc / 360.f, v_c));
+            sphere->planar_texcoords_use_indices.push_back((planar_uv + glm::vec2(1)) * 0.5f);
 
         }
     }

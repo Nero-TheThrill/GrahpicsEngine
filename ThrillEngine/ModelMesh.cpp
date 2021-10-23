@@ -3,7 +3,7 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/string_cast.hpp"
 #include  "glm/gtx/hash.hpp"
-
+#include "UVGenerator.h"
 ModelMesh::ModelMesh()
 {
     material=nullptr;
@@ -21,6 +21,7 @@ void ModelMesh::Init()
         GeneratePositionsWithIndices();
         GenerateNormals();
         GenerateNormalLines();
+        GenerateTexcoords();
         glGenBuffers(1, &VBO_positions);
         glGenBuffers(1, &EBO);
     }
@@ -113,14 +114,7 @@ void ModelMesh::GeneratePositionsWithIndices()
         }
     }
 
-    for (int i = 0; i < static_cast<int>(indices.size()); i++)
-    {
-        spherical_texcoords.push_back(spherical_texcoords_use_indices[indices[i]]);
-    }
-    for (int i = 0; i < static_cast<int>(indices.size()); i++)
-    {
-        cylindrical_texcoords.push_back(cylindrical_texcoords_use_indices[indices[i]]);
-    }
+
 }
 
 void ModelMesh::GenerateNormals()
@@ -182,6 +176,23 @@ void ModelMesh::GenerateNormalLines()
 
         face_normal_lines.push_back(midpoint);
         face_normal_lines.push_back(midpoint + face_normals[i]/10.f);
+    }
+}
+
+void ModelMesh::GenerateTexcoords()
+{
+    
+    for (int i = 0; i < static_cast<int>(indices.size()); i++)
+    {
+        spherical_texcoords.push_back(spherical_texcoords_use_indices[indices[i]]);
+    }
+    for (int i = 0; i < static_cast<int>(indices.size()); i++)
+    {
+        cylindrical_texcoords.push_back(cylindrical_texcoords_use_indices[indices[i]]);
+    }
+    for (int i = 0; i < static_cast<int>(indices.size()); i++)
+    {
+        planar_texcoords.push_back(planar_texcoords_use_indices[indices[i]]);
     }
 }
 

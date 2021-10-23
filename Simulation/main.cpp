@@ -48,6 +48,7 @@ int main()
     GRAPHICS->LoadTexture("../images/baron.png", "baron");
     GRAPHICS->LoadTexture("../images/penguin.png", "penguin");
     GRAPHICS->LoadTexture("../images/test.png", "test");
+    GRAPHICS->LoadTexture("../images/boxboundary.png", "bb");
 
     objloader.loadObject("../models/cube.obj", "cube");
     //objloader.loadObject("../models/human.obj", "human");
