@@ -25,10 +25,14 @@ void imGUIManager::Update()
 {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
+
+
     ImGui::NewFrame();
+    ImGui::End();
     {
         ImGui::Begin("GraphicsEngine GUI");
-
+        ImGuiIO& io = ImGui::GetIO();
+        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
         if (ImGui::Button("Reload Shader"))
             GRAPHICS->ReLoadShader();
         ImGui::SameLine();
@@ -46,9 +50,9 @@ void imGUIManager::Update()
         ImGui::Separator();
         ImGui::NewLine();
       
-        /* glm::vec3 bgcolor=GRAPHICS->background_color;
+         glm::vec3 bgcolor=GRAPHICS->background_color;
          ImGui::DragFloat3("background color", glm::value_ptr(bgcolor), 0.01f, 0, 1);
-         GRAPHICS->SetBackgroundColor(glm::vec4(bgcolor, 1.0f));*/
+         GRAPHICS->SetBackgroundColor(glm::vec4(bgcolor, 1.0f));
         
 
         std::unordered_map<unsigned, Object*> objects = OBJECTMANAGER->GetAllObjects();
@@ -398,10 +402,34 @@ void imGUIManager::Update()
             ImGui::RadioButton("calculate in gpu", &where_to_calculate, 0); ImGui::SameLine();
             ImGui::RadioButton("calculate in cpu", &where_to_calculate, 1); 
             center_obj->should_calculate_uv_in_gpu = (where_to_calculate == 0);
+            ImGui::Separator();
+            bool visaulize = center_obj->material->texture.texture ==GRAPHICS->GetTexture("test");
+            ImGui::Checkbox("Visualize UV", &visaulize);
+            if(visaulize)
+            {
+                center_obj->material->texture.texture = GRAPHICS->GetTexture("test");
+                center_obj->material->texture.ambient_texture = -1;
+                center_obj->material->texture.diffuse_texture = -1;
+                center_obj->material->texture.specular_texture = -1;
+                center_obj->material->ka = 0.03f;
+                center_obj->material->kd = 0.3f;
+                center_obj->material->ks = 0.2f;
+            }
+            else
+            {
+                center_obj->material->texture.texture = -1;
+                center_obj->material->texture.ambient_texture = -1;
+                center_obj->material->texture.diffuse_texture = GRAPHICS->GetTexture("roofdiff");
+                center_obj->material->texture.specular_texture = GRAPHICS->GetTexture("roofspec");
+                center_obj->material->ka = 0.05f;
+                center_obj->material->kd = 0.09f;
+                center_obj->material->ks = 0.05f;
+            }
 
             ImGui::End();
         }
     }
+
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }

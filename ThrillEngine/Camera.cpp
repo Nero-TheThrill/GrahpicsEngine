@@ -38,7 +38,7 @@ void Camera::Move(glm::vec3 v)
 
 void Camera::RotateYaxis(float degree)
 {
-    yaw += degree;
+    yaw += degree*TIMEMANAGER->deltaTime*10.f;
     glm::vec3 direction;
     direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
     direction.y = sin(glm::radians(pitch));
@@ -49,7 +49,7 @@ void Camera::RotateYaxis(float degree)
 
 void Camera::RotateXaxis(float degree)
 {
-    pitch -= degree;
+    pitch -= degree * TIMEMANAGER->deltaTime*10.f;
     if (pitch > 89.0f)
         pitch = 89.0f;
     if (pitch < -89.0f)

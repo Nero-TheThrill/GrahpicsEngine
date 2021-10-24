@@ -18,6 +18,14 @@ TestLevel::TestLevel()
 
 void TestLevel::Init()
 {
+    defaultmat = new Material("m_default");
+    objmat = new Material("m_obj");
+    ramusmat = new Material("m_ramus");
+    centermat = new Material("m_centerobj");
+    lightmat = new Material("m_light");
+    lightmat->emissive = glm::vec3(0.6f);
+    lightmat->kd = 0.3f;
+
     GRAPHICS->SetBackgroundColor(glm::vec4(0.6,0.65,0.7,1.0));
 
     orbit = new Object("orbit");
@@ -31,21 +39,22 @@ void TestLevel::Init()
     plane = new Object("plane");
     plane->SetMeshGroup(GRAPHICS->GetMeshGroup("quad"));
     plane->SetShader("phong_shading");
+    plane->material = defaultmat;
     plane->transform.Translate(glm::vec3(0, -7, 0));
     plane->transform.Rotate(-90, glm::vec3(1, 0, 0));
     plane->transform.Scale(glm::vec3(20.f));
     plane->drawmode = 1;
 
-    Material objmat,ramusmat,centermat;
-    objmat.texture.SetAmbientTexture("test");
-    objmat.texture.SetDiffuseTexture("me");
 
-    ramusmat.texture.SetTexture("ramus");
-    ramusmat.ka = 0.03f;
-    ramusmat.kd = 0.3f;
-    ramusmat.ks = 0.2f;
-    centermat.texture.SetDiffuseTexture("roofdiff");
-    centermat.texture.SetSpecularTexture("roofspec");
+    objmat->texture.SetAmbientTexture("test");
+    objmat->texture.SetDiffuseTexture("me");
+
+    ramusmat->texture.SetTexture("ramus");
+    ramusmat->ka = 0.03f;
+    ramusmat->kd = 0.3f;
+    ramusmat->ks = 0.2f;
+    centermat->texture.SetDiffuseTexture("roofdiff");
+    centermat->texture.SetSpecularTexture("roofspec");
 
     obj = new Object("obj");
     obj->SetMeshGroup(GRAPHICS->GetMeshGroup("cube"));
@@ -96,6 +105,7 @@ void TestLevel::Update()
             lightsource->transform.Scale(glm::vec3(0.2, 0.2, 0.2));
             lightsource->drawmode = 1;
             lightsource->type = LightType::POINT;
+            lightsource->material = GRAPHICS->GetMaterial("m_light");
             lights.push_back(lightsource);
         }
         for (int i = 0; i < lights.size(); i++)
@@ -114,7 +124,7 @@ void TestLevel::Update()
     }
     if (obj != nullptr)
     {
-        obj->transform.RotateMove(TIMEMANAGER->deltaTime * 10, glm::vec3(0, 1, 0));
+        obj->transform.Rotate(TIMEMANAGER->deltaTime, glm::vec3(0, 1, 0));
     }
     if (Input::IsPressed(GLFW_KEY_Y))
     {
@@ -142,19 +152,19 @@ void TestLevel::Update()
     }
     if (Input::IsPressed(GLFW_KEY_O))
     {
-        GRAPHICS->camera.RotateYaxis(0.3f);
+        GRAPHICS->camera.RotateYaxis(2);
     }
     if (Input::IsPressed(GLFW_KEY_U))
     {
-        GRAPHICS->camera.RotateYaxis(-0.3f);
+        GRAPHICS->camera.RotateYaxis(-2);
     }
     if (Input::IsPressed(GLFW_KEY_SEMICOLON))
     {
-        GRAPHICS->camera.RotateXaxis(0.3f);
+        GRAPHICS->camera.RotateXaxis(2);
     }
     if (Input::IsPressed(GLFW_KEY_P))
     {
-        GRAPHICS->camera.RotateXaxis(-0.3f);
+        GRAPHICS->camera.RotateXaxis(-2);
     }
     if (Input::IsTriggered(GLFW_KEY_N))
     {

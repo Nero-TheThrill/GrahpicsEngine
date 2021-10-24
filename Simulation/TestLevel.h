@@ -15,5 +15,6 @@ private:
     std::vector<LightObject*> lights;
     Object* skysphere;
     float time_count;
+    Material* defaultmat, * objmat, * ramusmat, * centermat,*lightmat;
 };
 

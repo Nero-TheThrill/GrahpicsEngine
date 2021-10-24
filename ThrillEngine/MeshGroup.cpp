@@ -60,7 +60,7 @@ void MeshGroup::AddMesh(Mesh* mesh)
     model_meshes.push_back(mesh);
 }
 
-void MeshGroup::SetMaterial(Material m)
+void MeshGroup::SetMaterial(Material* m)
 {
     for (auto mesh : model_meshes)
     {

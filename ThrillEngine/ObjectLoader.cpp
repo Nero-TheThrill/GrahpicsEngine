@@ -339,8 +339,8 @@ void ObjectLoader::reSizeObject()
     
     for (auto m_mesh : meshgroup->model_meshes)
     {
-        m_mesh->maxYval = (max_val_y - subtract_y) / denominator;
-        m_mesh->minYval = (min_val_y - subtract_y) / denominator;
+        m_mesh->maxYval = static_cast<float>((max_val_y - subtract_y) / denominator);
+        m_mesh->minYval = static_cast<float>((min_val_y - subtract_y) / denominator);
 
         int iterator = 0;
         for (auto p : m_mesh->positions_use_indices)

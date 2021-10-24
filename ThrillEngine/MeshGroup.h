@@ -13,7 +13,7 @@ public:
     void DrawNormals();
     void ChangeMode(int mode);
     void AddMesh(Mesh* mesh);
-    void SetMaterial(Material m);
+    void SetMaterial(Material* m);
     ~MeshGroup();
     std::string name;
     int n_mode=0; // 0: face normal,  1: vertex normal

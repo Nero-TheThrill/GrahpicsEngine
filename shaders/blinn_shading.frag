@@ -236,7 +236,7 @@ void main()
 		result+=CalculateLight(lights[i]);
 	}
 	if(default_texture_exists)
-		result*=texture(default_texture,TexCoord).xyz;
+		result*=texture(default_texture,realTexCoord).xyz;
 	
 	result+=global_ambient_color*k_a;
 	float fog_factor=(far-length(view_position-FragPosition))/(far-near);

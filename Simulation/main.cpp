@@ -45,7 +45,7 @@ int main()
     GRAPHICS->LoadTexture("../images/metal_roof_spec_512x512.png", "roofspec");
 
     objloader.loadObject("../models/cube.obj", "cube");
-    //objloader.loadObject("../models/human.obj", "human");
+    objloader.loadObject("../models/human.obj", "human");
     objloader.loadObject("../models/ramus.obj", "ramus");
     //objloader.loadObject("../models/rhino.obj", "rhino");
     //objloader.loadObject("../models/starwars1.obj", "starwars");
@@ -56,7 +56,7 @@ int main()
     objloader.loadObject("../models/bunny_high_poly.obj", "bunny_high_poly");
     objloader.loadObject("../models/4Sphere.obj", "4Sphere");
     //objloader.loadObject("../models/sphere_modified.obj", "sphere_modified");
-    //objloader.loadObject("../models/lucy_princeton.obj", "lucy_princeton");
+    objloader.loadObject("../models/lucy_princeton.obj", "lucy_princeton");
     //objloader.loadObject("../models/cup.obj", "cup");
     objloader.loadObject("../models/quad.obj", "quad");
     //objloader.loadObject("../models/triangle.obj", "triangle");

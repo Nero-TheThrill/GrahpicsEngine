@@ -32,6 +32,7 @@ uniform float minYval;
 uniform float k_a;
 uniform float k_d;
 uniform float k_s;
+uniform vec3 emissive;
 
 uniform mat4 model;
 
@@ -241,9 +242,9 @@ void main()
 		result+=CalculateLight(lights[i]);
 	}
 	if(default_texture_exists)
-		result*=texture(default_texture,aTexCoord).xyz;
+		result*=texture(default_texture,realTexCoord).xyz;
 
-	result+=global_ambient_color*k_a;
+	result+=global_ambient_color*k_a+emissive;
 	float fog_factor=(far-length(view_position-FragPosition))/(far-near);
 	result =  fog_factor*result+(1-fog_factor)*fog_color;
 

@@ -6,11 +6,14 @@ in vec3 FragPosition;
 in vec2 TexCoord;
 
 uniform vec3 objectColor;
-uniform vec3 lightColor;
 uniform vec3 lightPosition;
 uniform bool item_selected;
-uniform bool texture_exists;
-uniform sampler2D texture1;
+
+uniform float k_d;
+uniform vec3 emissive;
+
+vec3 I_d;
+vec3 n_normal=normalize(Normal);
 
 struct Light
 {
@@ -43,32 +46,22 @@ vec3 CalculateLight(Light light)
 {
 	if(light.type==0)
 	{
-		vec3 n_normal=normalize(Normal);
-		vec3 light_vector = normalize(light.position-FragPosition);
 
-		float k_d=0.25;
-		vec3 I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0);
+		vec3 light_vector = normalize(light.position-FragPosition);
+		I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0);
 
 		return I_d;
 	}
 	else if(light.type==1)
 	{
-		vec3 n_normal=normalize(Normal);
 		vec3 light_vector = normalize(light.direction);
-
-		float k_d=0.4;
-		vec3 I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0);
-
+		I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0);
 		return I_d;
 	}
 	else
 	{
-		vec3 n_normal=normalize(Normal);
 		vec3 light_vector = normalize(light.position-FragPosition);
-
-		float k_d=0.25;
-		vec3 I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0);
-
+		I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0);
 		return I_d;
 	}
 }
@@ -83,16 +76,10 @@ void main()
 
 	if(item_selected)
 	{
-		if(texture_exists)
-			FragColor = texture(texture1,TexCoord)*vec4(vec3(1,0.3,0.3),0.5);
-		else
 			FragColor = vec4(vec3(1,0.3,0.3),0.5);
 	}
 	else
 	{
-		if(texture_exists)
-			FragColor = texture(texture1,TexCoord)*vec4(result*objectColor,1.0);
-		else
 			FragColor = vec4(result*objectColor,1.0);
 	}
 }

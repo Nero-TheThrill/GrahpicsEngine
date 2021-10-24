@@ -10,7 +10,6 @@
 
 void Object::Update()
 {
-    mesh->n_mode=n_mode;
     mesh->mapping_mode = mapping_mode;
     mesh->should_calculate_uv_in_gpu = should_calculate_uv_in_gpu;
     mesh->mapping_with_normal = mapping_with_normal;
@@ -30,6 +29,7 @@ Object::Object(std::string n)
     name = n;
     draw_normal_shader = GRAPHICS->GetShader("test");
     mesh = nullptr;
+    material = nullptr;
 }
 
 Object::Object(std::string n, Object* obj)
@@ -46,6 +46,7 @@ Object::Object(std::string n, Object* obj)
     shouldDrawNormals = obj->shouldDrawNormals;
     draw_normal_shader = obj->draw_normal_shader;
     shader = obj->shader;
+    material = obj->material;
 }
 
 
@@ -68,6 +69,8 @@ void Object::Draw()
 {
     if (mesh != nullptr)
     {
+        mesh->mapping_mode = mapping_mode;
+        mesh->should_calculate_uv_in_gpu = should_calculate_uv_in_gpu;
         mesh->SetMaterial(material);
         mesh->ChangeMode(drawmode);
         glUseProgram(shader.program_handle);

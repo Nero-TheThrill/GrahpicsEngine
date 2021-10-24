@@ -30,7 +30,7 @@ void Material::Update(Shader shader)
     shader.set("k_a", ka);
     shader.set("k_d", kd);
     shader.set("k_s", ks);
-
+    shader.set("emissive", emissive);
     texture.Update(shader);
 
     for(auto v:set_values_v3)
