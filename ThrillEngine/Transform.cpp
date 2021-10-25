@@ -46,7 +46,8 @@ void Transform::Scale(glm::vec3 input)
 
 void Transform::Move(glm::vec3 input)
 {
-    translate = glm::translate(translate, input * TIMEMANAGER->deltaTime);
+    glm::mat4 tmp = glm::mat4(1.0f);
+    translate = glm::translate(tmp, position + input * TIMEMANAGER->deltaTime);
     position += input * TIMEMANAGER->deltaTime;
 }
 

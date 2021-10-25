@@ -24,7 +24,7 @@ struct Light
 	vec3 ambient;      // D,P,S      48
 	vec3 diffuse;      // D,P,S      64
 	vec3 specular;     // D,P,S      80
-
+	vec3 c;
 	float inner_angle; // S          96
 	float outer_angle; // S          112
 	float falloff;     // S          128
@@ -38,7 +38,6 @@ layout(std140, binding = 1) uniform LightInformation
 	vec3 view_position;
 	vec3 fog_color;
 	vec3 global_ambient_color;
-	vec3 c;
 	Light lights[16];
 };
 
@@ -73,7 +72,7 @@ void main()
 	{
 		result+=CalculateLight(lights[i]);
 	}
-
+	result+=emissive;
 	if(item_selected)
 	{
 			FragColor = vec4(vec3(1,0.3,0.3),0.5);

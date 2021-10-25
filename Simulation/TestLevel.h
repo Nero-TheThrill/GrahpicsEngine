@@ -11,10 +11,10 @@ public:
     void Close() override;
     ~TestLevel();
 private:
-    Object* plane,*orbit ,* centerobj,*obj,*ramus;
+    Object* plane, * orbit, * centerobj, * obj, * ramus, * dragon, * bumblebee, * jet1, * jet2, * jet3;
     std::vector<LightObject*> lights;
     Object* skysphere;
     float time_count;
-    Material* defaultmat, * objmat, * ramusmat, * centermat,*lightmat;
+
 };
 

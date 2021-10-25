@@ -237,9 +237,6 @@
     <ClInclude Include="..\includes\source\imgui\imstb_truetype.h">
       <Filter>IMGUI</Filter>
     </ClInclude>
-    <ClInclude Include="imGUIManager.h">
-      <Filter>Graphics\imGUIManager</Filter>
-    </ClInclude>
     <ClInclude Include="ModelMesh.h">
       <Filter>Object\Component\MeshGroup\Mesh\ModelMesh</Filter>
     </ClInclude>
@@ -257,6 +254,9 @@
     </ClInclude>
     <ClInclude Include="UVGenerator.h">
       <Filter>Object\ObjectLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="imGUIManager.h">
+      <Filter>Graphics\imGUIManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

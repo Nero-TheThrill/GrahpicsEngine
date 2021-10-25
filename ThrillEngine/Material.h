@@ -28,7 +28,7 @@ public:
 
     Texture texture;
     std::string name;
-    float ka = 0.05f, kd = 0.09f, ks = 0.05f;
+    float ka = 0.08f, kd = 0.1f, ks = 0.06f;
     glm::vec3 emissive = glm::vec3(0.1f);
 private:
     std::unordered_map<std::string, glm::vec3> set_values_v3;

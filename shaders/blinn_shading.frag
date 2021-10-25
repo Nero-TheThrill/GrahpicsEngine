@@ -47,7 +47,7 @@ struct Light
 	vec3 ambient;      // D,P,S      48
 	vec3 diffuse;      // D,P,S      64
 	vec3 specular;     // D,P,S      80
-
+	vec3 c;
 	float inner_angle; // S          96
 	float outer_angle; // S          112
 	float falloff;     // S          128
@@ -61,7 +61,6 @@ layout(std140, binding = 1) uniform LightInformation
 	vec3 view_position;
 	vec3 fog_color;
 	vec3 global_ambient_color;
-	vec3 c;
 	Light lights[16];
 };
 
@@ -94,7 +93,7 @@ vec3 CalculateLight(Light light)
 			I_s=vec3(0,0,0);
 		
 		float light_length=length(light.position-FragPosition);
-		float attenuation=min(1/(c.x+c.y*light_length+c.z*light_length*light_length),1);
+		float attenuation=min(1/(light.c.x+light.c.y*light_length+light.c.z*light_length*light_length),1);
 		vec3 I_local = attenuation*(I_a+I_d+I_s);
 		return I_local;
 	}
@@ -161,7 +160,7 @@ vec3 CalculateLight(Light light)
     		spotlighteffect=pow((alpha-cos(light.outer_angle))/(cos(light.inner_angle)-cos(light.outer_angle)),light.falloff);
     	}
 		float light_length=length(light.position-FragPosition);
-		float attenuation=min(1/(c.x+c.y*light_length+c.z*light_length*light_length),1);
+		float attenuation=min(1/(light.c.x+light.c.y*light_length+light.c.z*light_length*light_length),1);
 		vec3 I_local = attenuation*spotlighteffect*(I_d+I_s)+attenuation*I_a;
 		return I_local;
 	}

@@ -16,12 +16,14 @@ Graphics* GRAPHICS = nullptr;
 Graphics::Graphics()
 {
     GRAPHICS = this;
+    centerobj = nullptr;
 }
 
 void Graphics::Init()
 {
     camera.Projection(45, 0.1f, 200.f);
-    camera.View(glm::vec3(0.0f, 0.0f, 20));
+    camera.View(glm::vec3(0.0f, 4.0f, 25));
+    camera.RotateXaxis(10);
     InitPVmatrices();
     InitLightInfo();
     LineMesh* linemesh = new LineMesh();
@@ -83,12 +85,12 @@ void Graphics::UpdatePVmatrices()
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projection));
     glm::mat4 view = camera.GetViewMatrix();
     glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
-    glBindBuffer(GL_UNIFORM_BUFFER,0);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
 void Graphics::InitLightInfo()
 {
-    GLsizeiptr size = 112 * 16 + 80;// 16 * (sizeof(unsigned) + 5 * sizeof(glm::vec3) + 3 * sizeof(float)) + sizeof(unsigned)+3 * sizeof(float) + 3 * sizeof(glm::vec3);
+    GLsizeiptr size = 128 * 16 + 64;// 16 * (sizeof(unsigned) + 5 * sizeof(glm::vec3) + 3 * sizeof(float)) + sizeof(unsigned)+3 * sizeof(float) + 3 * sizeof(glm::vec3);
     glGenBuffers(1, &uboLight);
     glBindBuffer(GL_UNIFORM_BUFFER, uboLight);
     glBufferData(GL_UNIFORM_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
@@ -101,9 +103,9 @@ void Graphics::UpdateLightInfo()
     glBindBuffer(GL_UNIFORM_BUFFER, uboLight);
     std::unordered_map<unsigned, LightObject*>lights = OBJECTMANAGER->GetAllLights();
     auto lightnumber = static_cast<unsigned>(IMGUIMANAGER->lightNumber);
-    GLsizeiptr lightstride = 112;// (sizeof(unsigned) + 5 * sizeof(glm::vec3) + 3 * sizeof(float));
+    GLsizeiptr lightstride = 128;// (sizeof(unsigned) + 5 * sizeof(glm::vec3) + 3 * sizeof(float));
     int iter = 0;
-    
+
 
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(unsigned), &lightnumber);
     glBufferSubData(GL_UNIFORM_BUFFER, 4, sizeof(float), &(camera.near));
@@ -111,21 +113,20 @@ void Graphics::UpdateLightInfo()
     glBufferSubData(GL_UNIFORM_BUFFER, 16, sizeof(glm::vec3), glm::value_ptr(camera.cam_position));
     glBufferSubData(GL_UNIFORM_BUFFER, 32, sizeof(glm::vec3), glm::value_ptr(fog_color));
     glBufferSubData(GL_UNIFORM_BUFFER, 48, sizeof(glm::vec3), glm::value_ptr(global_ambient_color));
-    glBufferSubData(GL_UNIFORM_BUFFER, 64, sizeof(glm::vec3), glm::value_ptr(attenuation));
-
 
     for (auto light : lights)
     {
-        glBufferSubData(GL_UNIFORM_BUFFER, 80 + iter * lightstride, sizeof(unsigned), &(light.second->type));
-        light.second->direction = centerobj->transform.position-light.second->transform.position;
-        glBufferSubData(GL_UNIFORM_BUFFER, 80 + iter * lightstride + 16, sizeof(glm::vec3), glm::value_ptr(light.second->direction));
-        glBufferSubData(GL_UNIFORM_BUFFER, 80 + iter * lightstride + 32, sizeof(glm::vec3), glm::value_ptr(light.second->transform.position));
-        glBufferSubData(GL_UNIFORM_BUFFER, 80 + iter * lightstride + 48, sizeof(glm::vec3), glm::value_ptr(light.second->ambient));
-        glBufferSubData(GL_UNIFORM_BUFFER, 80 + iter * lightstride + 64, sizeof(glm::vec3), glm::value_ptr(light.second->diffuse));
-        glBufferSubData(GL_UNIFORM_BUFFER, 80 + iter * lightstride + 80, sizeof(glm::vec3), glm::value_ptr(light.second->specular));
-        glBufferSubData(GL_UNIFORM_BUFFER, 80 + iter * lightstride + 92, sizeof(float), &(light.second->inner_angle));
-        glBufferSubData(GL_UNIFORM_BUFFER, 80 + iter * lightstride + 96, sizeof(float), &(light.second->outer_angle));
-        glBufferSubData(GL_UNIFORM_BUFFER, 80 + iter * lightstride + 100, sizeof(float), &(light.second->falloff));
+        glBufferSubData(GL_UNIFORM_BUFFER, 64 + iter * lightstride, sizeof(unsigned), &(light.second->type));
+        light.second->direction = centerobj->transform.position - light.second->transform.position;
+        glBufferSubData(GL_UNIFORM_BUFFER, 64 + iter * lightstride + 16, sizeof(glm::vec3), glm::value_ptr(light.second->direction));
+        glBufferSubData(GL_UNIFORM_BUFFER, 64 + iter * lightstride + 32, sizeof(glm::vec3), glm::value_ptr(light.second->transform.position));
+        glBufferSubData(GL_UNIFORM_BUFFER, 64 + iter * lightstride + 48, sizeof(glm::vec3), glm::value_ptr(light.second->ambient));
+        glBufferSubData(GL_UNIFORM_BUFFER, 64 + iter * lightstride + 64, sizeof(glm::vec3), glm::value_ptr(light.second->diffuse));
+        glBufferSubData(GL_UNIFORM_BUFFER, 64 + iter * lightstride + 80, sizeof(glm::vec3), glm::value_ptr(light.second->specular));
+        glBufferSubData(GL_UNIFORM_BUFFER, 64 + iter * lightstride + 96, sizeof(glm::vec3), glm::value_ptr(light.second->attenuation));
+        glBufferSubData(GL_UNIFORM_BUFFER, 64 + iter * lightstride + 108, sizeof(float), &(light.second->inner_angle));
+        glBufferSubData(GL_UNIFORM_BUFFER, 64 + iter * lightstride + 112, sizeof(float), &(light.second->outer_angle));
+        glBufferSubData(GL_UNIFORM_BUFFER, 64 + iter * lightstride + 116, sizeof(float), &(light.second->falloff));
         iter++;
     }
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
@@ -381,7 +382,7 @@ void Graphics::AddSphereMesh()
             sphere->vertex_normals.push_back(glm::vec3(x, y, z));
             s = static_cast<float>(j) / static_cast<float>(sectorCount);
             t = static_cast<float>(i) / static_cast<float>(stackCount);
-            sphere->texcoords_use_indices.push_back(glm::vec2(1 - s, 1-t));
+            sphere->texcoords_use_indices.push_back(glm::vec2(1 - s, 1 - t));
 
             float u_sc = glm::degrees(atan2(y, x));
             u_sc += 180;
@@ -389,7 +390,7 @@ void Graphics::AddSphereMesh()
             float v_s = 180 - glm::degrees(acos(z / (sqrt(x * x + y * y + z * z))));
 
             float v_c = (z + 1) / 2.f;
-            glm::vec3 Vec=glm::vec3(x, y, z);
+            glm::vec3 Vec = glm::vec3(x, y, z);
             glm::vec3 absVec = abs(glm::vec3(x, y, z));
             glm::vec2 planar_uv;
             if (absVec.x >= absVec.y && absVec.x >= absVec.z)

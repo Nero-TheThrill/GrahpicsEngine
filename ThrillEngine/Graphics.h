@@ -69,7 +69,7 @@ private:
     unsigned int uboMatrices = 0,uboLight=0;
 
     glm::vec3 fog_color = glm::vec3(0.6, 0.6, 0.7) , global_ambient_color = glm::vec3(1, 1, 1);
-    glm::vec3 attenuation= glm::vec3(0.1, 0.005f, 0.0025f);
+
 
 };
 

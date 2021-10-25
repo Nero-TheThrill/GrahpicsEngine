@@ -35,38 +35,80 @@ int main()
     GRAPHICS->LoadShader("../shaders/light.frag", "f_light", ShaderType::FRAGMENT);
     GRAPHICS->CompileShader("v_light", "f_light", "light");
 
+    GRAPHICS->LoadShader("../shaders/nolight.vert", "v_nolight", ShaderType::VERTEX);
+    GRAPHICS->LoadShader("../shaders/nolight.frag", "f_nolight", ShaderType::FRAGMENT);
+    GRAPHICS->CompileShader("v_nolight", "f_nolight", "nolight");
 
 
+    GRAPHICS->LoadTexture("../images/graycamo.png", "jet");
     GRAPHICS->LoadTexture("../images/me.jpg", "me");
     GRAPHICS->LoadTexture("../images/space.png", "space");
     GRAPHICS->LoadTexture("../images/ramus.png", "ramus");
     GRAPHICS->LoadTexture("../images/test.png", "test");
+    GRAPHICS->LoadTexture("../images/dragon.jpg", "dragon");
+    GRAPHICS->LoadTexture("../images/bumblebee.jpg", "bumblebee");
     GRAPHICS->LoadTexture("../images/metal_roof_diff_512x512.png", "roofdiff");
     GRAPHICS->LoadTexture("../images/metal_roof_spec_512x512.png", "roofspec");
 
+    objloader.loadObject("../models/jet.obj", "jet");
+    objloader.loadObject("../models/bumblebee.obj", "bumblebee");
+    objloader.loadObject("../models/dragon.obj", "dragon");
     objloader.loadObject("../models/cube.obj", "cube");
-    objloader.loadObject("../models/human.obj", "human");
     objloader.loadObject("../models/ramus.obj", "ramus");
-    //objloader.loadObject("../models/rhino.obj", "rhino");
-    //objloader.loadObject("../models/starwars1.obj", "starwars");
+    objloader.loadObject("../models/rhino.obj", "rhino");
+    objloader.loadObject("../models/starwars1.obj", "starwars");
     objloader.loadObject("../models/sphere.obj", "sphere");
     objloader.loadObject("../models/cube2.obj", "cube2");
-
-    //objloader.loadObject("../models/bunny.obj", "bunny");
+    objloader.loadObject("../models/bunny.obj", "bunny");
     objloader.loadObject("../models/bunny_high_poly.obj", "bunny_high_poly");
     objloader.loadObject("../models/4Sphere.obj", "4Sphere");
-    //objloader.loadObject("../models/sphere_modified.obj", "sphere_modified");
+    objloader.loadObject("../models/sphere_modified.obj", "sphere_modified");
     objloader.loadObject("../models/lucy_princeton.obj", "lucy_princeton");
-    //objloader.loadObject("../models/cup.obj", "cup");
+    objloader.loadObject("../models/cup.obj", "cup");
     objloader.loadObject("../models/quad.obj", "quad");
-    //objloader.loadObject("../models/triangle.obj", "triangle");
+    objloader.loadObject("../models/triangle.obj", "triangle");
     objloader.loadObject("../models/baron.obj", "baron");
-    //objloader.loadObject("../models/penguin.obj", "penguin");
 
     GRAPHICS->AddSphereMesh();
 
 
+
+
     ThrillEngine->Init();
+
+    Material* objmat, * ramusmat, * centermat, * lightmat, * dragonmat, * bumblebeemat, * skymat, * jetmat;
+
+    new Material("m_default");
+    objmat = new Material("m_obj");
+    ramusmat = new Material("m_ramus");
+    centermat = new Material("m_centerobj");
+    lightmat = new Material("m_light");
+    skymat = new Material("m_skysphere");
+    dragonmat = new Material("m_dragon");
+    bumblebeemat = new Material("m_bumblebee");
+    jetmat = new Material("m_jet");
+    lightmat->emissive = glm::vec3(0.6f);
+    lightmat->kd = 0.3f;
+    objmat->texture.SetAmbientTexture("test");
+    objmat->texture.SetDiffuseTexture("me");
+
+    ramusmat->texture.SetTexture("ramus");
+    ramusmat->ka = 0.03f;
+    ramusmat->kd = 0.3f;
+    ramusmat->ks = 0.2f;
+
+    dragonmat->texture.SetAmbientTexture("dragon");
+    dragonmat->texture.SetDiffuseTexture("dragon");
+
+    bumblebeemat->texture.SetAmbientTexture("bumblebee");
+    bumblebeemat->texture.SetDiffuseTexture("bumblebee");
+
+    jetmat->texture.SetTexture("jet");
+
+    centermat->texture.SetDiffuseTexture("roofdiff");
+    centermat->texture.SetSpecularTexture("roofspec");
+
+    skymat->texture.SetTexture("space");
 
 
     LEVELMANAGER->InsertLevel(new TestLevel(), 1);

@@ -3,11 +3,11 @@
 #include "Graphics.h"
 #include "ObjectManager.h"
 #include "imgui/imgui_impl_opengl3.h"
-
 imGUIManager* IMGUIMANAGER = nullptr;
 
 imGUIManager::imGUIManager(GLFWwindow* window)
 {
+
     IMGUIMANAGER = this;
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -28,7 +28,6 @@ void imGUIManager::Update()
 
 
     ImGui::NewFrame();
-    ImGui::End();
     {
         ImGui::Begin("GraphicsEngine GUI");
         ImGuiIO& io = ImGui::GetIO();
@@ -44,16 +43,16 @@ void imGUIManager::Update()
                 current_light->item_selected = false;
             current_light = nullptr;
             current_item = nullptr;
-            
+
         }
         ImGui::NewLine();
         ImGui::Separator();
         ImGui::NewLine();
-      
-         glm::vec3 bgcolor=GRAPHICS->background_color;
-         ImGui::DragFloat3("background color", glm::value_ptr(bgcolor), 0.01f, 0, 1);
-         GRAPHICS->SetBackgroundColor(glm::vec4(bgcolor, 1.0f));
-        
+
+        glm::vec3 bgcolor = GRAPHICS->background_color;
+        ImGui::DragFloat3("background color", glm::value_ptr(bgcolor), 0.01f, 0, 1);
+        GRAPHICS->SetBackgroundColor(glm::vec4(bgcolor, 1.0f));
+
 
         std::unordered_map<unsigned, Object*> objects = OBJECTMANAGER->GetAllObjects();
 
@@ -165,18 +164,19 @@ void imGUIManager::Update()
                 current_item->item_selected = false;
             current_light = nullptr;
             current_item = nullptr;
+            justonce = true;
         }
 
         ImGui::Checkbox("Rotate lights", &shouldRotatelight);
         ImGui::NewLine();
         ImGui::Separator();
         ImGui::NewLine();
-
+        prev_lightoption = lightoption;
         ImGui::RadioButton("light option a", &lightoption, 0); ImGui::SameLine();
         ImGui::RadioButton("light option b", &lightoption, 1); ImGui::SameLine();
         ImGui::RadioButton("light option c", &lightoption, 2);
         std::unordered_map<unsigned, LightObject*> lights = OBJECTMANAGER->GetAllLights();
-        if(lightoption==0&&!lights.empty())
+        if (lightoption == 0 && !lights.empty())
         {
             if (ImGui::BeginCombo("all light type", light_type[static_cast<int>(lights.begin()->second->type)].c_str()))
             {
@@ -195,12 +195,13 @@ void imGUIManager::Update()
             }
             for (auto light : lights)
             {
-                light.second->ambient = glm::vec3(0.7f,0.7f,1.0f);
-                light.second->diffuse = glm::vec3(1,1,1);
+                light.second->ambient = glm::vec3(0.7f, 0.7f, 1.0f);
+                light.second->diffuse = glm::vec3(1, 1, 1);
                 light.second->specular = glm::vec3(1, 1, 1);
             }
+            justonce = true;
         }
-        else if(lightoption==1&&!lights.empty())
+        else if (lightoption == 1 && !lights.empty())
         {
             if (ImGui::BeginCombo("all light type", light_type[static_cast<int>(lights.begin()->second->type)].c_str()))
             {
@@ -222,29 +223,93 @@ void imGUIManager::Update()
             {
                 if (iter % 2 == 0)
                 {
-                    light.second->ambient = glm::vec3(0.3f, 0.5f,1.f);
+                    light.second->ambient = glm::vec3(0.3f, 0.5f, 1.f);
                     light.second->diffuse = glm::vec3(0.3f, 0.5f, 1.f);
                     light.second->specular = glm::vec3(0.3f, 0.5f, 1.f);
                 }
                 else
                 {
-                    light.second->ambient = glm::vec3(1.f, 0.5f, 0.3f);
-                    light.second->diffuse = glm::vec3(1.f, 0.5f, 0.3f);
-                    light.second->specular = glm::vec3(1.f, 0.5f, 0.3f);
+                    light.second->ambient = glm::vec3(0.9f, 0.5f, 0.3f);
+                    light.second->diffuse = glm::vec3(0.9f, 0.5f, 0.3f);
+                    light.second->specular = glm::vec3(0.9f, 0.5f, 0.3f);
                 }
                 iter += 1;
+            }
+            justonce = true;
+        }
+        else if (lightoption == 2 && !lights.empty())
+        {
+            int iter = 0;
+            if (justonce)
+            {
+                for (auto light : lights)
+                {
+                    if (iter % 8 == 7)
+                    {
+                        light.second->ambient = glm::vec3(1.f, 0.1f, 0.1f);
+                        light.second->diffuse = glm::vec3(1.f, 0.1f, 0.1f);
+                        light.second->specular = glm::vec3(1.f, 0.1f, 0.1f);
+                    }
+                    else if (iter % 8 == 6)
+                    {
+                        light.second->ambient = glm::vec3(1.f, 0.5f, 0.1f);
+                        light.second->diffuse = glm::vec3(1.f, 0.5f, 0.1f);
+                        light.second->specular = glm::vec3(1.f, 0.5f, 0.1f);
+                    }
+                    else if (iter % 8 == 5)
+                    {
+                        light.second->ambient = glm::vec3(0.5f, 0.5f, 0.1f);
+                        light.second->diffuse = glm::vec3(0.5f, 0.5f, 0.1f);
+                        light.second->specular = glm::vec3(0.5f, 0.5f, 0.1f);
+                    }
+                    else if (iter % 8 == 4)
+                    {
+                        light.second->ambient = glm::vec3(0.1f, 1.f, 0.1f);
+                        light.second->diffuse = glm::vec3(0.1f, 1.f, 0.1f);
+                        light.second->specular = glm::vec3(0.1f, 1.f, 0.1f);
+                    }
+                    else if (iter % 8 == 3)
+                    {
+                        light.second->ambient = glm::vec3(0.1f, 0.1f, 1.f);
+                        light.second->diffuse = glm::vec3(0.1f, 0.1f, 1.f);
+                        light.second->specular = glm::vec3(0.1f, 0.1f, 1.f);
+                    }
+                    else if (iter % 8 == 2)
+                    {
+                        light.second->ambient = glm::vec3(0.1f, 0.1f, 0.6f);
+                        light.second->diffuse = glm::vec3(0.1f, 0.1f, 0.6f);
+                        light.second->specular = glm::vec3(0.1f, 0.1f, 0.6f);
+                    }
+                    else if (iter % 8 == 1)
+                    {
+                        light.second->ambient = glm::vec3(0.6f, 0.1f, 1.f);
+                        light.second->diffuse = glm::vec3(0.6f, 0.1f, 1.f);
+                        light.second->specular = glm::vec3(0.6f, 0.1f, 1.f);
+                    }
+                    else
+                    {
+                        light.second->ambient = glm::vec3(1.f, 1.f, 1.f);
+                        light.second->diffuse = glm::vec3(1.f, 1.f, 1.f);
+                        light.second->specular = glm::vec3(1.f, 1.f, 1.f);
+                    }
+
+                    light.second->type = static_cast<LightType>(iter % 2 == 0 ? 0 : 2);
+
+                    iter += 1;
+                }
+                justonce = false;
             }
         }
         else
         {
-            
+
         }
 
         ImGui::NewLine();
         ImGui::Separator();
         ImGui::NewLine();
 
-      
+
 
         if (ImGui::BeginCombo("select light", current_light != nullptr ? current_light->name.c_str() : ""))
         {
@@ -295,22 +360,22 @@ void imGUIManager::Update()
             if (current_light->type == LightType::SPOT)
             {
                 float inner_radian = current_light->inner_angle;
-                ImGui::DragFloat("inner_angle(radian)", &inner_radian, 0.001f,0,current_light->outer_angle-0.001f);
-                current_light->inner_angle=inner_radian;
+                ImGui::DragFloat("inner_angle(radian)", &inner_radian, 0.001f, 0, current_light->outer_angle - 0.001f);
+                current_light->inner_angle = inner_radian;
 
                 float outer_radian = current_light->outer_angle;
-                ImGui::DragFloat("outer_angle(radian)", &outer_radian, 0.001f,0.01f,1.57f);
+                ImGui::DragFloat("outer_angle(radian)", &outer_radian, 0.001f, 0.01f, 1.57f);
                 current_light->outer_angle = outer_radian;
-                if(current_light->outer_angle<current_light->inner_angle)
+                if (current_light->outer_angle < current_light->inner_angle)
                 {
-                    current_light->inner_angle = current_light->outer_angle-0.001f;
+                    current_light->inner_angle = current_light->outer_angle - 0.001f;
                 }
                 float falloff_val = current_light->falloff;
-                ImGui::DragFloat("falloff value", &falloff_val,0.001f,0,1);
+                ImGui::DragFloat("falloff value", &falloff_val, 0.001f, 0, 1);
                 current_light->falloff = falloff_val;
             }
         }
-    ImGui::End();
+        ImGui::End();
     }
 
 
@@ -393,21 +458,21 @@ void imGUIManager::Update()
 
             int mapping_with_what = center_obj->mapping_with_normal ? 1 : 0;
             ImGui::RadioButton("mapping with position", &mapping_with_what, 0); ImGui::SameLine();
-            ImGui::RadioButton("mapping with normal", &mapping_with_what, 1); 
+            ImGui::RadioButton("mapping with normal", &mapping_with_what, 1);
             center_obj->mapping_with_normal = (mapping_with_what == 1);
 
             ImGui::Separator();
 
             int where_to_calculate = center_obj->should_calculate_uv_in_gpu ? 0 : 1;
             ImGui::RadioButton("calculate in gpu", &where_to_calculate, 0); ImGui::SameLine();
-            ImGui::RadioButton("calculate in cpu", &where_to_calculate, 1); 
+            ImGui::RadioButton("calculate in cpu", &where_to_calculate, 1);
             center_obj->should_calculate_uv_in_gpu = (where_to_calculate == 0);
             ImGui::Separator();
-            bool visaulize = center_obj->material->texture.texture ==GRAPHICS->GetTexture("test");
+            bool visaulize = center_obj->material->texture.texture == GRAPHICS->GetTexture("test");
             ImGui::Checkbox("Visualize UV", &visaulize);
-            if(visaulize)
+            if (visaulize)
             {
-                center_obj->material->texture.texture = GRAPHICS->GetTexture("test");
+                center_obj->material->texture.SetTexture("test");
                 center_obj->material->texture.ambient_texture = -1;
                 center_obj->material->texture.diffuse_texture = -1;
                 center_obj->material->texture.specular_texture = -1;
@@ -419,8 +484,8 @@ void imGUIManager::Update()
             {
                 center_obj->material->texture.texture = -1;
                 center_obj->material->texture.ambient_texture = -1;
-                center_obj->material->texture.diffuse_texture = GRAPHICS->GetTexture("roofdiff");
-                center_obj->material->texture.specular_texture = GRAPHICS->GetTexture("roofspec");
+                center_obj->material->texture.SetDiffuseTexture("roofdiff");
+                center_obj->material->texture.SetSpecularTexture("roofspec");
                 center_obj->material->ka = 0.05f;
                 center_obj->material->kd = 0.09f;
                 center_obj->material->ks = 0.05f;
