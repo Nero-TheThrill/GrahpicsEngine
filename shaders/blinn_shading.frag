@@ -34,6 +34,7 @@ uniform float minYval;
 uniform float k_a;
 uniform float k_d;
 uniform float k_s;
+uniform vec3 emissive;
 
 vec3 n_normal=normalize(Normal);
 vec2 realTexCoord;
@@ -237,7 +238,7 @@ void main()
 	if(default_texture_exists)
 		result*=texture(default_texture,realTexCoord).xyz;
 	
-	result+=global_ambient_color*k_a;
+	result+=global_ambient_color*k_a+emissive;
 	float fog_factor=(far-length(view_position-FragPosition))/(far-near);
 	result =  fog_factor*result+(1-fog_factor)*fog_color;
 	result=vec3(min(result.x,1),min(result.y,1),min(result.z,1));

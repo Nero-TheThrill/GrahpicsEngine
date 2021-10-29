@@ -48,7 +48,7 @@ Application::Application()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    window = glfwCreateWindow(width, height, "LearnOpenGL", NULL, NULL);
+    window = glfwCreateWindow(width, height, "JinwooChoi's Graphics Engine", NULL, NULL);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;

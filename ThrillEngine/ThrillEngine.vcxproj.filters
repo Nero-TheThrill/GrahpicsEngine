@@ -70,6 +70,9 @@
     <Filter Include="Object\LightObject">
       <UniqueIdentifier>{816be4fe-81f2-459a-be87-b952bf871eac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\stbi_image">
+      <UniqueIdentifier>{e620ba55-a88e-406f-a692-f24482f16fd5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -96,9 +99,6 @@
     </ClCompile>
     <ClCompile Include="LevelManager.cpp">
       <Filter>EngineCore\LevelManager</Filter>
-    </ClCompile>
-    <ClCompile Include="stb_image.cpp">
-      <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>Object\Component\Transform</Filter>
@@ -157,6 +157,9 @@
     <ClCompile Include="UVGenerator.cpp">
       <Filter>Object\ObjectLoader</Filter>
     </ClCompile>
+    <ClCompile Include="stb_image.cpp">
+      <Filter>Graphics\stbi_image</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -182,9 +185,6 @@
     </ClInclude>
     <ClInclude Include="EngineCore.h">
       <Filter>EngineCore</Filter>
-    </ClInclude>
-    <ClInclude Include="..\includes\source\stb_image.h">
-      <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="LevelStructure.h">
       <Filter>EngineCore\LevelManager</Filter>
@@ -257,6 +257,9 @@
     </ClInclude>
     <ClInclude Include="imGUIManager.h">
       <Filter>Graphics\imGUIManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\includes\source\stb_image.h">
+      <Filter>Graphics\stbi_image</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

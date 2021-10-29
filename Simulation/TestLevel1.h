@@ -1,5 +1,6 @@
 #pragma once
 #include "LevelStructure.h"
+#include "LightObject.h"
 #include "Object.h"
 class TestLevel1 : public LevelStructure
 {
@@ -10,7 +11,10 @@ public:
     void Close() override;
     ~TestLevel1();
 private:
-    Object* obj1, * obj2, * obj3;
+    Object* plane, * orbit, * centerobj, * obj, * ramus, * dragon, * bumblebee;
+    std::vector<LightObject*> lights;
+    Object* skysphere;
+    float time_count;
 
 };
 

@@ -32,7 +32,7 @@ glm::mat4 Camera::GetProjectionMatrix()
 
 void Camera::Move(glm::vec3 v)
 {
-    cam_position += v * TIMEMANAGER->deltaTime * 2.5f;
+    cam_position += v* TIMEMANAGER->deltaTime * 2.5f;
     view = glm::lookAt(cam_position, cam_position + cam_target, up);
 }
 
@@ -71,7 +71,7 @@ void Camera::MoveForward(float amount)
 
 void Camera::MoveSide(float amount)
 {
-    cam_position += -glm::cross(up, cam_target) * amount * TIMEMANAGER->deltaTime * 2.5f;
+    cam_position += -glm::cross(up,cam_target)*amount * TIMEMANAGER->deltaTime * 2.5f;
     view = glm::lookAt(cam_position, cam_position + cam_target, up);
 }
 

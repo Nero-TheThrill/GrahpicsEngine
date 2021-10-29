@@ -27,7 +27,8 @@ TestLevel::TestLevel()
 
 void TestLevel::Init()
 {
-    GRAPHICS->SetBackgroundColor(glm::vec4(0.6, 0.65, 0.7, 1.0));
+    IMGUIMANAGER->useIMGUI = true;
+    GRAPHICS->SetBackgroundColor(glm::vec4(0.6,0.65,0.7,1.0));
 
     orbit = new Object("orbit");
     orbit->SetMeshGroup(GRAPHICS->GetMeshGroup("line"));
@@ -47,12 +48,12 @@ void TestLevel::Init()
     plane->drawmode = 1;
 
 
-
+   
 
     obj = new Object("obj");
     obj->SetMeshGroup(GRAPHICS->GetMeshGroup("cube"));
     obj->SetShader("phong_shading");
-    obj->material = GRAPHICS->GetMaterial("m_obj");
+    obj->material= GRAPHICS->GetMaterial("m_obj");
     obj->mapping_mode = 3;
     obj->transform.Translate(glm::vec3(0, 4.f, 0.0f));
     obj->transform.Scale(glm::vec3(2.f));
@@ -98,14 +99,14 @@ void TestLevel::Init()
     jet1->transform.Rotate(45, glm::vec3(0, 1, 0));
     jet1->drawmode = 1;
 
-    jet2 = new Object("jet2", jet1);
+    jet2 = new Object("jet2",jet1);
     jet2->SetColor(glm::vec3(0.6f));
-    jet2->transform.Translate(glm::vec3(80, 7.2f, -98.f));
+    jet2->transform.Translate(glm::vec3(-80, 6.5f, -90.f));
     jet2->transform.Scale(glm::vec3(3.f));
 
     jet3 = new Object("jet3", jet2);
     jet3->SetColor(glm::vec3(0.6f));
-    jet3->transform.Translate(glm::vec3(90, 7.2f, -92.f));
+    jet3->transform.Translate(glm::vec3(90, 6.5f, -100.f));
 
 
 
@@ -121,7 +122,7 @@ void TestLevel::Init()
 
 
 
-
+  
 
     skysphere = new Object("skysphere");
     skysphere->SetMeshGroup(GRAPHICS->GetMeshGroup("customsphere"));
@@ -135,7 +136,7 @@ void TestLevel::Init()
 
 void TestLevel::Update()
 {
-    if (IMGUIMANAGER->lightNumberChanged || IMGUIMANAGER->lightoption != IMGUIMANAGER->prev_lightoption)
+    if (IMGUIMANAGER->lightNumberChanged||IMGUIMANAGER->lightoption!=IMGUIMANAGER->prev_lightoption)
     {
         for (auto light : lights)
         {
@@ -159,7 +160,7 @@ void TestLevel::Update()
             lights[i]->transform.Translate(glm::vec3(cos(time_count + (float)i * 6.28f / lights.size()) * 9, -3, sin(time_count + (float)i * 6.28f / lights.size()) * 9));
         }
         IMGUIMANAGER->lightNumberChanged = false;
-        if (IMGUIMANAGER->lightoption == 2)
+        if(IMGUIMANAGER->lightoption==2)
         {
             int iter = 0;
             for (auto light : lights)
@@ -231,17 +232,17 @@ void TestLevel::Update()
     {
         obj->transform.Rotate(TIMEMANAGER->deltaTime, glm::vec3(0, 1, 0));
     }
-    if (jet1 != nullptr && jet2 != nullptr && jet3 != nullptr)
+    if(jet1!=nullptr&&jet2!=nullptr&&jet3!=nullptr)
     {
-        float move = 20;
+        float move =20;
         jet1->transform.Move(glm::vec3(-move, 0, move));
         jet2->transform.Move(glm::vec3(-move, 0, move));
         jet3->transform.Move(glm::vec3(-move, 0, move));
-        if (jet1->transform.position.x < -100)
+        if(jet1->transform.position.x<-100)
         {
             jet1->transform.Translate(glm::vec3(85, 7.2f, -95.f));
-            jet2->transform.Translate(glm::vec3(80, 7.2f, -98.f));
-            jet3->transform.Translate(glm::vec3(90, 7.2f, -92.f));
+            jet2->transform.Translate(glm::vec3(80, 6.5f, -100.f));
+            jet3->transform.Translate(glm::vec3(90, 6.5f, -90.f));
         }
 
     }

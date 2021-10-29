@@ -85,7 +85,7 @@ void Graphics::UpdatePVmatrices()
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projection));
     glm::mat4 view = camera.GetViewMatrix();
     glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
-    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    glBindBuffer(GL_UNIFORM_BUFFER,0);
 }
 
 void Graphics::InitLightInfo()
@@ -102,10 +102,10 @@ void Graphics::UpdateLightInfo()
 {
     glBindBuffer(GL_UNIFORM_BUFFER, uboLight);
     std::unordered_map<unsigned, LightObject*>lights = OBJECTMANAGER->GetAllLights();
-    auto lightnumber = static_cast<unsigned>(IMGUIMANAGER->lightNumber);
+    auto lightnumber = static_cast<unsigned>(lights.size());
     GLsizeiptr lightstride = 128;// (sizeof(unsigned) + 5 * sizeof(glm::vec3) + 3 * sizeof(float));
     int iter = 0;
-
+    
 
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(unsigned), &lightnumber);
     glBufferSubData(GL_UNIFORM_BUFFER, 4, sizeof(float), &(camera.near));
@@ -117,7 +117,7 @@ void Graphics::UpdateLightInfo()
     for (auto light : lights)
     {
         glBufferSubData(GL_UNIFORM_BUFFER, 64 + iter * lightstride, sizeof(unsigned), &(light.second->type));
-        light.second->direction = centerobj->transform.position - light.second->transform.position;
+        light.second->direction = centerobj->transform.position-light.second->transform.position;
         glBufferSubData(GL_UNIFORM_BUFFER, 64 + iter * lightstride + 16, sizeof(glm::vec3), glm::value_ptr(light.second->direction));
         glBufferSubData(GL_UNIFORM_BUFFER, 64 + iter * lightstride + 32, sizeof(glm::vec3), glm::value_ptr(light.second->transform.position));
         glBufferSubData(GL_UNIFORM_BUFFER, 64 + iter * lightstride + 48, sizeof(glm::vec3), glm::value_ptr(light.second->ambient));
@@ -382,7 +382,7 @@ void Graphics::AddSphereMesh()
             sphere->vertex_normals.push_back(glm::vec3(x, y, z));
             s = static_cast<float>(j) / static_cast<float>(sectorCount);
             t = static_cast<float>(i) / static_cast<float>(stackCount);
-            sphere->texcoords_use_indices.push_back(glm::vec2(1 - s, 1 - t));
+            sphere->texcoords_use_indices.push_back(glm::vec2(1 - s, 1-t));
 
             float u_sc = glm::degrees(atan2(y, x));
             u_sc += 180;
@@ -390,7 +390,7 @@ void Graphics::AddSphereMesh()
             float v_s = 180 - glm::degrees(acos(z / (sqrt(x * x + y * y + z * z))));
 
             float v_c = (z + 1) / 2.f;
-            glm::vec3 Vec = glm::vec3(x, y, z);
+            glm::vec3 Vec=glm::vec3(x, y, z);
             glm::vec3 absVec = abs(glm::vec3(x, y, z));
             glm::vec2 planar_uv;
             if (absVec.x >= absVec.y && absVec.x >= absVec.z)

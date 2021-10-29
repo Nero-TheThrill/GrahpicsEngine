@@ -19,8 +19,8 @@ public:
 
 
 private:
-    MeshGroup* meshgroup;
-    ModelMesh* mesh;
+    MeshGroup* meshgroup=nullptr;
+    ModelMesh* mesh=nullptr;
 
     std::vector<glm::vec3> tmp_positions;
     std::vector<glm::vec3> tmp_normals;

@@ -29,7 +29,7 @@ Object::Object(std::string n)
     name = n;
     draw_normal_shader = GRAPHICS->GetShader("test");
     mesh = nullptr;
-    material = nullptr;
+    material = GRAPHICS->GetMaterial("m_default");
 }
 
 Object::Object(std::string n, Object* obj)

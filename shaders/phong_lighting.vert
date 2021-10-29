@@ -42,17 +42,17 @@ vec3 I_a,I_d,I_s;
 vec3 FragPosition=vec3(model*vec4(aPos,1.0));
 struct Light
 {
-	uint type;    	   //            0
-	vec3 direction;    // D,S        16
-	vec3 position;     // P          32
+	uint type;    	   //            
+	vec3 direction;    // D,S       
+	vec3 position;     // P          
 
-	vec3 ambient;      // D,P,S      48
-	vec3 diffuse;      // D,P,S      64
-	vec3 specular;     // D,P,S      80
+	vec3 ambient;      // D,P,S      
+	vec3 diffuse;      // D,P,S      
+	vec3 specular;     // D,P,S      
 	vec3 c;
-	float inner_angle; // S          96
-	float outer_angle; // S          112
-	float falloff;     // S          128
+	float inner_angle; // S          
+	float outer_angle; // S          
+	float falloff;     // S          
 };
 
 layout(std140, binding = 1) uniform LightInformation
