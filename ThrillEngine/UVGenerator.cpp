@@ -6,7 +6,7 @@ glm::vec2 GenerateSphericalUV(glm::vec3 vec)
     u_s += 180;
 
     float v_s = 180 - glm::degrees(acos(vec.y / (sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z))));
-    return glm::vec2(1 - u_s / 360.f, v_s / 180.f);
+    return glm::vec2(u_s / 360.f, v_s / 180.f);
 }
 
 glm::vec2 GenerateCylindricalUV(glm::vec3 vec,float max_y,float min_y)
@@ -16,7 +16,7 @@ glm::vec2 GenerateCylindricalUV(glm::vec3 vec,float max_y,float min_y)
     
     float v_c = (vec.y -min_y) / (max_y-min_y);
 
-    return glm::vec2(1 - u_c / 360.f, v_c);
+    return glm::vec2(u_c / 360.f, v_c);
 }
 
 glm::vec2 GeneratePlanarUV(glm::vec3 vec)

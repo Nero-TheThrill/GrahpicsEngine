@@ -474,15 +474,27 @@ void imGUIManager::Update()
                 ImGui::RadioButton("calculate in cpu", &where_to_calculate, 1);
                 center_obj->should_calculate_uv_in_gpu = (where_to_calculate == 0);
                 ImGui::Separator();
-                bool visaulize = center_obj->material == GRAPHICS->GetMaterial("m_test");
+                bool visaulize = center_obj->material->texture.texture == GRAPHICS->GetTexture("test");
                 ImGui::Checkbox("Visualize UV", &visaulize);
                 if (visaulize)
                 {
-                    center_obj->material = GRAPHICS->GetMaterial("m_test");
+                    center_obj->material->texture.SetTexture("test");
+                    center_obj->material->texture.ambient_texture = -1;
+                    center_obj->material->texture.diffuse_texture = -1;
+                    center_obj->material->texture.specular_texture = -1;
+                    center_obj->material->ka = 0.03f;
+                    center_obj->material->kd = 0.3f;
+                    center_obj->material->ks = 0.2f;
                 }
                 else
                 {
-                    center_obj->material = GRAPHICS->GetMaterial("m_centerobj");
+                    center_obj->material->texture.texture = -1;
+                    center_obj->material->texture.ambient_texture = -1;
+                    center_obj->material->texture.SetDiffuseTexture("roofdiff");
+                    center_obj->material->texture.SetSpecularTexture("roofspec");
+                    center_obj->material->ka = 0.05f;
+                    center_obj->material->kd = 0.09f;
+                    center_obj->material->ks = 0.05f;
                 }
 
                 ImGui::End();

@@ -200,13 +200,13 @@ void main()
     			u+=180;
    				v = 180-(acos(tmpVec3.y / (sqrt(tmpVec3.x * tmpVec3.x + tmpVec3.y * tmpVec3.y + tmpVec3.z * tmpVec3.z))) * 180.f / acos(-1)) ;
            
-				realTexCoord = vec2(1-u / 360.f, v / 180.f);
+				realTexCoord = vec2(u / 360.f, v / 180.f);
 				break;
 			case 2:
 			    u = degrees(atan(tmpVec3.z , tmpVec3.x));
 				u+=180;
    				v = (tmpVec3.y-minYval)/(maxYval-minYval);
-   				realTexCoord = vec2(1-u/360.f,v);
+   				realTexCoord = vec2(u/360.f,v);
    				break;
    			case 3:
            		if (abstmpVec3.x >= abstmpVec3.y && abstmpVec3.x >= abstmpVec3.z)

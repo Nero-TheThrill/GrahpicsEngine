@@ -41,7 +41,7 @@ void TestLevel::Init()
     plane = new Object("plane");
     plane->SetMeshGroup(GRAPHICS->GetMeshGroup("quad"));
     plane->SetShader("phong_shading");
-    plane->material = GRAPHICS->GetMaterial("m_default");
+    plane->material = GRAPHICS->GetMaterial("m_plane");
     plane->transform.Translate(glm::vec3(0, -7, 0));
     plane->transform.Rotate(-90, glm::vec3(1, 0, 0));
     plane->transform.Scale(glm::vec3(20.f));
@@ -128,7 +128,7 @@ void TestLevel::Init()
     skysphere->SetMeshGroup(GRAPHICS->GetMeshGroup("customsphere"));
     skysphere->SetShader("nolight");
     skysphere->material = GRAPHICS->GetMaterial("m_skysphere");
-    skysphere->transform.Scale(glm::vec3(99.f));
+    skysphere->transform.Scale(glm::vec3(500.f));
     skysphere->drawmode = 1;
 
     IMGUIMANAGER->Init();
@@ -234,15 +234,15 @@ void TestLevel::Update()
     }
     if(jet1!=nullptr&&jet2!=nullptr&&jet3!=nullptr)
     {
-        float move =20;
+        float move =30;
         jet1->transform.Move(glm::vec3(-move, 0, move));
         jet2->transform.Move(glm::vec3(-move, 0, move));
         jet3->transform.Move(glm::vec3(-move, 0, move));
-        if(jet1->transform.position.x<-100)
+        if(jet1->transform.position.x<-500)
         {
-            jet1->transform.Translate(glm::vec3(85, 7.2f, -95.f));
-            jet2->transform.Translate(glm::vec3(80, 6.5f, -100.f));
-            jet3->transform.Translate(glm::vec3(90, 6.5f, -90.f));
+            jet1->transform.Translate(glm::vec3(185, 7.2f, -195.f));
+            jet2->transform.Translate(glm::vec3(180, 6.5f, -200.f));
+            jet3->transform.Translate(glm::vec3(190, 6.5f, -190.f));
         }
 
     }

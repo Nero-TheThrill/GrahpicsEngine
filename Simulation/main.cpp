@@ -49,9 +49,6 @@ int main()
     GRAPHICS->LoadTexture("../images/bumblebee.jpg", "bumblebee");
     GRAPHICS->LoadTexture("../images/metal_roof_diff_512x512.png", "roofdiff");
     GRAPHICS->LoadTexture("../images/metal_roof_spec_512x512.png", "roofspec");
-    GRAPHICS->LoadTexture("../images/brickwall.jpg", "brickwall");
-    GRAPHICS->LoadTexture("../images/brickwall_normal.jpg", "brickwall_normal");
-
 
     objloader.loadObject("../models/jet.obj", "jet");
     objloader.loadObject("../models/bumblebee.obj", "bumblebee");
@@ -69,7 +66,7 @@ int main()
     objloader.loadObject("../models/lucy_princeton.obj", "lucy_princeton");
     objloader.loadObject("../models/cup.obj", "cup");
     objloader.loadObject("../models/quad.obj", "quad");
-    objloader.loadObject("../models/teapot.obj", "teapot");
+    objloader.loadObject("../models/triangle.obj", "triangle");
     objloader.loadObject("../models/baron.obj", "baron");
 
     GRAPHICS->AddSphereMesh();
@@ -79,10 +76,9 @@ int main()
 
     ThrillEngine->Init();
 
-    Material * objmat, * ramusmat, * centermat, * lightmat, * dragonmat, * bumblebeemat, * skymat, * jetmat, *testmat;
+    Material * objmat, * ramusmat, * centermat, * lightmat, * dragonmat, * bumblebeemat, * skymat, * jetmat,*planemat;
 
     new Material("m_default");
-
     objmat = new Material("m_obj");
     ramusmat = new Material("m_ramus");
     centermat = new Material("m_centerobj");
@@ -91,22 +87,21 @@ int main()
     dragonmat = new Material("m_dragon");
     bumblebeemat = new Material("m_bumblebee");
     jetmat = new Material("m_jet");
-    testmat = new Material("m_test");
+    planemat = new Material("m_plane");
+
     lightmat->emissive = glm::vec3(0.6f);
     lightmat->kd = 0.3f;
     objmat->texture.SetAmbientTexture("test");
     objmat->texture.SetDiffuseTexture("me");
 
     ramusmat->texture.SetTexture("ramus");
-    ramusmat->ka = 0.03f;
-    ramusmat->kd = 0.3f;
-    ramusmat->ks = 0.2f;
 
-    dragonmat->texture.SetAmbientTexture("dragon");
-    dragonmat->texture.SetDiffuseTexture("dragon");
 
-    bumblebeemat->texture.SetAmbientTexture("bumblebee");
-    bumblebeemat->texture.SetDiffuseTexture("bumblebee");
+    dragonmat->texture.SetTexture("dragon");
+
+
+    bumblebeemat->texture.SetTexture("bumblebee");
+
 
     jetmat->texture.SetTexture("jet");
 
@@ -115,13 +110,9 @@ int main()
 
     skymat->texture.SetTexture("space");
 
-    testmat->texture.SetTexture("test");
-    testmat->texture.ambient_texture = -1;
-    testmat->texture.diffuse_texture = -1;
-    testmat->texture.specular_texture = -1;
-    testmat->ka = 0.03f;
-    testmat->kd = 0.3f;
-    testmat->ks = 0.2f;
+    planemat->ka = 0.08f;
+    planemat->kd = 0.1f;
+    planemat->ks = 0.1f;
 
     LEVELMANAGER->InsertLevel(new TestLevel(), 1);
     LEVELMANAGER->ChangeLevel(1);

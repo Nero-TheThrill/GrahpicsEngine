@@ -21,7 +21,7 @@ Graphics::Graphics()
 
 void Graphics::Init()
 {
-    camera.Projection(45, 0.1f, 200.f);
+    camera.Projection(45, 0.1f, 2000.f);
     camera.View(glm::vec3(0.0f, 4.0f, 25));
     camera.RotateXaxis(10);
     InitPVmatrices();
@@ -382,14 +382,14 @@ void Graphics::AddSphereMesh()
             sphere->vertex_normals.push_back(glm::vec3(x, y, z));
             s = static_cast<float>(j) / static_cast<float>(sectorCount);
             t = static_cast<float>(i) / static_cast<float>(stackCount);
-            sphere->texcoords_use_indices.push_back(glm::vec2(1 - s, 1-t));
+            sphere->texcoords_use_indices.push_back(glm::vec2(s, t));
 
-            float u_sc = glm::degrees(atan2(y, x));
+            float u_sc = glm::degrees(atan2(z, x));
             u_sc += 180;
 
-            float v_s = 180 - glm::degrees(acos(z / (sqrt(x * x + y * y + z * z))));
+            float v_s = 180 - glm::degrees(acos(y / (sqrt(x * x + y * y + z * z))));
 
-            float v_c = (z + 1) / 2.f;
+            float v_c = (y + 1) / 2.f;
             glm::vec3 Vec=glm::vec3(x, y, z);
             glm::vec3 absVec = abs(glm::vec3(x, y, z));
             glm::vec2 planar_uv;
@@ -409,8 +409,8 @@ void Graphics::AddSphereMesh()
                 planar_uv.y = Vec.y / absVec.z;
             }
 
-            sphere->spherical_texcoords_use_indices.push_back(glm::vec2(1 - u_sc / 360.f, v_s / 180.f));
-            sphere->cylindrical_texcoords_use_indices.push_back(glm::vec2(1 - u_sc / 360.f, v_c));
+            sphere->spherical_texcoords_use_indices.push_back(glm::vec2( u_sc / 360.f, v_s / 180.f));
+            sphere->cylindrical_texcoords_use_indices.push_back(glm::vec2( u_sc / 360.f, v_c));
             sphere->planar_texcoords_use_indices.push_back((planar_uv + glm::vec2(1)) * 0.5f);
 
         }
