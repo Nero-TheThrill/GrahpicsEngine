@@ -71,7 +71,8 @@ void Object::Draw()
     {
         mesh->mapping_mode = mapping_mode;
         mesh->should_calculate_uv_in_gpu = should_calculate_uv_in_gpu;
-        mesh->SetMaterial(material);
+        if(material!=nullptr)
+            mesh->SetMaterial(material);
         mesh->ChangeMode(drawmode);
         glUseProgram(shader.program_handle);
         shader.set("model", transform.GetTransformMatrix());

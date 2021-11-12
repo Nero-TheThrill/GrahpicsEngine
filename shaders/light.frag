@@ -9,7 +9,7 @@ uniform vec3 objectColor;
 uniform vec3 lightPosition;
 uniform bool item_selected;
 
-uniform float k_d;
+uniform vec3 k_d;
 uniform vec3 emissive;
 
 vec3 I_d;

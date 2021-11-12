@@ -44,7 +44,7 @@ void ObjectLoader::loadObject(const std::string& path, const std::string& mesh_i
 
     while (std::getline(in_file, line))
     {
-        std::string prefix = "";
+        std::string prefix = "",mtlpath="";
         glm::vec2 tmp_vec2;
         double x, y, z;
         ss.clear();
@@ -81,9 +81,15 @@ void ObjectLoader::loadObject(const std::string& path, const std::string& mesh_i
         {
 
         }
-        else if (prefix == "use_mtl")
+        else if (prefix == "mtllib")
         {
-
+            ss >> mtlpath;
+            loadMtl(mtlpath,path);
+        }
+        else if (prefix == "usemtl")
+        {
+            ss >> mtlpath;
+            mesh->material = GRAPHICS->GetMaterial(path+mtlpath);
         }
         else if (prefix == "v") // position
         {
@@ -253,6 +259,72 @@ void ObjectLoader::loadObject(const std::string& path, const std::string& mesh_i
 
     meshgroup->Init();
     GRAPHICS->AddMeshGroup(mesh_id,meshgroup);
+}
+
+void ObjectLoader::loadMtl(const std::string& path, const std::string& id)
+{
+    std::ifstream in_file("../models/"+path);
+    std::string line = "";
+
+    if (!in_file.is_open())
+    {
+        std::cout << "failed to load file : " << path << std::endl;
+    }
+
+    Material* m=nullptr;
+    std::string name;
+    std::string texture_path;
+    while (std::getline(in_file, line))
+    {
+        std::string prefix = "";
+        ss.clear();
+        ss.str(line);
+        ss >> prefix;
+        if (prefix == "newmtl")
+        {
+            ss >> name;
+            m = new Material();
+            GRAPHICS->AddMaterial(id+name,m);
+        }
+        else if (prefix == "Ns")
+        {
+            ss >> m->ns;
+        }
+        else if (prefix == "Ka")
+        {
+            ss >> m->ka.x >> m->ka.y >> m->ka.z;
+        }
+        else if (prefix == "Kd")
+        {
+            ss >> m->kd.x >> m->kd.y >> m->kd.z;
+        }
+        else if (prefix == "Ks")
+        {
+            ss >> m->ks.x >> m->ks.y >> m->ks.z;
+        }
+        else if (prefix == "map_Kd")
+        {
+            ss >> texture_path;
+            GRAPHICS->LoadTexture("../images/" + texture_path, texture_path);
+            m->texture.diffuse_texture = GRAPHICS->GetTexture(texture_path);
+        }
+        else if (prefix == "map_Ka")
+        {
+            ss >> texture_path;
+            GRAPHICS->LoadTexture("../images/" + texture_path, texture_path);
+            m->texture.ambient_texture = GRAPHICS->GetTexture(texture_path);
+        }
+        else if (prefix == "map_Ks")
+        {
+            ss >> texture_path;
+            GRAPHICS->LoadTexture("../images/" + texture_path, texture_path);
+            m->texture.specular_texture = GRAPHICS->GetTexture(texture_path);
+        }
+        else
+        {
+            
+        }
+    }
 }
 
 void ObjectLoader::reArrangeData()

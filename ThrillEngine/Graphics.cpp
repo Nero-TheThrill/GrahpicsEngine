@@ -455,7 +455,8 @@ void Graphics::SetBackgroundColor(glm::vec4 bgcolor)
 
 void Graphics::AddMaterial(const std::string& material_id, Material* material)
 {
-    materials.insert(std::pair<std::string, Material*>(material_id, material));
+    if (materials.find(material_id) == materials.end())
+        materials.insert(std::pair<std::string, Material*>(material_id, material));
 }
 
 

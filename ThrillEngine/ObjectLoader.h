@@ -8,11 +8,14 @@
 #include  "glm/gtx/hash.hpp"
 #include "MeshGroup.h"
 #include "ModelMesh.h"
+
+
+
 class ObjectLoader
 {
 public:
     void loadObject(const std::string& path, const std::string& mesh);
-
+    void loadMtl(const std::string& path, const std::string& id);
     void reArrangeData();
     void reSizeObject();
 
@@ -31,7 +34,6 @@ private:
     std::vector<int> tmp_texture_indices;
 
     std::unordered_map<glm::ivec3, int> pos_texcoord_norm_indices;
-
     int tmp_glInt_p1 = 0, tmp_glInt_p2 = 0, tmp_glInt_p3 = 0;
     int tmp_glInt_n1 = 0, tmp_glInt_n2 = 0, tmp_glInt_n3 = 0;
     int tmp_glInt_t1 = 0, tmp_glInt_t2 = 0, tmp_glInt_t3 = 0;

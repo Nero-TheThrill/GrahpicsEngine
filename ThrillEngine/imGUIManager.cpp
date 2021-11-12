@@ -482,9 +482,6 @@ void imGUIManager::Update()
                     center_obj->material->texture.ambient_texture = -1;
                     center_obj->material->texture.diffuse_texture = -1;
                     center_obj->material->texture.specular_texture = -1;
-                    center_obj->material->ka = 0.03f;
-                    center_obj->material->kd = 0.3f;
-                    center_obj->material->ks = 0.2f;
                 }
                 else
                 {
@@ -492,9 +489,6 @@ void imGUIManager::Update()
                     center_obj->material->texture.ambient_texture = -1;
                     center_obj->material->texture.SetDiffuseTexture("roofdiff");
                     center_obj->material->texture.SetSpecularTexture("roofspec");
-                    center_obj->material->ka = 0.05f;
-                    center_obj->material->kd = 0.09f;
-                    center_obj->material->ks = 0.05f;
                 }
 
                 ImGui::End();

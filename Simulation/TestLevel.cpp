@@ -62,7 +62,7 @@ void TestLevel::Init()
     ramus = new Object("ramus");
     ramus->SetMeshGroup(GRAPHICS->GetMeshGroup("ramus"));
     ramus->SetShader("phong_shading");
-    ramus->material = GRAPHICS->GetMaterial("m_ramus");
+    //ramus->material = GRAPHICS->GetMaterial("m_ramus");
     ramus->transform.Translate(glm::vec3(-10.7, -2.6f, -10.f));
     ramus->transform.Scale(glm::vec3(5.f));
     ramus->transform.Rotate(45, glm::vec3(0, 1, 0));
@@ -71,8 +71,8 @@ void TestLevel::Init()
     dragon = new Object("dragon");
     dragon->SetMeshGroup(GRAPHICS->GetMeshGroup("dragon"));
     dragon->SetShader("phong_shading");
-    dragon->material = GRAPHICS->GetMaterial("m_dragon");
-    dragon->SetColor(glm::vec3(0.6f));
+   // dragon->material = GRAPHICS->GetMaterial("m_dragon");
+   // dragon->SetColor(glm::vec3(0.6f));
     dragon->transform.Translate(glm::vec3(-38.7, -1.9f, -16.6f));
     dragon->transform.Scale(glm::vec3(40.f));
     dragon->transform.Rotate(-35, glm::vec3(0, 1, 0));
@@ -81,7 +81,7 @@ void TestLevel::Init()
     bumblebee = new Object("bumblebee");
     bumblebee->SetMeshGroup(GRAPHICS->GetMeshGroup("bumblebee"));
     bumblebee->SetShader("phong_shading");
-    bumblebee->material = GRAPHICS->GetMaterial("m_bumblebee");
+  //  bumblebee->material = GRAPHICS->GetMaterial("m_bumblebee");
     bumblebee->SetColor(glm::vec3(0.6f));
     bumblebee->transform.Translate(glm::vec3(10, -2.2f, -5.3f));
     bumblebee->transform.Scale(glm::vec3(5.f));

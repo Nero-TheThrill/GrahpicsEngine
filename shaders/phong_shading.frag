@@ -30,9 +30,10 @@ uniform vec3 objectColor;
 uniform float maxYval;
 uniform float minYval;
 
-uniform float k_a;
-uniform float k_d;
-uniform float k_s;
+uniform vec3 k_a;
+uniform vec3 k_d;
+uniform vec3 k_s;
+uniform float ns;
 uniform vec3 emissive;
 
 vec3 n_normal=normalize(Normal);
@@ -70,13 +71,13 @@ vec3 CalculateLight(Light light)
 	if(ambient_texture_exists)
 		I_a= light.ambient * vec3(texture(ambient_texture,realTexCoord))/16;
 	else 
-		I_a=k_a * light.ambient;
+		I_a= light.ambient*k_a;
 	if(light.type==0)
 	{
 		vec3 light_vector = normalize(light.position-FragPosition);
 
 		if(diffuse_texture_exists)
-			I_d = light.diffuse*max(dot(n_normal,light_vector),0.0)* vec3(texture(diffuse_texture,realTexCoord));
+			I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0)* vec3(texture(diffuse_texture,realTexCoord));
 		else
 			I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0);
 
@@ -88,7 +89,7 @@ vec3 CalculateLight(Light light)
 			if(specular_texture_exists)
 			{
 				vec3 k_s3=vec3(texture(specular_texture,realTexCoord));
-				I_s = light.specular*pow(max(dot(view_vector,reflectDirection),0.0),k_s3.x*k_s3.x*32+0.00001)* k_s3/2;
+				I_s = light.specular*pow(max(dot(view_vector,reflectDirection),0.0),ns)* k_s3/2;
 			}
 			else
 				I_s = k_s*light.specular*pow(max(dot(view_vector,reflectDirection),0.0),32); 
@@ -106,7 +107,7 @@ vec3 CalculateLight(Light light)
 		vec3 light_vector = normalize(-light.direction);
 
 		if(diffuse_texture_exists)
-			I_d = light.diffuse*max(dot(n_normal,light_vector),0.0)* vec3(texture(diffuse_texture,realTexCoord));
+			I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0)* vec3(texture(diffuse_texture,realTexCoord));
 		else
 			I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0);
 
@@ -118,7 +119,7 @@ vec3 CalculateLight(Light light)
 			if(specular_texture_exists)
 			{
 				vec3 k_s3=vec3(texture(specular_texture,realTexCoord));
-				I_s = light.specular*pow(max(dot(view_vector,reflectDirection),0.0),k_s3.x*k_s3.x*32+0.00001)* k_s3/2;
+				I_s = light.specular*pow(max(dot(view_vector,reflectDirection),0.0),ns)* k_s3/2;
 			}
 			else
 				I_s = k_s*light.specular*pow(max(dot(view_vector,reflectDirection),0.0),32); 
@@ -135,7 +136,7 @@ vec3 CalculateLight(Light light)
 		vec3 light_vector = normalize(light.position-FragPosition);
 
 		if(diffuse_texture_exists)
-			I_d = light.diffuse*max(dot(n_normal,light_vector),0.0)* vec3(texture(diffuse_texture,realTexCoord));
+			I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0)* vec3(texture(diffuse_texture,realTexCoord));
 		else
 			I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0);
 
@@ -147,7 +148,7 @@ vec3 CalculateLight(Light light)
 			if(specular_texture_exists)
 			{
 				vec3 k_s3=vec3(texture(specular_texture,realTexCoord));
-				I_s = light.specular*pow(max(dot(view_vector,reflectDirection),0.0),k_s3.x*k_s3.x*32+0.00001)* k_s3/2;
+				I_s = light.specular*pow(max(dot(view_vector,reflectDirection),0.0),ns)* k_s3/2;
 			}
 			else
 				I_s = k_s*light.specular*pow(max(dot(view_vector,reflectDirection),0.0),32); 

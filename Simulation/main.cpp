@@ -50,6 +50,8 @@ int main()
     GRAPHICS->LoadTexture("../images/metal_roof_diff_512x512.png", "roofdiff");
     GRAPHICS->LoadTexture("../images/metal_roof_spec_512x512.png", "roofspec");
 
+    //objloader.loadObject("../models/sexygirl.obj", "sexygirl");
+    objloader.loadObject("../models/girl.obj", "girl");
     objloader.loadObject("../models/jet.obj", "jet");
     objloader.loadObject("../models/bumblebee.obj", "bumblebee");
     objloader.loadObject("../models/dragon.obj", "dragon");
@@ -76,31 +78,22 @@ int main()
 
     ThrillEngine->Init();
 
-    Material * objmat, * ramusmat, * centermat, * lightmat, * dragonmat, * bumblebeemat, * skymat, * jetmat,*planemat;
+    Material * objmat, * centermat, * lightmat, * skymat, * jetmat,*planemat;
 
     new Material("m_default");
     objmat = new Material("m_obj");
-    ramusmat = new Material("m_ramus");
     centermat = new Material("m_centerobj");
     lightmat = new Material("m_light");
     skymat = new Material("m_skysphere");
-    dragonmat = new Material("m_dragon");
-    bumblebeemat = new Material("m_bumblebee");
+
     jetmat = new Material("m_jet");
     planemat = new Material("m_plane");
 
     lightmat->emissive = glm::vec3(0.6f);
-    lightmat->kd = 0.3f;
+    lightmat->kd = glm::vec3(0.3f);
     objmat->texture.SetAmbientTexture("test");
     objmat->texture.SetDiffuseTexture("me");
 
-    ramusmat->texture.SetTexture("ramus");
-
-
-    dragonmat->texture.SetTexture("dragon");
-
-
-    bumblebeemat->texture.SetTexture("bumblebee");
 
 
     jetmat->texture.SetTexture("jet");
@@ -110,9 +103,9 @@ int main()
 
     skymat->texture.SetTexture("space");
 
-    planemat->ka = 0.08f;
-    planemat->kd = 0.1f;
-    planemat->ks = 0.1f;
+    planemat->ka = glm::vec3(0.08f);
+    planemat->kd = glm::vec3(0.1f);
+    planemat->ks = glm::vec3(0.1f);
 
     LEVELMANAGER->InsertLevel(new TestLevel(), 1);
     LEVELMANAGER->ChangeLevel(1);

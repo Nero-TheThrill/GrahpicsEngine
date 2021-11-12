@@ -1,6 +1,6 @@
 # Blender v2.74 (sub 0) OBJ File: ''
 # www.blender.org
-mtllib alduin-dragon.mtl
+mtllib dragon.mtl
 o Alduin_Dragon
 v -132.237000 52.721588 -34.639717
 v -114.027000 57.219604 -33.456715
