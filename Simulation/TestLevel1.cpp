@@ -46,7 +46,6 @@ void TestLevel1::Init()
     centerobj = new Object("centerobject");
     centerobj->SetMeshGroup(GRAPHICS->GetMeshGroup("dragon"));
     centerobj->SetShader("phong_shading");
-    centerobj->material = GRAPHICS->GetMaterial("m_dragon");
     centerobj->transform.Translate(glm::vec3(0.f, -3.7f, 0.f));
     centerobj->transform.Rotate(-45, glm::vec3(0, 1, 0));
     centerobj->transform.Scale(glm::vec3(13.f));

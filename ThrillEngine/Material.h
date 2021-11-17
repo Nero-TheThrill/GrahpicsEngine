@@ -12,7 +12,7 @@ class Material
 {
 public:
     Material()=default;
-    Material(const std::string& id);
+    Material(const std::string& id,bool IsUsingCubeMapTexture=false);
     ~Material();
 
     void Use();
@@ -26,7 +26,7 @@ public:
     void set(const std::string& value_id, glm::mat4 input);
 
 
-    Texture texture;
+    Texture* texture;
     std::string name;
     glm::vec3 ka = glm::vec3(0.08f), kd = glm::vec3(0.7f), ks = glm::vec3(0.4f);
     glm::vec3 emissive = glm::vec3(0.1f);

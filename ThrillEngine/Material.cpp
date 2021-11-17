@@ -3,15 +3,20 @@
 #include "Graphics.h"
 
 
-Material::Material(const std::string& id)
+Material::Material(const std::string& id,bool IsUsingCubeMapTexture)
 {
     GRAPHICS->AddMaterial(id,this);
     name = id;
-    std::cout << "Material<" << name << "> Constructor Called" << std::endl;
+    if(!IsUsingCubeMapTexture)
+        texture = new Texture();
+    else
+        texture = new CubeMapTexture();
+    //std::cout << "Material<" << name << "> Constructor Called" << std::endl;
 }
 
 Material::~Material()
 {
+    delete texture;
     //std::cout << "Material<"<<name<<"> Destructor Called" << std::endl;
 }
 
@@ -32,7 +37,7 @@ void Material::Update(Shader shader)
     shader.set("k_s", ks);
     shader.set("emissive", emissive);
     shader.set("ns", ns);
-    texture.Update(shader);
+    texture->Update(shader);
 
     for(auto v:set_values_v3)
     {

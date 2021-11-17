@@ -53,14 +53,14 @@ int main()
     GRAPHICS->LoadTexture("../images/metal_roof_diff_512x512.png", "roofdiff");
     GRAPHICS->LoadTexture("../images/metal_roof_spec_512x512.png", "roofspec");
 
-    GRAPHICS->LoadTexture("../images/skybox/Daylight Box_Front.bmp", "skybox_front");
-    GRAPHICS->LoadTexture("../images/skybox/Daylight Box_Back.bmp", "skybox_back");
-    GRAPHICS->LoadTexture("../images/skybox/Daylight Box_Right.bmp", "skybox_right");
-    GRAPHICS->LoadTexture("../images/skybox/Daylight Box_Left.bmp", "skybox_left");
-    GRAPHICS->LoadTexture("../images/skybox/Daylight Box_Top.bmp", "skybox_top");
-    GRAPHICS->LoadTexture("../images/skybox/Daylight Box_Bottom.bmp", "skybox_bottom");
+    GRAPHICS->LoadTexture("../images/skybox/TropicalSunnyDay_pz.jpg", "skybox_front");
+    GRAPHICS->LoadTexture("../images/skybox/TropicalSunnyDay_nz.jpg", "skybox_back");
+    GRAPHICS->LoadTexture("../images/skybox/TropicalSunnyDay_px.jpg", "skybox_right");
+    GRAPHICS->LoadTexture("../images/skybox/TropicalSunnyDay_nx.jpg", "skybox_left");
+    GRAPHICS->LoadTexture("../images/skybox/TropicalSunnyDay_py.jpg", "skybox_top");
+    GRAPHICS->LoadTexture("../images/skybox/TropicalSunnyDay_ny.jpg", "skybox_bottom");
 
-    objloader.loadObject("../models/starwars-millennium-falcon.obj", "stwas");
+    objloader.loadObject("../models/desertcity.obj", "desertcity");
     objloader.loadObject("../models/girl.obj", "girl");
     objloader.loadObject("../models/jet.obj", "jet");
     objloader.loadObject("../models/bumblebee.obj", "bumblebee");
@@ -101,27 +101,29 @@ int main()
 
     lightmat->emissive = glm::vec3(0.6f);
     lightmat->kd = glm::vec3(0.3f);
-    objmat->texture.SetAmbientTexture("test");
-    objmat->texture.SetDiffuseTexture("me");
+    objmat->texture->SetAmbientTexture("test");
+    objmat->texture->SetDiffuseTexture("me");
 
 
 
-    jetmat->texture.SetTexture("jet");
+    jetmat->texture->SetTexture("jet");
 
-    centermat->texture.SetDiffuseTexture("roofdiff");
-    centermat->texture.SetSpecularTexture("roofspec");
+    centermat->texture->SetDiffuseTexture("roofdiff");
+    centermat->texture->SetSpecularTexture("roofspec");
 
-    skymat->texture.SetTexture("space");
+    skymat->texture->SetTexture("space");
 
     planemat->ka = glm::vec3(0.08f);
     planemat->kd = glm::vec3(0.1f);
     planemat->ks = glm::vec3(0.1f);
 
+
+
+
+
     LEVELMANAGER->InsertLevel(new TestLevel(), 1);
     LEVELMANAGER->ChangeLevel(1);
     LEVELMANAGER->InsertLevel(new TestLevel1(), 2);
-
-
 
 
 

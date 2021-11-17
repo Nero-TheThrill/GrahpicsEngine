@@ -26,6 +26,9 @@ private:
     std::vector<decltype(lightobjects)::key_type> light_to_be_erased;
     
     SkyBox* skybox;
+    //TODO: make frambufferobject
+    GLuint FBO=0;
+    int textures;
 
 };
 extern ObjectManager* OBJECTMANAGER;

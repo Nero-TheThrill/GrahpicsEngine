@@ -18,6 +18,7 @@ public:
     int drawmode = 0;// 0: facenormal 1: vertexnormal
     bool shouldDrawNormals = false;
     MeshGroup* mesh;
+    Material* material;
     Shader shader, draw_normal_shader;
     std::string name;
     bool item_selected = false;

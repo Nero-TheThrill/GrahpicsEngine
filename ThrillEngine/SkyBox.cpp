@@ -41,25 +41,9 @@ void SkyBox::Draw()
         mesh->ChangeMode(drawmode);
         glUseProgram(shader.program_handle);
         shader.set("item_selected", item_selected);
-
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, top);
-        shader.set("top", 0);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, bottom);
-        shader.set("bottom", 1);
-        glActiveTexture(GL_TEXTURE2);
-        glBindTexture(GL_TEXTURE_2D, left);
-        shader.set("left", 2);
-        glActiveTexture(GL_TEXTURE3);
-        glBindTexture(GL_TEXTURE_2D, right);
-        shader.set("right", 3);
-        glActiveTexture(GL_TEXTURE4);
-        glBindTexture(GL_TEXTURE_2D, front);
-        shader.set("front", 4);
-        glActiveTexture(GL_TEXTURE5);
-        glBindTexture(GL_TEXTURE_2D, back);
-        shader.set("back", 5);
+        if (material != nullptr)
+            mesh->SetMaterial(material);
+   
 
         mesh->Draw(shader);
         glUseProgram(0);

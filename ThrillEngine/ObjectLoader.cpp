@@ -283,7 +283,7 @@ void ObjectLoader::loadMtl(const std::string& path, const std::string& id)
         if (prefix == "newmtl")
         {
             ss >> name;
-            m = new Material();
+            m = new Material(id+name);
             GRAPHICS->AddMaterial(id+name,m);
         }
         else if (prefix == "Ns")
@@ -306,19 +306,19 @@ void ObjectLoader::loadMtl(const std::string& path, const std::string& id)
         {
             ss >> texture_path;
             GRAPHICS->LoadTexture("../images/" + texture_path, texture_path);
-            m->texture.diffuse_texture = GRAPHICS->GetTexture(texture_path);
+            m->texture->diffuse_texture = GRAPHICS->GetTexture(texture_path);
         }
         else if (prefix == "map_Ka")
         {
             ss >> texture_path;
             GRAPHICS->LoadTexture("../images/" + texture_path, texture_path);
-            m->texture.ambient_texture = GRAPHICS->GetTexture(texture_path);
+            m->texture->ambient_texture = GRAPHICS->GetTexture(texture_path);
         }
         else if (prefix == "map_Ks")
         {
             ss >> texture_path;
             GRAPHICS->LoadTexture("../images/" + texture_path, texture_path);
-            m->texture.specular_texture = GRAPHICS->GetTexture(texture_path);
+            m->texture->specular_texture = GRAPHICS->GetTexture(texture_path);
         }
         else
         {

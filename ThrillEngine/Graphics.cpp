@@ -319,7 +319,10 @@ void Graphics::LoadTexture(const std::string& path, const std::string& texture_i
 
 
         // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
+  
         data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
+
+
         if (data)
         {
             if (nrChannels == 4)

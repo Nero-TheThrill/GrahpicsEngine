@@ -11,14 +11,27 @@ ObjectManager::ObjectManager()
     genObjectsNum = 0;
     std::cout << "Object Manager Constructor Called" << std::endl;
     //TODO: Initialize framebufferobject
+    glGenFramebuffers(1, &FBO);
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+
 }
 
 void ObjectManager::Init()
 {
+    if (GRAPHICS->GetMaterial("m_skybox") == nullptr)
+    {
+        Material* m_skybox = new Material("m_skybox", true);
+        reinterpret_cast<CubeMapTexture*>(m_skybox->texture)->SetFrontTexture("skybox_front");
+        reinterpret_cast<CubeMapTexture*>(m_skybox->texture)->SetBackTexture("skybox_back");
+        reinterpret_cast<CubeMapTexture*>(m_skybox->texture)->SetLeftTexture("skybox_left");
+        reinterpret_cast<CubeMapTexture*>(m_skybox->texture)->SetRightTexture("skybox_right");
+        reinterpret_cast<CubeMapTexture*>(m_skybox->texture)->SetTopTexture("skybox_top");
+        reinterpret_cast<CubeMapTexture*>(m_skybox->texture)->SetBottomTexture("skybox_bottom");
+    }
     skybox = new SkyBox("skybox");
     skybox->SetShader("nolight");
     skybox->SetMeshGroup(GRAPHICS->GetMeshGroup("cube"));
-    skybox->SetTextures();
+    skybox->material = GRAPHICS->GetMaterial("m_skybox");
 }
 
 void ObjectManager::Update()
@@ -60,6 +73,14 @@ void ObjectManager::Update()
     }
     need_to_be_erased.clear();
     light_to_be_erased.clear();
+    //TODO: Bind framebufferobject
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+    //TODO: use shader to generate environment textures
+    
+    //TODO: apply to the center object
+    
+    //TODO: UnBind framebufferobject
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void ObjectManager::RegisterObject(Object* obj)
@@ -85,8 +106,6 @@ void ObjectManager::DeleteAll()
     {
         light_to_be_erased.push_back(light->first);
     }
-    delete skybox;
-    skybox = nullptr;
 }
 
 Object* ObjectManager::GetObject(std::string id)
