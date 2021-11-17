@@ -58,13 +58,6 @@ void TestLevel1::Init()
 
 
 
-    skysphere = new Object("skysphere");
-    skysphere->SetMeshGroup(GRAPHICS->GetMeshGroup("customsphere"));
-    skysphere->SetShader("nolight");
-    skysphere->material = GRAPHICS->GetMaterial("m_skysphere");
-    skysphere->transform.Scale(glm::vec3(99.f));
-    skysphere->drawmode = 1;
-
 
     for (int i = 0; i < 8; i++)
     {

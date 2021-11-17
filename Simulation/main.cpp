@@ -40,6 +40,9 @@ int main()
     GRAPHICS->CompileShader("v_nolight", "f_nolight", "nolight");
 
 
+
+
+
     GRAPHICS->LoadTexture("../images/graycamo.png", "jet");
     GRAPHICS->LoadTexture("../images/me.jpg", "me");
     GRAPHICS->LoadTexture("../images/space.png", "space");
@@ -50,7 +53,14 @@ int main()
     GRAPHICS->LoadTexture("../images/metal_roof_diff_512x512.png", "roofdiff");
     GRAPHICS->LoadTexture("../images/metal_roof_spec_512x512.png", "roofspec");
 
-    //objloader.loadObject("../models/sexygirl.obj", "sexygirl");
+    GRAPHICS->LoadTexture("../images/skybox/Daylight Box_Front.bmp", "skybox_front");
+    GRAPHICS->LoadTexture("../images/skybox/Daylight Box_Back.bmp", "skybox_back");
+    GRAPHICS->LoadTexture("../images/skybox/Daylight Box_Right.bmp", "skybox_right");
+    GRAPHICS->LoadTexture("../images/skybox/Daylight Box_Left.bmp", "skybox_left");
+    GRAPHICS->LoadTexture("../images/skybox/Daylight Box_Top.bmp", "skybox_top");
+    GRAPHICS->LoadTexture("../images/skybox/Daylight Box_Bottom.bmp", "skybox_bottom");
+
+    objloader.loadObject("../models/starwars-millennium-falcon.obj", "stwas");
     objloader.loadObject("../models/girl.obj", "girl");
     objloader.loadObject("../models/jet.obj", "jet");
     objloader.loadObject("../models/bumblebee.obj", "bumblebee");

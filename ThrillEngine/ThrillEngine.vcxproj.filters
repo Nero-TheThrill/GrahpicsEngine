@@ -73,6 +73,9 @@
     <Filter Include="Graphics\stbi_image">
       <UniqueIdentifier>{e620ba55-a88e-406f-a692-f24482f16fd5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\SkyBoxObject">
+      <UniqueIdentifier>{51f6ed25-a032-407d-ab09-71747a9800f4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -159,6 +162,9 @@
     </ClCompile>
     <ClCompile Include="stb_image.cpp">
       <Filter>Graphics\stbi_image</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyBox.cpp">
+      <Filter>Object\SkyBoxObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -260,6 +266,9 @@
     </ClInclude>
     <ClInclude Include="..\includes\source\stb_image.h">
       <Filter>Graphics\stbi_image</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyBox.h">
+      <Filter>Object\SkyBoxObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

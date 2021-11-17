@@ -1,6 +1,8 @@
 #include "ObjectManager.h"
 #include <iostream>
 
+#include "Graphics.h"
+
 ObjectManager* OBJECTMANAGER = nullptr;
 
 ObjectManager::ObjectManager()
@@ -8,15 +10,25 @@ ObjectManager::ObjectManager()
     OBJECTMANAGER = this;
     genObjectsNum = 0;
     std::cout << "Object Manager Constructor Called" << std::endl;
+    //TODO: Initialize framebufferobject
 }
 
 void ObjectManager::Init()
 {
-
+    skybox = new SkyBox("skybox");
+    skybox->SetShader("nolight");
+    skybox->SetMeshGroup(GRAPHICS->GetMeshGroup("cube"));
+    skybox->SetTextures();
 }
 
 void ObjectManager::Update()
 {
+    if (skybox != nullptr)
+    {
+        glDepthMask(GL_FALSE);
+        skybox->Update();
+        glDepthMask(GL_TRUE);
+    }
     for (std::unordered_map<unsigned, LightObject*>::iterator light = lightobjects.begin(); light != lightobjects.end(); light++)
     {
         if (!light->second->alive)
@@ -73,6 +85,8 @@ void ObjectManager::DeleteAll()
     {
         light_to_be_erased.push_back(light->first);
     }
+    delete skybox;
+    skybox = nullptr;
 }
 
 Object* ObjectManager::GetObject(std::string id)
@@ -105,6 +119,8 @@ ObjectManager::~ObjectManager()
     {
         delete obj.second;
     }
+    delete skybox;
+    skybox = nullptr;
     std::cout << "ObjectManager Destructor Called" << std::endl;
 }
 

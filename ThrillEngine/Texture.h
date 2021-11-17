@@ -21,3 +21,9 @@ private:
    
 };
 
+
+//class CubeMapTexture : public Texture
+//{
+//private:
+//    std::vector< Texture2D*>   m_cubeMapTextures;
+//};

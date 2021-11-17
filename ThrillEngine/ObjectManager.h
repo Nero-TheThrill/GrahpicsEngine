@@ -3,6 +3,8 @@
 #include "LightObject.h"
 #include "unordered_map"
 #include "Object.h"
+#include "SkyBox.h"
+
 class ObjectManager : public EngineCore
 {
 public:
@@ -22,5 +24,8 @@ private:
     std::vector<decltype(objects)::key_type> need_to_be_erased;
     std::unordered_map<unsigned, LightObject*> lightobjects;
     std::vector<decltype(lightobjects)::key_type> light_to_be_erased;
+    
+    SkyBox* skybox;
+
 };
 extern ObjectManager* OBJECTMANAGER;

@@ -38,20 +38,12 @@ void TestLevel::Init()
     orbit->transform.Scale(glm::vec3(9, 9, 9));
 
 
-    plane = new Object("plane");
-    plane->SetMeshGroup(GRAPHICS->GetMeshGroup("quad"));
-    plane->SetShader("phong_shading");
-    plane->material = GRAPHICS->GetMaterial("m_plane");
-    plane->transform.Translate(glm::vec3(0, -7, 0));
-    plane->transform.Rotate(-90, glm::vec3(1, 0, 0));
-    plane->transform.Scale(glm::vec3(20.f));
-    plane->drawmode = 1;
 
 
    
 
     obj = new Object("obj");
-    obj->SetMeshGroup(GRAPHICS->GetMeshGroup("cube"));
+    obj->SetMeshGroup(GRAPHICS->GetMeshGroup("cube2"));
     obj->SetShader("phong_shading");
     obj->material= GRAPHICS->GetMaterial("m_obj");
     obj->mapping_mode = 3;
@@ -69,7 +61,7 @@ void TestLevel::Init()
     ramus->drawmode = 1;
 
     dragon = new Object("dragon");
-    dragon->SetMeshGroup(GRAPHICS->GetMeshGroup("dragon"));
+    dragon->SetMeshGroup(GRAPHICS->GetMeshGroup("stwas"));
     dragon->SetShader("phong_shading");
    // dragon->material = GRAPHICS->GetMaterial("m_dragon");
    // dragon->SetColor(glm::vec3(0.6f));
@@ -124,12 +116,12 @@ void TestLevel::Init()
 
   
 
-    skysphere = new Object("skysphere");
-    skysphere->SetMeshGroup(GRAPHICS->GetMeshGroup("customsphere"));
-    skysphere->SetShader("nolight");
-    skysphere->material = GRAPHICS->GetMaterial("m_skysphere");
-    skysphere->transform.Scale(glm::vec3(500.f));
-    skysphere->drawmode = 1;
+    //skysphere = new Object("skysphere");
+    //skysphere->SetMeshGroup(GRAPHICS->GetMeshGroup("customsphere"));
+    //skysphere->SetShader("nolight");
+    //skysphere->material = GRAPHICS->GetMaterial("m_skysphere");
+    //skysphere->transform.Scale(glm::vec3(500.f));
+    //skysphere->drawmode = 1;
 
     IMGUIMANAGER->Init();
 }
