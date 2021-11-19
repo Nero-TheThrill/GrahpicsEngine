@@ -40,6 +40,10 @@ int main()
     GRAPHICS->CompileShader("v_nolight", "f_nolight", "nolight");
 
 
+    GRAPHICS->LoadShader("../shaders/phong_shading_cube.vert", "v_phong_shading_cube", ShaderType::VERTEX);
+    GRAPHICS->LoadShader("../shaders/phong_shading_cube.frag", "f_phong_shading_cube", ShaderType::FRAGMENT);
+    GRAPHICS->CompileShader("v_phong_shading_cube", "f_phong_shading_cube", "phong_shading_cube");
+
 
 
 
@@ -60,7 +64,7 @@ int main()
     GRAPHICS->LoadTexture("../images/skybox/TropicalSunnyDay_py.jpg", "skybox_top");
     GRAPHICS->LoadTexture("../images/skybox/TropicalSunnyDay_ny.jpg", "skybox_bottom");
 
-    objloader.loadObject("../models/desertcity.obj", "desertcity");
+   // objloader.loadObject("../models/desertcity.obj", "desertcity");
     objloader.loadObject("../models/girl.obj", "girl");
     objloader.loadObject("../models/jet.obj", "jet");
     objloader.loadObject("../models/bumblebee.obj", "bumblebee");

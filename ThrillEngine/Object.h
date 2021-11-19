@@ -23,7 +23,6 @@ public:
     Transform transform;
     MeshGroup* mesh;
     Shader shader, draw_normal_shader;
-    Texture texture;
     Material* material;
     glm::vec3 color{ 1.0 };
     std::string name;
@@ -31,4 +30,5 @@ public:
     int mapping_mode = 0; // 0: default, 1: spherical, 2: cylindrical, 3: planar
     bool should_calculate_uv_in_gpu = true;
     bool mapping_with_normal = false;
+    bool isUsingCubeMapTexture = false;
 };

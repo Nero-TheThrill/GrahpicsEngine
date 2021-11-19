@@ -28,7 +28,12 @@ private:
     SkyBox* skybox;
     //TODO: make frambufferobject
     GLuint FBO=0;
-    int textures;
+    GLuint texture_top, texture_bottom, texture_front, texture_back, texture_left, texture_right;
+    GLuint DepthBuffer = 0;
+    Material* m_environment =nullptr;
+    glm::vec3 centerobj_position;
+    glm::mat4 projection, view;
+    glm::vec3 direction;
 
 };
 extern ObjectManager* OBJECTMANAGER;

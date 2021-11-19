@@ -1,6 +1,6 @@
 #version 450 core
-out vec4 FragColor;
-
+layout(location =0) out vec4 FragColor;
+layout(location =1) out float depth;
 in vec3 Normal;
 in vec3 FragPosition;
 in vec2 TexCoord;
@@ -260,4 +260,5 @@ void main()
 	{
 		FragColor = vec4(result*objectColor,1.0);
 	}
+	depth=(FragPosition.z-near)/(far-near);
 }

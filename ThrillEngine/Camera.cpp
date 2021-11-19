@@ -65,13 +65,13 @@ void Camera::RotateXaxis(float degree)
 
 void Camera::MoveForward(float amount)
 {
-    cam_position += (cam_target)*amount * TIMEMANAGER->deltaTime * 2.5f;
+    cam_position += glm::normalize((cam_target))*amount * TIMEMANAGER->deltaTime * 2.5f;
     view = glm::lookAt(cam_position, cam_position + cam_target, up);
 }
 
 void Camera::MoveSide(float amount)
 {
-    cam_position += -glm::cross(up,cam_target)*amount * TIMEMANAGER->deltaTime * 2.5f;
+    cam_position += -glm::normalize(glm::cross(up,cam_target))*amount * TIMEMANAGER->deltaTime * 2.5f;
     view = glm::lookAt(cam_position, cam_position + cam_target, up);
 }
 

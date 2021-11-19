@@ -13,6 +13,10 @@ public:
     void SetAmbientTexture(const std::string& texture_id);
     void SetDiffuseTexture(const std::string& texture_id);
     void SetSpecularTexture(const std::string& texture_id);
+    void SetTexture(int texture_id);
+    void SetAmbientTexture(int texture_id);
+    void SetDiffuseTexture(int texture_id);
+    void SetSpecularTexture(int texture_id);
     int texture = -1;
     int ambient_texture = -1;
     int diffuse_texture = -1;

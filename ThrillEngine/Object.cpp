@@ -10,9 +10,7 @@
 
 void Object::Update()
 {
-    mesh->mapping_mode = mapping_mode;
-    mesh->should_calculate_uv_in_gpu = should_calculate_uv_in_gpu;
-    mesh->mapping_with_normal = mapping_with_normal;
+
     Draw();
 }
 
@@ -40,7 +38,6 @@ Object::Object(std::string n, Object* obj)
     name = n;
     color = obj->color;
     transform = obj->transform;
-    texture = obj->texture;
     mesh = obj->mesh;
     drawmode = obj->drawmode;
     shouldDrawNormals = obj->shouldDrawNormals;
@@ -71,6 +68,7 @@ void Object::Draw()
     {
         mesh->mapping_mode = mapping_mode;
         mesh->should_calculate_uv_in_gpu = should_calculate_uv_in_gpu;
+        mesh->mapping_with_normal = mapping_with_normal;
         if(material!=nullptr)
             mesh->SetMaterial(material);
         mesh->ChangeMode(drawmode);
@@ -78,7 +76,6 @@ void Object::Draw()
         shader.set("model", transform.GetTransformMatrix());
         shader.set("objectColor", color);
         shader.set("item_selected", item_selected);
-
         mesh->Draw(shader);
         glUseProgram(0);
         if (shouldDrawNormals)
@@ -89,6 +86,25 @@ void Object::Draw()
             mesh->DrawNormals();
             glUseProgram(0);
         }
+    }
+}
+
+void Object::DrawToFBO()
+{
+    if (mesh != nullptr)
+    {
+        mesh->mapping_mode = mapping_mode;
+        mesh->should_calculate_uv_in_gpu = should_calculate_uv_in_gpu;
+        mesh->mapping_with_normal = mapping_with_normal;
+        if (material != nullptr)
+            mesh->SetMaterial(material);
+        mesh->ChangeMode(drawmode);
+        glUseProgram(shader.program_handle);
+        shader.set("model", transform.GetTransformMatrix());
+        shader.set("objectColor", color);
+        shader.set("item_selected", item_selected);
+        mesh->Draw(shader);
+        glUseProgram(0);
     }
 }
 

@@ -27,7 +27,7 @@ void Engine::Init()
     for (auto* e_core : enginecore)
         e_core->Init();
     Input::Init();
-    APPLICATION->AppSet(1380, 600);
+    APPLICATION->AppSet(800 , 800);
 }
 
 void Engine::Loop()

@@ -56,13 +56,13 @@ void TestLevel::Init()
     ramus->transform.Rotate(45, glm::vec3(0, 1, 0));
     ramus->drawmode = 1;
 
-    city = new Object("city");
-    city->SetMeshGroup(GRAPHICS->GetMeshGroup("desertcity"));
-    city->SetShader("phong_shading");
-    city->transform.Translate(glm::vec3(0, -10, 0));
-    city->transform.Scale(glm::vec3(3000.f));
-    city->transform.Rotate(270, glm::vec3(0, 1, 0));
-    city->drawmode = 1;
+    //city = new Object("city");
+    //city->SetMeshGroup(GRAPHICS->GetMeshGroup("desertcity"));
+    //city->SetShader("phong_shading");
+    //city->transform.Translate(glm::vec3(0, -10, 0));
+    //city->transform.Scale(glm::vec3(3000.f));
+    //city->transform.Rotate(270, glm::vec3(0, 1, 0));
+    //city->drawmode = 1;
 
     bumblebee = new Object("bumblebee");
     bumblebee->SetMeshGroup(GRAPHICS->GetMeshGroup("bumblebee"));
@@ -96,14 +96,16 @@ void TestLevel::Init()
 
 
     centerobj = new Object("centerobject");
-    centerobj->SetMeshGroup(GRAPHICS->GetMeshGroup("bunny_high_poly"));
-    centerobj->SetShader("phong_shading");
+    centerobj->SetMeshGroup(GRAPHICS->GetMeshGroup("customsphere"));
+    centerobj->SetShader("phong_shading_cube");
     centerobj->material = GRAPHICS->GetMaterial("m_centerobj");
     centerobj->transform.Translate(glm::vec3(0, -3.f, 0.0f));
     centerobj->transform.Scale(glm::vec3(3.f));
     centerobj->drawmode = 1;
     centerobj->mapping_mode = 1;
+    centerobj->isUsingCubeMapTexture = true;
     GRAPHICS->centerobj = centerobj;
+
 
     IMGUIMANAGER->Init();
 }

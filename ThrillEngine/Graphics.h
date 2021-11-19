@@ -57,6 +57,7 @@ public:
     std::unordered_map < std::string, std::pair<Shader, std::pair<std::string, std::string>>> GetAllShaders();
     Camera camera;
     Object* centerobj;
+    unsigned int uboMatrices = 0, uboLight = 0;
 private:
     std::unordered_map<std::string /*id*/, Material* /*material*/> materials;
     std::unordered_map<std::string /*id*/, MeshGroup* /*mesh*/> meshgroups;
@@ -66,7 +67,7 @@ private:
     std::unordered_map < std::string /*id*/, std::pair<Shader/*shader*/,std::pair<std::string/*vertex_id*/, std::string/*frag_id*/>>> shaders;
     std::unordered_map<std::string /*id*/, int /*texture*/> textures;
 
-    unsigned int uboMatrices = 0,uboLight=0;
+   
 
     glm::vec3 fog_color = glm::vec3(0.6, 0.6, 0.7) , global_ambient_color = glm::vec3(1, 1, 1);
 

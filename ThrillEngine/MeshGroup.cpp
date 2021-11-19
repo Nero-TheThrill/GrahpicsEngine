@@ -29,6 +29,7 @@ void MeshGroup::Draw(Shader shader)
     }
 }
 
+
 void MeshGroup::DrawNormals()
 {
     for (auto mesh : model_meshes)

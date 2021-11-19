@@ -61,6 +61,25 @@ void Texture::SetSpecularTexture(const std::string& texture_id)
     specular_texture = GRAPHICS->GetTexture(texture_id);
 }
 
+void Texture::SetTexture(int texture_id)
+{
+    texture = texture_id;
+}
+
+void Texture::SetAmbientTexture(int texture_id)
+{
+    ambient_texture = texture_id;
+}
+
+void Texture::SetDiffuseTexture(int texture_id)
+{
+    diffuse_texture = texture_id;
+}
+
+void Texture::SetSpecularTexture(int texture_id)
+{
+    specular_texture = texture_id;
+}
 
 
 void CubeMapTexture::Init()
