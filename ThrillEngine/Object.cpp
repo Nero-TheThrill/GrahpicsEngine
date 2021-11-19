@@ -89,24 +89,6 @@ void Object::Draw()
     }
 }
 
-void Object::DrawToFBO()
-{
-    if (mesh != nullptr)
-    {
-        mesh->mapping_mode = mapping_mode;
-        mesh->should_calculate_uv_in_gpu = should_calculate_uv_in_gpu;
-        mesh->mapping_with_normal = mapping_with_normal;
-        if (material != nullptr)
-            mesh->SetMaterial(material);
-        mesh->ChangeMode(drawmode);
-        glUseProgram(shader.program_handle);
-        shader.set("model", transform.GetTransformMatrix());
-        shader.set("objectColor", color);
-        shader.set("item_selected", item_selected);
-        mesh->Draw(shader);
-        glUseProgram(0);
-    }
-}
 
 
 

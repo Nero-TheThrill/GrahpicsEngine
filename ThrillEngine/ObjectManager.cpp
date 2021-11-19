@@ -1,12 +1,14 @@
 #include "ObjectManager.h"
 #include <iostream>
 
+#include "Application.h"
 #include "Graphics.h"
 
 ObjectManager* OBJECTMANAGER = nullptr;
 
 ObjectManager::ObjectManager()
 {
+    int width=static_cast<int>(APPLICATION->GetWindowSize().x), height = static_cast<int>(APPLICATION->GetWindowSize().y);
     OBJECTMANAGER = this;
     genObjectsNum = 0;
     std::cout << "Object Manager Constructor Called" << std::endl;
@@ -15,32 +17,32 @@ ObjectManager::ObjectManager()
     glBindFramebuffer(GL_FRAMEBUFFER, FBO);
     glGenTextures(1, &texture_top);
     glBindTexture(GL_TEXTURE_2D, texture_top);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,800,800, 0, GL_RGB, GL_UNSIGNED_INT, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width,height, 0, GL_RGB, GL_UNSIGNED_INT, 0);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glGenTextures(1, &texture_bottom);
     glBindTexture(GL_TEXTURE_2D, texture_bottom);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 800, 800, 0, GL_RGB, GL_UNSIGNED_INT, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_INT, 0);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glGenTextures(1, &texture_front);
     glBindTexture(GL_TEXTURE_2D, texture_front);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 800, 800, 0, GL_RGB, GL_UNSIGNED_INT, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_INT, 0);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glGenTextures(1, &texture_back);
     glBindTexture(GL_TEXTURE_2D, texture_back);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 800, 800, 0, GL_RGB, GL_UNSIGNED_INT, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_INT, 0);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glGenTextures(1, &texture_left);
     glBindTexture(GL_TEXTURE_2D, texture_left);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 800, 800, 0, GL_RGB, GL_UNSIGNED_INT, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_INT, 0);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glGenTextures(1, &texture_right);
     glBindTexture(GL_TEXTURE_2D, texture_right);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 800, 800, 0, GL_RGB, GL_UNSIGNED_INT, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_INT, 0);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -390,6 +392,27 @@ void ObjectManager::Update()
     }
 
 
+}
+
+void ObjectManager::EnvironmentTextureCallback(int w, int h)
+{
+    glBindTexture(GL_TEXTURE_2D, texture_top);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_INT, 0);
+
+    glBindTexture(GL_TEXTURE_2D, texture_bottom);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_INT, 0);
+
+    glBindTexture(GL_TEXTURE_2D, texture_front);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_INT, 0);
+
+    glBindTexture(GL_TEXTURE_2D, texture_back);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_INT, 0);
+
+    glBindTexture(GL_TEXTURE_2D, texture_left);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_INT, 0);
+
+    glBindTexture(GL_TEXTURE_2D, texture_right);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_INT, 0);
 }
 
 void ObjectManager::RegisterObject(Object* obj)

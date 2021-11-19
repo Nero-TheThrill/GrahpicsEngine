@@ -11,6 +11,7 @@ public:
     ObjectManager();
     void Init() override;
     void Update() override;
+    void EnvironmentTextureCallback(int w, int h);
     ~ObjectManager();
     void RegisterObject(Object* obj);
     void RegisterLight(LightObject* light);

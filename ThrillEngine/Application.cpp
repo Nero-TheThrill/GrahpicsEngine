@@ -1,10 +1,12 @@
 #include "Application.h"
 #include <iostream>
 #include "Input.h"
+#include "ObjectManager.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
+    OBJECTMANAGER->EnvironmentTextureCallback(width, height);
 }
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -28,6 +30,8 @@ void window_size_callback(GLFWwindow* window, int w, int h)
 {
     glViewport(0, 0, w, h);
     APPLICATION->SetWindowSize(w, h);
+    OBJECTMANAGER->EnvironmentTextureCallback(w,h);
+
 }
 Application* APPLICATION = nullptr;
 
