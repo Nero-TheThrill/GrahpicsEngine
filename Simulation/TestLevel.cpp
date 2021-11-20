@@ -56,13 +56,13 @@ void TestLevel::Init()
     ramus->transform.Rotate(45, glm::vec3(0, 1, 0));
     ramus->drawmode = 1;
 
-    //city = new Object("city");
-    //city->SetMeshGroup(GRAPHICS->GetMeshGroup("desertcity"));
-    //city->SetShader("phong_shading");
-    //city->transform.Translate(glm::vec3(0, -10, 0));
-    //city->transform.Scale(glm::vec3(3000.f));
-    //city->transform.Rotate(270, glm::vec3(0, 1, 0));
-    //city->drawmode = 1;
+    city = new Object("city");
+    city->SetMeshGroup(GRAPHICS->GetMeshGroup("desertcity"));
+    city->SetShader("phong_shading");
+    city->transform.Translate(glm::vec3(0, -10, 0));
+    city->transform.Scale(glm::vec3(3000.f));
+    city->transform.Rotate(270, glm::vec3(0, 1, 0));
+    city->drawmode = 1;
 
     bumblebee = new Object("bumblebee");
     bumblebee->SetMeshGroup(GRAPHICS->GetMeshGroup("bumblebee"));

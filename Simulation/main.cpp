@@ -64,7 +64,7 @@ int main()
     GRAPHICS->LoadTexture("../images/skybox/TropicalSunnyDay_py.jpg", "skybox_top");
     GRAPHICS->LoadTexture("../images/skybox/TropicalSunnyDay_ny.jpg", "skybox_bottom");
 
-    //objloader.loadObject("../models/desertcity.obj", "desertcity");
+    objloader.loadObject("../models/desertcity.obj", "desertcity");
     objloader.loadObject("../models/girl.obj", "girl");
     objloader.loadObject("../models/jet.obj", "jet");
     objloader.loadObject("../models/bumblebee.obj", "bumblebee");
