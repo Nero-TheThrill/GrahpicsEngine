@@ -152,7 +152,7 @@ vec3 CalculateLight(Light light)
 void main()
 {
 
-	vec3 tmpVec3=pos,abstmpVec3=abs(tmpVec3);
+	vec3 tmpVec3=normalize(norm),abstmpVec3=abs(tmpVec3);
 	if (abstmpVec3.x >= abstmpVec3.y && abstmpVec3.x >= abstmpVec3.z)
     {
         if(tmpVec3.x < 0)
