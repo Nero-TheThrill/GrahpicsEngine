@@ -37,7 +37,7 @@ void LineMesh::UnBind()
 
 }
 
-void LineMesh::Draw(Shader shader)
+void LineMesh::Draw(Shader shader, Material* custom_material)
 {
     Bind();
     glDrawArrays(GL_LINES,0, static_cast<GLsizei>(positions.size()));

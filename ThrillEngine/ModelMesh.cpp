@@ -67,7 +67,7 @@ void ModelMesh::UnBind()
     }
 }
 
-void ModelMesh::Draw(Shader shader)
+void ModelMesh::Draw(Shader shader,Material* custom_material)
 {
     BindData();
     shader.set("maxYval", maxYval);
@@ -76,8 +76,15 @@ void ModelMesh::Draw(Shader shader)
     shader.set("should_use_gpuside_uv", should_calculate_uv_in_gpu);
     shader.set("mapping_with_normal", mapping_with_normal);
 
-    if(material!=nullptr)
-        material->Update(shader);
+    if (custom_material != nullptr)
+    {
+        custom_material->Update(shader);
+    }
+    else
+    {
+        if (material != nullptr)
+            material->Update(shader);
+    }
 
     if (n_mode == 0)
     {

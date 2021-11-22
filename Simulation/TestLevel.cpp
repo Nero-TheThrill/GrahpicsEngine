@@ -39,40 +39,43 @@ void TestLevel::Init()
 
 
 
-    obj = new Object("obj");
-    obj->SetMeshGroup(GRAPHICS->GetMeshGroup("cube2"));
-    obj->SetShader("phong_shading");
-    obj->material= GRAPHICS->GetMaterial("m_obj");
-    obj->mapping_mode = 3;
-    obj->transform.Translate(glm::vec3(0, 4.f, 0.0f));
-    obj->transform.Scale(glm::vec3(2.f));
-    obj->drawmode = 1;
+    //obj = new Object("obj");
+    //obj->SetMeshGroup(GRAPHICS->GetMeshGroup("cube2"));
+    //obj->SetShader("phong_shading");
+    //obj->material= GRAPHICS->GetMaterial("m_obj");
+    //obj->mapping_mode = 3;
+    //obj->transform.Translate(glm::vec3(0, 4.f, 0.0f));
+    //obj->transform.Scale(glm::vec3(2.f));
+    //obj->drawmode = 1;
 
     ramus = new Object("ramus");
     ramus->SetMeshGroup(GRAPHICS->GetMeshGroup("ramus"));
     ramus->SetShader("phong_shading");
-    ramus->transform.Translate(glm::vec3(-28.7, -22.6f, -72.f));
-    ramus->transform.Scale(glm::vec3(10.f));
+    //ramus->transform.Translate(glm::vec3(-28.7, -22.6f, -72.f));
+    //ramus->transform.Scale(glm::vec3(10.f));
+    ramus->transform.Translate(glm::vec3(-8, 0, -6.f));
+    ramus->transform.Scale(glm::vec3(2.f));
     ramus->transform.Rotate(45, glm::vec3(0, 1, 0));
     ramus->drawmode = 1;
 
     city = new Object("city");
     city->SetMeshGroup(GRAPHICS->GetMeshGroup("desertcity"));
     city->SetShader("phong_shading");
-    city->transform.Translate(glm::vec3(0, -10, 0));
-    city->transform.Scale(glm::vec3(3000.f));
+    city->transform.Translate(glm::vec3(0, -20, 0));
+    city->transform.Scale(glm::vec3(50.f));
     city->transform.Rotate(270, glm::vec3(0, 1, 0));
     city->drawmode = 1;
 
     bumblebee = new Object("bumblebee");
-    bumblebee->SetMeshGroup(GRAPHICS->GetMeshGroup("bumblebee"));
-    bumblebee->SetShader("phong_shading");
+    bumblebee->SetMeshGroup(GRAPHICS->GetMeshGroup("bunny_high_poly"));
+    bumblebee->SetShader("phong_shading_cube");
     bumblebee->SetColor(glm::vec3(0.6f));
-    bumblebee->transform.Translate(glm::vec3(48, -5.2f, -74.3f));
-    bumblebee->transform.Scale(glm::vec3(10.f));
+    bumblebee->transform.Translate(glm::vec3(5, 0, 5));
+    bumblebee->transform.Scale(glm::vec3(2.f));
     bumblebee->transform.Rotate(-45, glm::vec3(0, 1, 0));
     bumblebee->drawmode = 1;
-
+    bumblebee->isUsingCubeMapTexture = true;
+    bumblebee->environmentmapping_mode = 1;
 
 
     jet1 = new Object("jet1");
@@ -122,7 +125,7 @@ void TestLevel::Update()
         for (int i = 0; i < IMGUIMANAGER->lightNumber; i++)
         {
             LightObject* lightsource = new LightObject("light" + std::to_string(i));
-            lightsource->SetMeshGroup(GRAPHICS->GetMeshGroup("customsphere"));
+            lightsource->SetMeshGroup(GRAPHICS->GetMeshGroup("sphere"));
             lightsource->SetShader("light");
             lightsource->transform.Scale(glm::vec3(0.2, 0.2, 0.2));
             lightsource->drawmode = 1;
@@ -224,43 +227,43 @@ void TestLevel::Update()
     }
     if (Input::IsPressed(GLFW_KEY_Q))
     {
-        GRAPHICS->camera.Move(glm::vec3(0, 1, 0));
+        GRAPHICS->camera.Move(glm::vec3(0, 2, 0));
     }
     if (Input::IsPressed(GLFW_KEY_E))
     {
-        GRAPHICS->camera.Move(glm::vec3(0, -1, 0));
+        GRAPHICS->camera.Move(glm::vec3(0, -2, 0));
     }
     if (Input::IsPressed(GLFW_KEY_D))
     {
-        GRAPHICS->camera.MoveSide(2);
+        GRAPHICS->camera.MoveSide(5);
     }
     if (Input::IsPressed(GLFW_KEY_A))
     {
-        GRAPHICS->camera.MoveSide(-2);
+        GRAPHICS->camera.MoveSide(-5);
     }
     if (Input::IsPressed(GLFW_KEY_W))
     {
-        GRAPHICS->camera.MoveForward(2);
+        GRAPHICS->camera.MoveForward(5);
     }
     if (Input::IsPressed(GLFW_KEY_S))
     {
-        GRAPHICS->camera.MoveForward(-2);
+        GRAPHICS->camera.MoveForward(-5);
     }
     if (Input::IsPressed(GLFW_KEY_RIGHT))
     {
-        GRAPHICS->camera.RotateYaxis(2 * TIMEMANAGER->deltaTime * 10.f);
+        GRAPHICS->camera.RotateYaxis(5 * TIMEMANAGER->deltaTime * 10.f);
     }
     if (Input::IsPressed(GLFW_KEY_LEFT))
     {
-        GRAPHICS->camera.RotateYaxis(-2 * TIMEMANAGER->deltaTime * 10.f);
+        GRAPHICS->camera.RotateYaxis(-5 * TIMEMANAGER->deltaTime * 10.f);
     }
     if (Input::IsPressed(GLFW_KEY_DOWN))
     {
-        GRAPHICS->camera.RotateXaxis(2 * TIMEMANAGER->deltaTime * 10.f);
+        GRAPHICS->camera.RotateXaxis(5 * TIMEMANAGER->deltaTime * 10.f);
     }
     if (Input::IsPressed(GLFW_KEY_UP))
     {
-        GRAPHICS->camera.RotateXaxis(-2 * TIMEMANAGER->deltaTime * 10.f);
+        GRAPHICS->camera.RotateXaxis(-5 * TIMEMANAGER->deltaTime * 10.f);
     }
     if (Input::IsTriggered(GLFW_KEY_N))
     {

@@ -32,129 +32,129 @@ void imGUIManager::Update()
 
 
         ImGui::NewFrame();
+        {        ImGui::ShowDemoWindow();
+        ImGui::Begin("GraphicsEngine GUI");
+        ImGuiIO& io = ImGui::GetIO();
+        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+        if (ImGui::Button("Reload Shader"))
+            GRAPHICS->ReLoadShader();
+        ImGui::SameLine();
+        if (ImGui::Button("Unselect All"))
         {
-            ImGui::Begin("GraphicsEngine GUI");
-            ImGuiIO& io = ImGui::GetIO();
-            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-            if (ImGui::Button("Reload Shader"))
-                GRAPHICS->ReLoadShader();
-            ImGui::SameLine();
-            if (ImGui::Button("Unselect All"))
+            if (current_item != nullptr)
+                current_item->item_selected = false;
+            if (current_light != nullptr)
+                current_light->item_selected = false;
+            current_light = nullptr;
+            current_item = nullptr;
+
+        }
+        ImGui::NewLine();
+        ImGui::Separator();
+        ImGui::NewLine();
+
+        glm::vec3 bgcolor = GRAPHICS->background_color;
+        ImGui::DragFloat3("background color", glm::value_ptr(bgcolor), 0.01f, 0, 1);
+        GRAPHICS->SetBackgroundColor(glm::vec4(bgcolor, 1.0f));
+
+
+        std::unordered_map<unsigned, Object*> objects = OBJECTMANAGER->GetAllObjects();
+
+        if (ImGui::BeginCombo("select object", current_item != nullptr ? current_item->name.c_str() : ""))
+        {
+
+            prev_item = current_item;
+
+            for (auto obj : objects)
             {
+                if (obj.second != nullptr)
+                {
+                    bool is_selected = (current_item == obj.second);
+                    if (ImGui::Selectable(obj.second->name.c_str(), is_selected))
+                    {
+                        current_item = obj.second;
+                    }
+                    if (is_selected)
+                        ImGui::SetItemDefaultFocus();
+
+                }
+            }
+            if (current_item != prev_item)
+            {
+                if (prev_item != nullptr)
+                {
+                    prev_item->item_selected = false;
+                }
                 if (current_item != nullptr)
-                    current_item->item_selected = false;
-                if (current_light != nullptr)
-                    current_light->item_selected = false;
-                current_light = nullptr;
-                current_item = nullptr;
+                {
+                    current_item->item_selected = true;
+                }
 
             }
-            ImGui::NewLine();
-            ImGui::Separator();
-            ImGui::NewLine();
+            ImGui::EndCombo();
+        }
+        if (current_item != nullptr)
+        {
+            glm::vec3 pos = current_item->transform.position;
+            ImGui::DragFloat3("translation", glm::value_ptr(pos), 0.1f, -FLT_MAX, FLT_MAX);
+            current_item->transform.Translate(pos);
 
-            glm::vec3 bgcolor = GRAPHICS->background_color;
-            ImGui::DragFloat3("background color", glm::value_ptr(bgcolor), 0.01f, 0, 1);
-            GRAPHICS->SetBackgroundColor(glm::vec4(bgcolor, 1.0f));
+            glm::vec3 scale = current_item->transform.current_scale;
+            ImGui::DragFloat3("scale", glm::value_ptr(scale), 0.1f, -FLT_MAX, FLT_MAX);
+            current_item->transform.Scale(scale);
 
+            glm::vec3 rotate = current_item->transform.current_rotate_axis;
+            float degree = current_item->transform.current_rotate_degree;
+            ImGui::DragFloat3("rotate axis", glm::value_ptr(rotate), 0.01f, -1, 1);
+            ImGui::DragFloat("degree", &degree);
+            current_item->transform.Rotate(degree, rotate);
 
-            std::unordered_map<unsigned, Object*> objects = OBJECTMANAGER->GetAllObjects();
+            std::unordered_map < std::string, std::pair<Shader, std::pair<std::string, std::string>>> shaders = GRAPHICS->GetAllShaders();
+            std::string current_shader = current_item->shader.name;
 
-            if (ImGui::BeginCombo("select object", current_item != nullptr ? current_item->name.c_str() : ""))
+            if (ImGui::BeginCombo("select shader", current_shader.c_str()))
             {
-
-                prev_item = current_item;
-
-                for (auto obj : objects)
+                for (auto shader : shaders)
                 {
-                    if (obj.second != nullptr)
+                    bool is_selected = (current_shader == shader.second.first.name);
+                    if (ImGui::Selectable(shader.second.first.name.c_str(), is_selected))
                     {
-                        bool is_selected = (current_item == obj.second);
-                        if (ImGui::Selectable(obj.second->name.c_str(), is_selected))
-                        {
-                            current_item = obj.second;
-                        }
-                        if (is_selected)
-                            ImGui::SetItemDefaultFocus();
-
+                        current_shader = shader.second.first.name;
+                        current_item->SetShader(shader.second.first.name);
                     }
-                }
-                if (current_item != prev_item)
-                {
-                    if (prev_item != nullptr)
-                    {
-                        prev_item->item_selected = false;
-                    }
-                    if (current_item != nullptr)
-                    {
-                        current_item->item_selected = true;
-                    }
-
+                    if (is_selected)
+                        ImGui::SetItemDefaultFocus();
                 }
                 ImGui::EndCombo();
             }
-            if (current_item != nullptr)
+
+            std::unordered_map<std::string, MeshGroup*> meshes = GRAPHICS->GetAllMeshGroups();
+            std::string current_mesh = current_item->mesh->name;
+            if (ImGui::BeginCombo("select mesh", current_mesh.c_str()))
             {
-                glm::vec3 pos = current_item->transform.position;
-                ImGui::DragFloat3("translation", glm::value_ptr(pos), 0.1f, -FLT_MAX, FLT_MAX);
-                current_item->transform.Translate(pos);
-
-                glm::vec3 scale = current_item->transform.current_scale;
-                ImGui::DragFloat3("scale", glm::value_ptr(scale), 0.1f, -FLT_MAX, FLT_MAX);
-                current_item->transform.Scale(scale);
-
-                glm::vec3 rotate = current_item->transform.current_rotate_axis;
-                float degree = current_item->transform.current_rotate_degree;
-                ImGui::DragFloat3("rotate axis", glm::value_ptr(rotate), 0.01f, -1, 1);
-                ImGui::DragFloat("degree", &degree);
-                current_item->transform.Rotate(degree, rotate);
-
-                std::unordered_map < std::string, std::pair<Shader, std::pair<std::string, std::string>>> shaders = GRAPHICS->GetAllShaders();
-                std::string current_shader = current_item->shader.name;
-
-                if (ImGui::BeginCombo("select shader", current_shader.c_str()))
+                for (auto mesh : meshes)
                 {
-                    for (auto shader : shaders)
+                    bool is_selected = (current_mesh == mesh.second->name);
+                    if (ImGui::Selectable(mesh.second->name.c_str(), is_selected))
                     {
-                        bool is_selected = (current_shader == shader.second.first.name);
-                        if (ImGui::Selectable(shader.second.first.name.c_str(), is_selected))
-                        {
-                            current_shader = shader.second.first.name;
-                            current_item->SetShader(shader.second.first.name);
-                        }
-                        if (is_selected)
-                            ImGui::SetItemDefaultFocus();
+                        current_mesh = mesh.second->name;
+                        current_item->SetMeshGroup(mesh.second);
                     }
-                    ImGui::EndCombo();
+                    if (is_selected)
+                        ImGui::SetItemDefaultFocus();
                 }
-
-                std::unordered_map<std::string, MeshGroup*> meshes = GRAPHICS->GetAllMeshGroups();
-                std::string current_mesh = current_item->mesh->name;
-                if (ImGui::BeginCombo("select mesh", current_mesh.c_str()))
-                {
-                    for (auto mesh : meshes)
-                    {
-                        bool is_selected = (current_mesh == mesh.second->name);
-                        if (ImGui::Selectable(mesh.second->name.c_str(), is_selected))
-                        {
-                            current_mesh = mesh.second->name;
-                            current_item->SetMeshGroup(mesh.second);
-                        }
-                        if (is_selected)
-                            ImGui::SetItemDefaultFocus();
-                    }
-                    ImGui::EndCombo();
-                }
-                int mode = current_item->drawmode;
-                ImGui::RadioButton("face normal", &mode, 0); ImGui::SameLine();
-                ImGui::RadioButton("vertex normal", &mode, 1);
-                current_item->drawmode = mode;
-                bool drawnormal = current_item->shouldDrawNormals;
-                ImGui::Checkbox("draw normals", &drawnormal);
-                current_item->shouldDrawNormals = drawnormal;
+                ImGui::EndCombo();
             }
+            int mode = current_item->drawmode;
+            ImGui::RadioButton("face normal", &mode, 0); ImGui::SameLine();
+            ImGui::RadioButton("vertex normal", &mode, 1);
+            current_item->drawmode = mode;
+            bool drawnormal = current_item->shouldDrawNormals;
+            ImGui::Checkbox("draw normals", &drawnormal);
+            current_item->shouldDrawNormals = drawnormal;
+        }
 
-            ImGui::End();
+        ImGui::End();
         }
 
         {
@@ -345,8 +345,8 @@ void imGUIManager::Update()
                 }
                 ImGui::EndCombo();
             }
-			if (prev_lightoption != lightoption)
-				current_light = nullptr;
+            if (prev_lightoption != lightoption)
+                current_light = nullptr;
             if (current_light != nullptr)
             {
                 if (ImGui::BeginCombo("light type", light_type[static_cast<int>(current_light->type)].c_str()))
@@ -405,24 +405,24 @@ void imGUIManager::Update()
                 ImGui::DragFloat("degree", &degree);
                 center_obj->transform.Rotate(degree, rotate);
 
-                std::unordered_map < std::string, std::pair<Shader, std::pair<std::string, std::string>>> shaders = GRAPHICS->GetAllShaders();
-                std::string current_shader = center_obj->shader.name;
+                //std::unordered_map < std::string, std::pair<Shader, std::pair<std::string, std::string>>> shaders = GRAPHICS->GetAllShaders();
+                //std::string current_shader = center_obj->shader.name;
 
-                if (ImGui::BeginCombo("select shader", current_shader.c_str()))
-                {
-                    for (auto shader : shaders)
-                    {
-                        bool is_selected = (current_shader == shader.second.first.name);
-                        if (ImGui::Selectable(shader.second.first.name.c_str(), is_selected))
-                        {
-                            current_shader = shader.second.first.name;
-                            center_obj->SetShader(shader.second.first.name);
-                        }
-                        if (is_selected)
-                            ImGui::SetItemDefaultFocus();
-                    }
-                    ImGui::EndCombo();
-                }
+                //if (ImGui::BeginCombo("select shader", current_shader.c_str()))
+                //{
+                //    for (auto shader : shaders)
+                //    {
+                //        bool is_selected = (current_shader == shader.second.first.name);
+                //        if (ImGui::Selectable(shader.second.first.name.c_str(), is_selected))
+                //        {
+                //            current_shader = shader.second.first.name;
+                //            center_obj->SetShader(shader.second.first.name);
+                //        }
+                //        if (is_selected)
+                //            ImGui::SetItemDefaultFocus();
+                //    }
+                //    ImGui::EndCombo();
+                //}
 
                 std::unordered_map<std::string, MeshGroup*> meshes = GRAPHICS->GetAllMeshGroups();
                 std::string current_mesh = center_obj->mesh->name;
@@ -441,55 +441,109 @@ void imGUIManager::Update()
                     }
                     ImGui::EndCombo();
                 }
-                int mode = center_obj->drawmode;
-                ImGui::RadioButton("face normal", &mode, 0); ImGui::SameLine();
-                ImGui::RadioButton("vertex normal", &mode, 1);
-                center_obj->drawmode = mode;
-                bool drawnormal = center_obj->shouldDrawNormals;
-                ImGui::Checkbox("draw normals", &drawnormal);
-                center_obj->shouldDrawNormals = drawnormal;
 
-                ImGui::NewLine();
-                ImGui::Separator();
-                ImGui::NewLine();
+                int mode = center_obj->environmentmapping_mode;
+                ImGui::RadioButton("Only reflection", &mode, 0); ImGui::SameLine();
+                ImGui::RadioButton("Only refraction", &mode, 1); ImGui::SameLine();
+                ImGui::RadioButton("Combination of both", &mode, 2);
+                center_obj->environmentmapping_mode = mode;
+                bool drawnormal = center_obj->isModePhongShading_EnvironmentMapping;
+                ImGui::Checkbox("PhongShading + EnvironmentMapping", &drawnormal);
+                center_obj->isModePhongShading_EnvironmentMapping = drawnormal;
 
-                mapping_option = center_obj->mapping_mode;
-                ImGui::RadioButton("default mapping", &mapping_option, 0); ImGui::SameLine();
-                ImGui::RadioButton("spherical mapping", &mapping_option, 1); ImGui::SameLine();
-                ImGui::RadioButton("cylindrical mapping", &mapping_option, 2); ImGui::SameLine();
-                ImGui::RadioButton("planar mapping", &mapping_option, 3);
-                center_obj->mapping_mode = mapping_option;
-
-                ImGui::Separator();
-
-                int mapping_with_what = center_obj->mapping_with_normal ? 1 : 0;
-                ImGui::RadioButton("mapping with position", &mapping_with_what, 0); ImGui::SameLine();
-                ImGui::RadioButton("mapping with normal", &mapping_with_what, 1);
-                center_obj->mapping_with_normal = (mapping_with_what == 1);
-
-                ImGui::Separator();
-
-                int where_to_calculate = center_obj->should_calculate_uv_in_gpu ? 0 : 1;
-                ImGui::RadioButton("calculate in gpu", &where_to_calculate, 0); ImGui::SameLine();
-                ImGui::RadioButton("calculate in cpu", &where_to_calculate, 1);
-                center_obj->should_calculate_uv_in_gpu = (where_to_calculate == 0);
-                ImGui::Separator();
-                bool visaulize = center_obj->material->texture->texture == GRAPHICS->GetTexture("test");
-                ImGui::Checkbox("Visualize UV", &visaulize);
-                if (visaulize)
+                if (mode != 0)
                 {
-                    center_obj->material->texture->SetTexture("test");
-                    center_obj->material->texture->ambient_texture = -1;
-                    center_obj->material->texture->diffuse_texture = -1;
-                    center_obj->material->texture->specular_texture = -1;
+                    float ratioDenominator = center_obj->RatioDenominator;
+                    ImGui::DragFloat("Ratio", &ratioDenominator, 0.01f, 0, 100);
+                    center_obj->RatioDenominator = ratioDenominator;
+                    if (ImGui::TreeNode("Experiment with diffrent values"))
+                    {
+
+                        if (ImGui::SmallButton("Air - 1.000293"))
+                        {
+                            center_obj->RatioDenominator = 1.000293f;
+                        }
+                        if (ImGui::SmallButton("Hydrogen - 1.000132"))
+                        {
+                            center_obj->RatioDenominator = 1.000132f;
+                        }
+                        if (ImGui::SmallButton("Water - 1.333"))
+                        {
+                            center_obj->RatioDenominator = 1.333f;
+                        }
+                        if (ImGui::SmallButton("Olive Oil - 1.47"))
+                        {
+                            center_obj->RatioDenominator = 1.47f;
+                        }
+                        if (ImGui::SmallButton("Ice (solidified water) - 1.31"))
+                        {
+                            center_obj->RatioDenominator = 1.31f;
+                        }
+                        if (ImGui::SmallButton("Quartz - 1.46"))
+                        {
+                            center_obj->RatioDenominator = 1.46f;
+                        }
+                        if (ImGui::SmallButton("Diamond - 2.42"))
+                        {
+                            center_obj->RatioDenominator = 2.42f;
+                        }
+                        if (ImGui::SmallButton("Acrylic / plexiglas / Lucite - 1.49"))
+                        {
+                            center_obj->RatioDenominator = 1.49f;
+                        }
+                    }
+                    ImGui::TreePop();
                 }
-                else
-                {
-                    center_obj->material->texture->texture = -1;
-                    center_obj->material->texture->ambient_texture = -1;
-                    center_obj->material->texture->SetDiffuseTexture("roofdiff");
-                    center_obj->material->texture->SetSpecularTexture("roofspec");
-                }
+
+                //int mode = center_obj->drawmode;
+                //ImGui::RadioButton("face normal", &mode, 0); ImGui::SameLine();
+                //ImGui::RadioButton("vertex normal", &mode, 1);
+                //center_obj->drawmode = mode;
+                //bool drawnormal = center_obj->shouldDrawNormals;
+                //ImGui::Checkbox("draw normals", &drawnormal);
+                //center_obj->shouldDrawNormals = drawnormal;
+
+                //ImGui::NewLine();
+                //ImGui::Separator();
+                //ImGui::NewLine();
+
+                //mapping_option = center_obj->mapping_mode;
+                //ImGui::RadioButton("default mapping", &mapping_option, 0); ImGui::SameLine();
+                //ImGui::RadioButton("spherical mapping", &mapping_option, 1); ImGui::SameLine();
+                //ImGui::RadioButton("cylindrical mapping", &mapping_option, 2); ImGui::SameLine();
+                //ImGui::RadioButton("planar mapping", &mapping_option, 3);
+                //center_obj->mapping_mode = mapping_option;
+
+                //ImGui::Separator();
+
+                //int mapping_with_what = center_obj->mapping_with_normal ? 1 : 0;
+                //ImGui::RadioButton("mapping with position", &mapping_with_what, 0); ImGui::SameLine();
+                //ImGui::RadioButton("mapping with normal", &mapping_with_what, 1);
+                //center_obj->mapping_with_normal = (mapping_with_what == 1);
+
+                //ImGui::Separator();
+
+                //int where_to_calculate = center_obj->should_calculate_uv_in_gpu ? 0 : 1;
+                //ImGui::RadioButton("calculate in gpu", &where_to_calculate, 0); ImGui::SameLine();
+                //ImGui::RadioButton("calculate in cpu", &where_to_calculate, 1);
+                //center_obj->should_calculate_uv_in_gpu = (where_to_calculate == 0);
+                //ImGui::Separator();
+                //bool visaulize = center_obj->material->texture->texture == GRAPHICS->GetTexture("test");
+                //ImGui::Checkbox("Visualize UV", &visaulize);
+                //if (visaulize)
+                //{
+                //    center_obj->material->texture->SetTexture("test");
+                //    center_obj->material->texture->ambient_texture = -1;
+                //    center_obj->material->texture->diffuse_texture = -1;
+                //    center_obj->material->texture->specular_texture = -1;
+                //}
+                //else
+                //{
+                //    center_obj->material->texture->texture = -1;
+                //    center_obj->material->texture->ambient_texture = -1;
+                //    center_obj->material->texture->SetDiffuseTexture("roofdiff");
+                //    center_obj->material->texture->SetSpecularTexture("roofspec");
+                //}
 
                 ImGui::End();
             }

@@ -9,7 +9,7 @@ class MeshGroup
 public:
     MeshGroup();
     void Init();
-    void Draw(Shader shader);
+    void Draw(Shader shader,Material* custom_material=nullptr);
     void DrawNormals();
     void ChangeMode(int mode);
     void AddMesh(Mesh* mesh);

@@ -31,4 +31,8 @@ public:
     bool should_calculate_uv_in_gpu = true;
     bool mapping_with_normal = false;
     bool isUsingCubeMapTexture = false;
+    int environmentmapping_mode = 0;//0: reflection 1: refraction 2: combination of both using fresnel approximation
+    bool isModePhongShading_EnvironmentMapping=false;
+    float R=0.97f, G=0.98f, B=0.99f;
+    float RatioDenominator = 1.08f;
 };

@@ -12,6 +12,7 @@ public:
     void Init() override;
     void Update() override;
     void EnvironmentTextureCallback(int w, int h);
+    void GenerateEnvironmentTextures();
     ~ObjectManager();
     void RegisterObject(Object* obj);
     void RegisterLight(LightObject* light);

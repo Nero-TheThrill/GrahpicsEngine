@@ -13,7 +13,7 @@ class Mesh : public Component
 public:
     virtual void Init()=0;
     virtual void Bind()=0;
-    virtual void Draw(Shader shader)=0;
+    virtual void Draw(Shader shader, Material* custom_material=nullptr) =0;
     virtual void UnBind()=0;
     virtual void UnBindData();
     virtual void BindData();

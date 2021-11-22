@@ -9,7 +9,7 @@ public:
     void Init() override;
     void Bind() override;
     void UnBind() override;
-    void Draw(Shader shader) override;
+    void Draw(Shader shader, Material* custom_material=nullptr) override;
     ~ModelMesh() override;
     void GeneratePositionsWithIndices();
     void GenerateNormals();

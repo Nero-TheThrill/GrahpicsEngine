@@ -64,7 +64,7 @@ int main()
     GRAPHICS->LoadTexture("../images/skybox/TropicalSunnyDay_py.jpg", "skybox_top");
     GRAPHICS->LoadTexture("../images/skybox/TropicalSunnyDay_ny.jpg", "skybox_bottom");
 
-    objloader.loadObject("../models/desertcity.obj", "desertcity");
+    objloader.loadObject("../models/grassy-groves-grass-tile.obj", "desertcity");
     objloader.loadObject("../models/girl.obj", "girl");
     objloader.loadObject("../models/jet.obj", "jet");
     objloader.loadObject("../models/bumblebee.obj", "bumblebee");
@@ -107,7 +107,7 @@ int main()
     lightmat->kd = glm::vec3(0.3f);
     objmat->texture->SetAmbientTexture("test");
     objmat->texture->SetDiffuseTexture("me");
-
+    
 
 
     jetmat->texture->SetTexture("jet");

@@ -16,7 +16,7 @@ void MeshGroup::Init()
     std::cout << "ModelMesh <" << name << "> Initialized" << std::endl;
 }
 
-void MeshGroup::Draw(Shader shader)
+void MeshGroup::Draw(Shader shader, Material* custom_material)
 {
     for(auto mesh: model_meshes)
     {
@@ -24,7 +24,7 @@ void MeshGroup::Draw(Shader shader)
         mesh->mapping_mode = mapping_mode;
         mesh->mapping_with_normal = mapping_with_normal;
         glBindVertexArray(VAO);
-        mesh->Draw(shader);
+        mesh->Draw(shader, custom_material);
         glBindVertexArray(0);
     }
 }

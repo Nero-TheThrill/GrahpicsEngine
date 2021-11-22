@@ -69,14 +69,20 @@ void Object::Draw()
         mesh->mapping_mode = mapping_mode;
         mesh->should_calculate_uv_in_gpu = should_calculate_uv_in_gpu;
         mesh->mapping_with_normal = mapping_with_normal;
-        if(material!=nullptr)
-            mesh->SetMaterial(material);
+
+           
         mesh->ChangeMode(drawmode);
         glUseProgram(shader.program_handle);
         shader.set("model", transform.GetTransformMatrix());
         shader.set("objectColor", color);
         shader.set("item_selected", item_selected);
-        mesh->Draw(shader);
+        shader.set("isModePhongShading_EnvironmentMapping", isModePhongShading_EnvironmentMapping);
+        shader.set("environmentmapping_mode", environmentmapping_mode);
+        shader.set("R", R);
+        shader.set("G", G);
+        shader.set("B", B);
+        shader.set("RatioDenominator", RatioDenominator);
+        mesh->Draw(shader, material);
         glUseProgram(0);
         if (shouldDrawNormals)
         {
