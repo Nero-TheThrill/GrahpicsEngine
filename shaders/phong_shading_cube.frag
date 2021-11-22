@@ -25,6 +25,12 @@ uniform float G;
 uniform float B;
 uniform float RatioDenominator;
 uniform int environmentmapping_mode;
+float FresnelPower=5.0;
+float F=((1.0-G)*(1.0-G))/((1.0+G)*(1.0+G));
+vec3 RefractRGB,RefractR,RefractG,RefractB;
+float fresnelRatio;
+vec3 I;
+
 
 uniform vec3 objectColor;
 
@@ -153,115 +159,89 @@ vec3 CalculateLight(Light light)
 	}
 }
 
+vec3 RefractCalculate(float ratio)
+{
+	float k=1.0-ratio*ratio*(1-dot(n_normal,I)*dot(n_normal,I));
+
+	if(k<0.0)
+		return vec3(0);
+	else
+		return ratio*I-(ratio*dot(n_normal,I)+sqrt(k))*n_normal;
+}
+
+vec3 GetTextureColor(vec3 v)
+{
+	vec3 tmpVec3=normalize(v),abstmpVec3=abs(tmpVec3);
+	if (abstmpVec3.x >= abstmpVec3.y && abstmpVec3.x >= abstmpVec3.z)
+    {
+        if(tmpVec3.x < 0)
+            realTexCoord.x = -tmpVec3.z/abstmpVec3.x;
+        else
+        	realTexCoord.x = tmpVec3.z/abstmpVec3.x;
+        realTexCoord.y = tmpVec3.y/abstmpVec3.x;
+        realTexCoord=(realTexCoord+vec2(1))/2;
+	    if(tmpVec3.x>0)
+	    	return vec3(texture(right,realTexCoord));
+	    else
+	    	return vec3(texture(left,realTexCoord));
+
+	}
+	if (abstmpVec3.y >= abstmpVec3.x && abstmpVec3.y >= abstmpVec3.z)
+	{
+	    if(tmpVec3.y < 0)
+			realTexCoord.x = tmpVec3.x/abstmpVec3.y;
+	    else
+	    	realTexCoord.x = -tmpVec3.x/abstmpVec3.y;
+	    realTexCoord.y = -tmpVec3.z/abstmpVec3.y;
+	    realTexCoord=(realTexCoord+vec2(1))/2;
+	    if(tmpVec3.y>0)
+	    	return vec3(texture(top,realTexCoord));
+	    else
+	    	return vec3(texture(bottom,realTexCoord));
+	}
+	if (abstmpVec3.z >= abstmpVec3.y && abstmpVec3.z >= abstmpVec3.x)
+	{
+	    if(tmpVec3.z < 0) 
+			realTexCoord.x = tmpVec3.x/abstmpVec3.z;
+	    else
+	    	realTexCoord.x = -tmpVec3.x/abstmpVec3.z;
+	    realTexCoord.y = tmpVec3.y/abstmpVec3.z;
+	    realTexCoord=(realTexCoord+vec2(1))/2;
+	    if(tmpVec3.z>0)
+	    	return vec3(texture(front,realTexCoord));
+	    else
+	    	return vec3(texture(back,realTexCoord));
+	}
+
+}
 void main()
 {
 
-	vec3 I = normalize(FragPosition - view_position);
+	I = normalize(FragPosition - view_position);
 	vec3 reflectDirection = I-2*dot(n_normal,I)*n_normal;
 
+	fresnelRatio=F + (1.0 - F) * pow((1.0 - dot(-I,n_normal)), FresnelPower);
+	RefractR=RefractCalculate(R);
+	RefractG=RefractCalculate(G);
+	RefractB=RefractCalculate(B);
+	RefractRGB.r=GetTextureColor(RefractR).r;
+	RefractRGB.g=GetTextureColor(RefractG).g;
+	RefractRGB.b=GetTextureColor(RefractB).b;
 	float ratio=1/RatioDenominator;
 
-	float k=1.0-ratio*ratio*(1-dot(n_normal,I)*dot(n_normal,I));
 	vec3 refractDirection;
-	if(k<0.0)
-		refractDirection=vec3(0);
-	else
-		refractDirection=ratio*I-(ratio*dot(n_normal,I)+sqrt(k))*n_normal;
+	refractDirection=RefractCalculate(ratio);
 
 
-
-	vec3 tmpVec3=normalize(reflectDirection),abstmpVec3=abs(tmpVec3);
-	if (abstmpVec3.x >= abstmpVec3.y && abstmpVec3.x >= abstmpVec3.z)
-    {
-        if(tmpVec3.x < 0)
-            realTexCoord.x = -tmpVec3.z/abstmpVec3.x;
-        else
-        	realTexCoord.x = tmpVec3.z/abstmpVec3.x;
-        realTexCoord.y = tmpVec3.y/abstmpVec3.x;
-        realTexCoord=(realTexCoord+vec2(1))/2;
-	    if(tmpVec3.x>0)
-	    	CurrentColor=vec3(texture(right,realTexCoord));
-	    else
-	    	CurrentColor=vec3(texture(left,realTexCoord));
-
-	}
-	if (abstmpVec3.y >= abstmpVec3.x && abstmpVec3.y >= abstmpVec3.z)
-	{
-	    if(tmpVec3.y < 0)
-			realTexCoord.x = tmpVec3.x/abstmpVec3.y;
-	    else
-	    	realTexCoord.x = -tmpVec3.x/abstmpVec3.y;
-	    realTexCoord.y = -tmpVec3.z/abstmpVec3.y;
-	    realTexCoord=(realTexCoord+vec2(1))/2;
-	    if(tmpVec3.y>0)
-	    	CurrentColor=vec3(texture(top,realTexCoord));
-	    else
-	    	CurrentColor=vec3(texture(bottom,realTexCoord));
-	}
-	if (abstmpVec3.z >= abstmpVec3.y && abstmpVec3.z >= abstmpVec3.x)
-	{
-	    if(tmpVec3.z < 0) 
-			realTexCoord.x = tmpVec3.x/abstmpVec3.z;
-	    else
-	    	realTexCoord.x = -tmpVec3.x/abstmpVec3.z;
-	    realTexCoord.y = tmpVec3.y/abstmpVec3.z;
-	    realTexCoord=(realTexCoord+vec2(1))/2;
-	    if(tmpVec3.z>0)
-	    	CurrentColor=vec3(texture(front,realTexCoord));
-	    else
-	    	CurrentColor=vec3(texture(back,realTexCoord));
-	}
-
-
-
-    tmpVec3=normalize(refractDirection),abstmpVec3=abs(tmpVec3);
-	if (abstmpVec3.x >= abstmpVec3.y && abstmpVec3.x >= abstmpVec3.z)
-    {
-        if(tmpVec3.x < 0)
-            realTexCoord.x = -tmpVec3.z/abstmpVec3.x;
-        else
-        	realTexCoord.x = tmpVec3.z/abstmpVec3.x;
-        realTexCoord.y = tmpVec3.y/abstmpVec3.x;
-        realTexCoord=(realTexCoord+vec2(1))/2;
-	    if(tmpVec3.x>0)
-	    	CurrentColor1=vec3(texture(right,realTexCoord));
-	    else
-	    	CurrentColor1=vec3(texture(left,realTexCoord));
-
-	}
-	if (abstmpVec3.y >= abstmpVec3.x && abstmpVec3.y >= abstmpVec3.z)
-	{
-	    if(tmpVec3.y < 0)
-			realTexCoord.x = tmpVec3.x/abstmpVec3.y;
-	    else
-	    	realTexCoord.x = -tmpVec3.x/abstmpVec3.y;
-	    realTexCoord.y = -tmpVec3.z/abstmpVec3.y;
-	    realTexCoord=(realTexCoord+vec2(1))/2;
-	    if(tmpVec3.y>0)
-	    	CurrentColor1=vec3(texture(top,realTexCoord));
-	    else
-	    	CurrentColor1=vec3(texture(bottom,realTexCoord));
-	}
-	if (abstmpVec3.z >= abstmpVec3.y && abstmpVec3.z >= abstmpVec3.x)
-	{
-	    if(tmpVec3.z < 0) 
-			realTexCoord.x = tmpVec3.x/abstmpVec3.z;
-	    else
-	    	realTexCoord.x = -tmpVec3.x/abstmpVec3.z;
-	    realTexCoord.y = tmpVec3.y/abstmpVec3.z;
-	    realTexCoord=(realTexCoord+vec2(1))/2;
-	    if(tmpVec3.z>0)
-	    	CurrentColor1=vec3(texture(front,realTexCoord));
-	    else
-	    	CurrentColor1=vec3(texture(back,realTexCoord));
-	}
-
+	CurrentColor=GetTextureColor(reflectDirection);
+	CurrentColor1=GetTextureColor(refractDirection);
+  	
 	if(environmentmapping_mode==0)
 		resultColor = CurrentColor;
 	else if(environmentmapping_mode==1)
 		resultColor = CurrentColor1;
 	else //if(environmentmapping_mode==2)
-		resultColor = mix(CurrentColor,CurrentColor1,0.4);
+		resultColor = mix(RefractRGB,CurrentColor,fresnelRatio);
 
 
 	vec3 result=vec3(0);

@@ -32,7 +32,7 @@ void imGUIManager::Update()
 
 
         ImGui::NewFrame();
-        {        ImGui::ShowDemoWindow();
+        {
         ImGui::Begin("GraphicsEngine GUI");
         ImGuiIO& io = ImGui::GetIO();
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
@@ -456,43 +456,79 @@ void imGUIManager::Update()
                     float ratioDenominator = center_obj->RatioDenominator;
                     ImGui::DragFloat("Ratio", &ratioDenominator, 0.01f, 0, 100);
                     center_obj->RatioDenominator = ratioDenominator;
+                    center_obj->R = 1/ratioDenominator + 0.01f;
+                    center_obj->G = 1 / ratioDenominator;
+                    center_obj->B = std::max(1 / ratioDenominator - 0.01f, 0.0f);
                     if (ImGui::TreeNode("Experiment with diffrent values"))
                     {
 
                         if (ImGui::SmallButton("Air - 1.000293"))
                         {
                             center_obj->RatioDenominator = 1.000293f;
+                            center_obj->R = 1/1.000493f;
+                            center_obj->G = 1/1.000293f;
+                            center_obj->B = 1/1.000093f;
                         }
                         if (ImGui::SmallButton("Hydrogen - 1.000132"))
                         {
                             center_obj->RatioDenominator = 1.000132f;
+                            center_obj->R = 1 / 1.000232f;
+                            center_obj->G = 1 / 1.000132f;
+                            center_obj->B = 1 / 1.000032f;
                         }
                         if (ImGui::SmallButton("Water - 1.333"))
                         {
                             center_obj->RatioDenominator = 1.333f;
+                            center_obj->R = 1 / 1.363f;
+                            center_obj->G = 1 / 1.333f;
+                            center_obj->B = 1 / 1.303f;
                         }
                         if (ImGui::SmallButton("Olive Oil - 1.47"))
                         {
                             center_obj->RatioDenominator = 1.47f;
+                            center_obj->R = 1 / 1.52f;
+                            center_obj->G = 1 / 1.47f;
+                            center_obj->B = 1 / 1.42f;
                         }
                         if (ImGui::SmallButton("Ice (solidified water) - 1.31"))
                         {
                             center_obj->RatioDenominator = 1.31f;
+                            center_obj->R = 1 / 1.35f;
+                            center_obj->G = 1 / 1.31f;
+                            center_obj->B = 1 / 1.27f;
                         }
                         if (ImGui::SmallButton("Quartz - 1.46"))
                         {
                             center_obj->RatioDenominator = 1.46f;
+                            center_obj->R = 1 / 1.41f;
+                            center_obj->G = 1 / 1.46f;
+                            center_obj->B = 1 / 1.51f;
                         }
                         if (ImGui::SmallButton("Diamond - 2.42"))
                         {
                             center_obj->RatioDenominator = 2.42f;
+                            center_obj->R = 1 / 2.47f;
+                            center_obj->G = 1 / 2.42f;
+                            center_obj->B = 1 / 2.37f;
                         }
                         if (ImGui::SmallButton("Acrylic / plexiglas / Lucite - 1.49"))
                         {
                             center_obj->RatioDenominator = 1.49f;
+                            center_obj->R = 1 / 1.54f;
+                            center_obj->G = 1 / 1.49f;
+                            center_obj->B = 1 / 1.44f;
                         }
                     }
                     ImGui::TreePop();
+                    float r = center_obj->R;
+                    ImGui::DragFloat("R_value", &r, 0.001f, 0, 1);
+                    center_obj->R = r;
+                    float g = center_obj->G;
+                    ImGui::DragFloat("G_value", &g, 0.001f, 0, 1);
+                    center_obj->G = g;
+                    float b = center_obj->B;
+                    ImGui::DragFloat("B_value", &b, 0.001f, 0, 1);
+                    center_obj->B = b;
                 }
 
                 //int mode = center_obj->drawmode;
