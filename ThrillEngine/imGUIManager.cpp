@@ -465,58 +465,34 @@ void imGUIManager::Update()
                         if (ImGui::SmallButton("Air - 1.000293"))
                         {
                             center_obj->RatioDenominator = 1.000293f;
-                            center_obj->R = 1/1.000493f;
-                            center_obj->G = 1/1.000293f;
-                            center_obj->B = 1/1.000093f;
                         }
                         if (ImGui::SmallButton("Hydrogen - 1.000132"))
                         {
                             center_obj->RatioDenominator = 1.000132f;
-                            center_obj->R = 1 / 1.000232f;
-                            center_obj->G = 1 / 1.000132f;
-                            center_obj->B = 1 / 1.000032f;
                         }
                         if (ImGui::SmallButton("Water - 1.333"))
                         {
                             center_obj->RatioDenominator = 1.333f;
-                            center_obj->R = 1 / 1.363f;
-                            center_obj->G = 1 / 1.333f;
-                            center_obj->B = 1 / 1.303f;
                         }
                         if (ImGui::SmallButton("Olive Oil - 1.47"))
                         {
                             center_obj->RatioDenominator = 1.47f;
-                            center_obj->R = 1 / 1.52f;
-                            center_obj->G = 1 / 1.47f;
-                            center_obj->B = 1 / 1.42f;
                         }
                         if (ImGui::SmallButton("Ice (solidified water) - 1.31"))
                         {
                             center_obj->RatioDenominator = 1.31f;
-                            center_obj->R = 1 / 1.35f;
-                            center_obj->G = 1 / 1.31f;
-                            center_obj->B = 1 / 1.27f;
                         }
                         if (ImGui::SmallButton("Quartz - 1.46"))
                         {
                             center_obj->RatioDenominator = 1.46f;
-                            center_obj->R = 1 / 1.41f;
-                            center_obj->G = 1 / 1.46f;
-                            center_obj->B = 1 / 1.51f;
                         }
                         if (ImGui::SmallButton("Diamond - 2.42"))
                         {
                             center_obj->RatioDenominator = 2.42f;
-                            center_obj->R = 1 / 2.47f;
-                            center_obj->G = 1 / 2.42f;
-                            center_obj->B = 1 / 2.37f;
                         }
                         if (ImGui::SmallButton("Acrylic / plexiglas / Lucite - 1.49"))
                         {
                             center_obj->RatioDenominator = 1.49f;
-                            center_obj->R = 1 / 1.54f;
-                            center_obj->G = 1 / 1.49f;
-                            center_obj->B = 1 / 1.44f;
                         }
                     }
                     ImGui::TreePop();

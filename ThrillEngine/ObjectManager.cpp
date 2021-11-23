@@ -193,7 +193,7 @@ void ObjectManager::EnvironmentTextureCallback(int w, int h)
 void ObjectManager::GenerateEnvironmentTextures()
 {
     int width = static_cast<int>(APPLICATION->GetWindowSize().x), height = static_cast<int>(APPLICATION->GetWindowSize().y);
-    //TODO: Bind framebufferobject
+
     glBindFramebuffer(GL_FRAMEBUFFER, FBO);
     //////////////////////////////////////////////////////////////////////////////////.
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_front, 0);
@@ -217,14 +217,13 @@ void ObjectManager::GenerateEnvironmentTextures()
     glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-    //TODO: generate environment textures
+
     if (skybox != nullptr)
     {
         glDepthMask(GL_FALSE);
         skybox->Update();
         glDepthMask(GL_TRUE);
     }
-    glEnable(GL_DEPTH_TEST);
     for (std::unordered_map<unsigned, Object*>::iterator obj = objects.begin(); obj != objects.end(); obj++)
     {
         if (!obj->second->isUsingCubeMapTexture)
@@ -253,7 +252,7 @@ void ObjectManager::GenerateEnvironmentTextures()
     view = glm::lookAt(centerobj_position, centerobj_position + glm::normalize(direction), glm::vec3(0.0f, 1.0f, 0.0f));
     glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
-    //TODO: generate environment textures
+
     if (skybox != nullptr)
     {
         glDepthMask(GL_FALSE);
@@ -288,7 +287,7 @@ void ObjectManager::GenerateEnvironmentTextures()
     view = glm::lookAt(centerobj_position, centerobj_position + glm::normalize(direction), glm::vec3(0.0f, 1.0f, 0.0f));
     glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
-    //TODO: generate environment textures
+
     if (skybox != nullptr)
     {
         glDepthMask(GL_FALSE);
@@ -323,7 +322,7 @@ void ObjectManager::GenerateEnvironmentTextures()
     view = glm::lookAt(centerobj_position, centerobj_position + glm::normalize(direction), glm::vec3(0.0f, 1.0f, 0.0f));
     glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
-    //TODO: generate environment textures
+
     if (skybox != nullptr)
     {
         glDepthMask(GL_FALSE);
@@ -358,7 +357,7 @@ void ObjectManager::GenerateEnvironmentTextures()
     view = glm::lookAt(centerobj_position, centerobj_position + glm::normalize(direction), glm::vec3(0.0f, 1.0f, 0.0f));
     glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
-    //TODO: generate environment textures
+
     if (skybox != nullptr)
     {
         glDepthMask(GL_FALSE);
@@ -393,7 +392,7 @@ void ObjectManager::GenerateEnvironmentTextures()
     view = glm::lookAt(centerobj_position, centerobj_position + glm::normalize(direction), glm::vec3(0.0f, 1.0f, 0.0f));
     glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
-    //TODO: generate environment textures
+
     if (skybox != nullptr)
     {
         glDepthMask(GL_FALSE);

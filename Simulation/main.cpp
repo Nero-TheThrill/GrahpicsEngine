@@ -65,7 +65,7 @@ int main()
     GRAPHICS->LoadTexture("../images/skybox/TropicalSunnyDay_ny.jpg", "skybox_bottom");
 
     objloader.loadObject("../models/grassy-groves-grass-tile.obj", "desertcity");
-    objloader.loadObject("../models/girl.obj", "girl");
+    objloader.loadObject("../models/dolphin.obj", "dolphin");
     objloader.loadObject("../models/jet.obj", "jet");
     objloader.loadObject("../models/bumblebee.obj", "bumblebee");
     objloader.loadObject("../models/dragon.obj", "dragon");
@@ -92,10 +92,9 @@ int main()
 
     ThrillEngine->Init();
 
-    Material * objmat, * centermat, * lightmat, * skymat, * jetmat,*planemat;
+    Material * centermat, * lightmat, * skymat, * jetmat,*planemat;
 
     new Material("m_default");
-    objmat = new Material("m_obj");
     centermat = new Material("m_centerobj");
     lightmat = new Material("m_light");
     skymat = new Material("m_skysphere");
@@ -105,9 +104,7 @@ int main()
 
     lightmat->emissive = glm::vec3(0.6f);
     lightmat->kd = glm::vec3(0.3f);
-    objmat->texture->SetAmbientTexture("test");
-    objmat->texture->SetDiffuseTexture("me");
-    
+
 
 
     jetmat->texture->SetTexture("jet");
