@@ -89,6 +89,8 @@ void ObjectManager::Init()
     {
         m_environment = new Material("m_environment",true);
     }
+    reinterpret_cast<CubeMapTexture*>(m_environment->texture)->SetEmissiveTexture("test");
+    m_environment->ka = glm::vec3(0.2f);
     skybox = new SkyBox("skybox");
     skybox->SetShader("nolight");
     skybox->SetMeshGroup(GRAPHICS->GetMeshGroup("cube"));
@@ -409,7 +411,6 @@ void ObjectManager::GenerateEnvironmentTextures()
             }
         }
     }
-    //TODO: UnBind framebufferobject
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glDrawBuffer(GL_BACK_LEFT);
 

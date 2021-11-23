@@ -6,8 +6,11 @@ in vec3 FragPosition;
 in vec2 TexCoord;
 in vec3 pos;
 in vec3 norm;
+in vec3 t_norm;
+in vec3 t_pos;
 
 uniform bool item_selected;
+
 
 uniform sampler2D top;
 uniform sampler2D bottom;
@@ -15,6 +18,9 @@ uniform sampler2D left;
 uniform sampler2D right;
 uniform sampler2D front;
 uniform sampler2D back;
+uniform sampler2D emissive_texture;
+
+uniform bool emissive_texture_exists;
 
 uniform bool should_use_gpuside_uv;
 uniform bool mapping_with_normal;
@@ -44,7 +50,7 @@ uniform float ns;
 uniform vec3 emissive;
 
 vec3 n_normal=normalize(Normal);
-vec2 realTexCoord;
+vec2 realTexCoord,objectTexCoord;
 vec3 I_a,I_d,I_s;
 vec3 CurrentColor,CurrentColor1,resultColor;
 
@@ -81,7 +87,9 @@ vec3 CalculateLight(Light light)
 	{
 		vec3 light_vector = normalize(light.position-FragPosition);
 
-		I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0)* resultColor;
+
+		I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0);
+
 
 
 		vec3 view_vector=normalize(view_position-FragPosition);
@@ -104,7 +112,7 @@ vec3 CalculateLight(Light light)
 	{
 		vec3 light_vector = normalize(-light.direction);
 
-		I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0)* resultColor;
+		I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0);
 
 		vec3 view_vector=normalize(view_position-FragPosition);
 		vec3 reflectDirection = 2*dot(n_normal,light_vector)*n_normal-light_vector;
@@ -125,7 +133,7 @@ vec3 CalculateLight(Light light)
 		vec3 light_vector = normalize(light.position-FragPosition);
 
 
-		I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0)* resultColor;
+		I_d = k_d*light.diffuse*max(dot(n_normal,light_vector),0.0);
 
 
 		vec3 view_vector=normalize(view_position-FragPosition);
@@ -216,6 +224,67 @@ vec3 GetTextureColor(vec3 v)
 }
 void main()
 {
+if(should_use_gpuside_uv)
+	{
+		vec3 tmpVec3,abstmpVec3;
+		float u,v;
+		if(mapping_with_normal)
+			tmpVec3=normalize(t_norm);
+		else
+			tmpVec3=t_pos;
+		abstmpVec3=abs(tmpVec3);
+		switch(mapping_mode)
+		{
+			case 0:
+				objectTexCoord=TexCoord;
+				break;
+			case 1:
+			    u = degrees(atan(tmpVec3.z , tmpVec3.x));
+    			u+=180;
+   				v = 180-(acos(tmpVec3.y / (sqrt(tmpVec3.x * tmpVec3.x + tmpVec3.y * tmpVec3.y + tmpVec3.z * tmpVec3.z))) * 180.f / acos(-1)) ;
+           
+				objectTexCoord = vec2(u / 360.f, v / 180.f);
+				break;
+			case 2:
+			    u = degrees(atan(tmpVec3.z , tmpVec3.x));
+				u+=180;
+   				v = (tmpVec3.y-minYval)/(maxYval-minYval);
+   				objectTexCoord = vec2(u/360.f,v);
+   				break;
+   			case 3:
+           		if (abstmpVec3.x >= abstmpVec3.y && abstmpVec3.x >= abstmpVec3.z)
+            	{
+                	if(tmpVec3.x < 0)
+                		objectTexCoord.x = tmpVec3.z/abstmpVec3.x;
+                	else
+                		objectTexCoord.x = -tmpVec3.z/abstmpVec3.x;
+                	objectTexCoord.y = tmpVec3.y/abstmpVec3.x;
+	            }
+	            if (abstmpVec3.y >= abstmpVec3.x && abstmpVec3.y >= abstmpVec3.z)
+	            {
+	                if(tmpVec3.y < 0)
+	                	objectTexCoord.x = tmpVec3.x/abstmpVec3.y;
+	                else
+	                	objectTexCoord.x = -tmpVec3.x/abstmpVec3.y;
+	                objectTexCoord.y = tmpVec3.z/abstmpVec3.y;
+	            }
+	            if (abstmpVec3.z >= abstmpVec3.y && abstmpVec3.z >= abstmpVec3.x)
+	            {
+	                if(tmpVec3.z < 0) 
+	                	objectTexCoord.x = -tmpVec3.x/abstmpVec3.z;
+	                else
+	                	objectTexCoord.x = tmpVec3.x/abstmpVec3.z;
+	                objectTexCoord.y = tmpVec3.y/abstmpVec3.z;
+	            }
+	            objectTexCoord=(objectTexCoord+vec2(1))/2;
+   				break;
+   			default:
+   				break;
+		}
+	}
+	else
+		objectTexCoord=TexCoord;
+
 
 	I = normalize(FragPosition - view_position);
 	vec3 reflectDirection = I-2*dot(n_normal,I)*n_normal;
@@ -249,8 +318,10 @@ void main()
 	{
 		result+=CalculateLight(lights[i]);
 	}
-	
-	result+=global_ambient_color*k_a+emissive;
+	if(emissive_texture_exists)
+		result+=global_ambient_color*k_a+vec3(texture(emissive_texture,objectTexCoord))/5;
+	else
+		result+=global_ambient_color*k_a+emissive;
 	float fog_factor=(far-length(view_position-FragPosition))/(far-near);
 	result =  fog_factor*result+(1-fog_factor)*fog_color;
 	result=vec3(min(result.x,1),min(result.y,1),min(result.z,1));
@@ -263,7 +334,7 @@ void main()
 	{
 		if(isModePhongShading_EnvironmentMapping)
 		{	
-			FragColor=vec4(mix(result,resultColor,0.3),1.0);
+			FragColor=vec4(mix(result,resultColor,0.7),1.0);
 			
 		}
 		else

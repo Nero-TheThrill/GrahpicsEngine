@@ -8,6 +8,8 @@ out vec3 FragPosition;
 out vec2 TexCoord;
 out vec3 pos;
 out vec3 norm;
+out vec3 t_norm;
+out vec3 t_pos;
 
 layout(std140, binding = 0) uniform ProjectViewMatrices
 {
@@ -25,4 +27,6 @@ void main()
 	TexCoord = vec2(aTexCoord.x, aTexCoord.y);
 	pos=vec3(mat4(mat3(model)) * vec4(aPos, 1.0));
 	norm=vec3(mat4(mat3(model)) * vec4(aNormal, 1.0));
+	t_norm=aNormal;
+	t_pos=aPos;
 }

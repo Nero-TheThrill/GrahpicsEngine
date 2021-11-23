@@ -129,6 +129,13 @@ void CubeMapTexture::Update(Shader shader)
         glBindTexture(GL_TEXTURE_2D, back);
         shader.set("back", 5);
     }
+    if (emissive_texture != -1)
+    {
+        glActiveTexture(GL_TEXTURE6);
+        glBindTexture(GL_TEXTURE_2D, emissive_texture);
+        shader.set("emissive_texture", 6);
+    }
+    shader.set("emissive_texture_exists", emissive_texture != -1);
 }
 
 void CubeMapTexture::SetTopTexture(const std::string& texture_id)
@@ -189,4 +196,9 @@ void CubeMapTexture::SetLeftTexture(int texture_id)
 void CubeMapTexture::SetRightTexture(int texture_id)
 {
     right = texture_id;
+}
+
+void CubeMapTexture::SetEmissiveTexture(const std::string& texture_id)
+{
+    emissive_texture = GRAPHICS->GetTexture(texture_id);
 }

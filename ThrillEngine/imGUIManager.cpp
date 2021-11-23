@@ -405,25 +405,6 @@ void imGUIManager::Update()
                 ImGui::DragFloat("degree", &degree);
                 center_obj->transform.Rotate(degree, rotate);
 
-                //std::unordered_map < std::string, std::pair<Shader, std::pair<std::string, std::string>>> shaders = GRAPHICS->GetAllShaders();
-                //std::string current_shader = center_obj->shader.name;
-
-                //if (ImGui::BeginCombo("select shader", current_shader.c_str()))
-                //{
-                //    for (auto shader : shaders)
-                //    {
-                //        bool is_selected = (current_shader == shader.second.first.name);
-                //        if (ImGui::Selectable(shader.second.first.name.c_str(), is_selected))
-                //        {
-                //            current_shader = shader.second.first.name;
-                //            center_obj->SetShader(shader.second.first.name);
-                //        }
-                //        if (is_selected)
-                //            ImGui::SetItemDefaultFocus();
-                //    }
-                //    ImGui::EndCombo();
-                //}
-
                 std::unordered_map<std::string, MeshGroup*> meshes = GRAPHICS->GetAllMeshGroups();
                 std::string current_mesh = center_obj->mesh->name;
                 if (ImGui::BeginCombo("select mesh", current_mesh.c_str()))
@@ -447,9 +428,9 @@ void imGUIManager::Update()
                 ImGui::RadioButton("Only refraction", &mode, 1); ImGui::SameLine();
                 ImGui::RadioButton("Combination of both", &mode, 2);
                 center_obj->environmentmapping_mode = mode;
-                bool drawnormal = center_obj->isModePhongShading_EnvironmentMapping;
-                ImGui::Checkbox("PhongShading + EnvironmentMapping", &drawnormal);
-                center_obj->isModePhongShading_EnvironmentMapping = drawnormal;
+                bool whatmode = center_obj->isModePhongShading_EnvironmentMapping;
+                ImGui::Checkbox("PhongShading + EnvironmentMapping", &whatmode);
+                center_obj->isModePhongShading_EnvironmentMapping = whatmode;
 
                 if (mode != 0)
                 {
@@ -507,56 +488,48 @@ void imGUIManager::Update()
                     center_obj->B = b;
                 }
 
-                //int mode = center_obj->drawmode;
-                //ImGui::RadioButton("face normal", &mode, 0); ImGui::SameLine();
-                //ImGui::RadioButton("vertex normal", &mode, 1);
-                //center_obj->drawmode = mode;
-                //bool drawnormal = center_obj->shouldDrawNormals;
-                //ImGui::Checkbox("draw normals", &drawnormal);
-                //center_obj->shouldDrawNormals = drawnormal;
+                ImGui::NewLine();
+                ImGui::Separator();
+                ImGui::NewLine();
 
-                //ImGui::NewLine();
-                //ImGui::Separator();
-                //ImGui::NewLine();
+                int drawmode = center_obj->drawmode;
+                ImGui::RadioButton("face normal", &drawmode, 0); ImGui::SameLine();
+                ImGui::RadioButton("vertex normal", &drawmode, 1);
+                center_obj->drawmode = drawmode;
+                bool drawnormal = center_obj->shouldDrawNormals;
+                ImGui::Checkbox("draw normals", &drawnormal);
+                center_obj->shouldDrawNormals = drawnormal;
 
-                //mapping_option = center_obj->mapping_mode;
-                //ImGui::RadioButton("default mapping", &mapping_option, 0); ImGui::SameLine();
-                //ImGui::RadioButton("spherical mapping", &mapping_option, 1); ImGui::SameLine();
-                //ImGui::RadioButton("cylindrical mapping", &mapping_option, 2); ImGui::SameLine();
-                //ImGui::RadioButton("planar mapping", &mapping_option, 3);
-                //center_obj->mapping_mode = mapping_option;
+                ImGui::NewLine();
+                ImGui::Separator();
+                ImGui::NewLine();
 
-                //ImGui::Separator();
+                mapping_option = center_obj->mapping_mode;
+                ImGui::RadioButton("default mapping", &mapping_option, 0); ImGui::SameLine();
+                ImGui::RadioButton("spherical mapping", &mapping_option, 1); ImGui::SameLine();
+                ImGui::RadioButton("cylindrical mapping", &mapping_option, 2); ImGui::SameLine();
+                ImGui::RadioButton("planar mapping", &mapping_option, 3);
+                center_obj->mapping_mode = mapping_option;
 
-                //int mapping_with_what = center_obj->mapping_with_normal ? 1 : 0;
-                //ImGui::RadioButton("mapping with position", &mapping_with_what, 0); ImGui::SameLine();
-                //ImGui::RadioButton("mapping with normal", &mapping_with_what, 1);
-                //center_obj->mapping_with_normal = (mapping_with_what == 1);
+                ImGui::NewLine();
+                ImGui::Separator();
+                ImGui::NewLine();
 
-                //ImGui::Separator();
+                int mapping_with_what = center_obj->mapping_with_normal ? 1 : 0;
+                ImGui::RadioButton("mapping with position", &mapping_with_what, 0); ImGui::SameLine();
+                ImGui::RadioButton("mapping with normal", &mapping_with_what, 1);
+                center_obj->mapping_with_normal = (mapping_with_what == 1);
 
-                //int where_to_calculate = center_obj->should_calculate_uv_in_gpu ? 0 : 1;
-                //ImGui::RadioButton("calculate in gpu", &where_to_calculate, 0); ImGui::SameLine();
-                //ImGui::RadioButton("calculate in cpu", &where_to_calculate, 1);
-                //center_obj->should_calculate_uv_in_gpu = (where_to_calculate == 0);
-                //ImGui::Separator();
-                //bool visaulize = center_obj->material->texture->texture == GRAPHICS->GetTexture("test");
-                //ImGui::Checkbox("Visualize UV", &visaulize);
-                //if (visaulize)
-                //{
-                //    center_obj->material->texture->SetTexture("test");
-                //    center_obj->material->texture->ambient_texture = -1;
-                //    center_obj->material->texture->diffuse_texture = -1;
-                //    center_obj->material->texture->specular_texture = -1;
-                //}
-                //else
-                //{
-                //    center_obj->material->texture->texture = -1;
-                //    center_obj->material->texture->ambient_texture = -1;
-                //    center_obj->material->texture->SetDiffuseTexture("roofdiff");
-                //    center_obj->material->texture->SetSpecularTexture("roofspec");
-                //}
+                ImGui::NewLine();
+                ImGui::Separator();
+                ImGui::NewLine();
 
+                int where_to_calculate = center_obj->should_calculate_uv_in_gpu ? 0 : 1;
+                ImGui::RadioButton("calculate in gpu", &where_to_calculate, 0); ImGui::SameLine();
+                ImGui::RadioButton("calculate in cpu", &where_to_calculate, 1);
+                center_obj->should_calculate_uv_in_gpu = (where_to_calculate == 0);
+
+                ImGui::NewLine();
                 ImGui::End();
             }
         }

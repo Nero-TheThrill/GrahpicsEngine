@@ -28,7 +28,6 @@ private:
     std::vector<decltype(lightobjects)::key_type> light_to_be_erased;
     
     SkyBox* skybox;
-    //TODO: make frambufferobject
     GLuint FBO=0;
     GLuint texture_top, texture_bottom, texture_front, texture_back, texture_left, texture_right;
     GLuint DepthBuffer = 0;

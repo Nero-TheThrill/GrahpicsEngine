@@ -12,10 +12,10 @@ TestLevel::TestLevel()
     skysphere = nullptr;
     centerobj = nullptr;
     obj = nullptr;
-    ramus = nullptr;
+    dolphine = nullptr;
     time_count = 0;
 
-    bumblebee = nullptr;
+    reflectivedolpihne = nullptr;
 
     city = nullptr;
 
@@ -38,25 +38,13 @@ void TestLevel::Init()
     orbit->transform.Scale(glm::vec3(9, 9, 9));
 
 
-
-    //obj = new Object("obj");
-    //obj->SetMeshGroup(GRAPHICS->GetMeshGroup("cube2"));
-    //obj->SetShader("phong_shading");
-    //obj->material= GRAPHICS->GetMaterial("m_obj");
-    //obj->mapping_mode = 3;
-    //obj->transform.Translate(glm::vec3(0, 4.f, 0.0f));
-    //obj->transform.Scale(glm::vec3(2.f));
-    //obj->drawmode = 1;
-
-    ramus = new Object("ramus");
-    ramus->SetMeshGroup(GRAPHICS->GetMeshGroup("dolphin"));
-    ramus->SetShader("phong_shading");
-    //ramus->transform.Translate(glm::vec3(-28.7, -22.6f, -72.f));
-    //ramus->transform.Scale(glm::vec3(10.f));
-    ramus->transform.Translate(glm::vec3(-14.8f, -6, -11.5f));
-    ramus->transform.Scale(glm::vec3(10.f));
-    ramus->transform.Rotate(86, glm::vec3(-1, 0.6, 0.6));
-    ramus->drawmode = 1;
+    dolphine = new Object("ramus");
+    dolphine->SetMeshGroup(GRAPHICS->GetMeshGroup("dolphin"));
+    dolphine->SetShader("phong_shading");
+    dolphine->transform.Translate(glm::vec3(-14.8f, -6, -11.5f));
+    dolphine->transform.Scale(glm::vec3(10.f));
+    dolphine->transform.Rotate(86, glm::vec3(-1, 0.6, 0.6));
+    dolphine->drawmode = 1;
 
     city = new Object("city");
     city->SetMeshGroup(GRAPHICS->GetMeshGroup("desertcity"));
@@ -66,16 +54,16 @@ void TestLevel::Init()
     city->transform.Rotate(270, glm::vec3(0, 1, 0));
     city->drawmode = 1;
 
-    bumblebee = new Object("bumblebee");
-    bumblebee->SetMeshGroup(GRAPHICS->GetMeshGroup("dolphin"));
-    bumblebee->SetShader("phong_shading_cube");
-    bumblebee->SetColor(glm::vec3(0.6f));
-    bumblebee->transform.Translate(glm::vec3(19, -6.5f, -15.7f));
-    bumblebee->transform.Scale(glm::vec3(15.f));
-    bumblebee->transform.Rotate(-84, glm::vec3(0.63f, 0.4f, 0.35f));
-    bumblebee->drawmode = 1;
-    bumblebee->isUsingCubeMapTexture = true;
-    bumblebee->environmentmapping_mode = 0;
+    reflectivedolpihne = new Object("bumblebee");
+    reflectivedolpihne->SetMeshGroup(GRAPHICS->GetMeshGroup("dolphin"));
+    reflectivedolpihne->SetShader("phong_shading_cube");
+    reflectivedolpihne->SetColor(glm::vec3(0.6f));
+    reflectivedolpihne->transform.Translate(glm::vec3(19, -6.5f, -15.7f));
+    reflectivedolpihne->transform.Scale(glm::vec3(15.f));
+    reflectivedolpihne->transform.Rotate(-84, glm::vec3(0.63f, 0.4f, 0.35f));
+    reflectivedolpihne->drawmode = 1;
+    reflectivedolpihne->isUsingCubeMapTexture = true;
+    reflectivedolpihne->environmentmapping_mode = 0;
 
 
 
@@ -84,20 +72,19 @@ void TestLevel::Init()
     jet1->SetMeshGroup(GRAPHICS->GetMeshGroup("jet"));
     jet1->SetShader("phong_shading");
     jet1->material = GRAPHICS->GetMaterial("m_jet");
-    jet1->transform.Translate(glm::vec3(85, 7.2f, -95.f));
+    jet1->transform.Translate(glm::vec3(185, 7.2f, -195.f));
     jet1->transform.Scale(glm::vec3(5.f));
     jet1->transform.Rotate(45, glm::vec3(0, 1, 0));
     jet1->drawmode = 1;
 
     jet2 = new Object("jet2",jet1);
     jet2->SetColor(glm::vec3(0.6f));
-    jet2->transform.Translate(glm::vec3(-80, 6.5f, -90.f));
+    jet2->transform.Translate(glm::vec3(180, 6.5f, -200.f));
     jet2->transform.Scale(glm::vec3(3.f));
 
     jet3 = new Object("jet3", jet2);
     jet3->SetColor(glm::vec3(0.6f));
-    jet3->transform.Translate(glm::vec3(90, 6.5f, -100.f));
-
+    jet3->transform.Translate(glm::vec3(190, 6.5f, -190.f));
 
 
     centerobj = new Object("centerobject");
