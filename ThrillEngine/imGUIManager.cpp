@@ -391,9 +391,7 @@ void imGUIManager::Update()
             {
                 ImGui::Begin("CenterObject Manager");
 
-                glm::vec3 pos = center_obj->transform.position;
-                ImGui::DragFloat3("translation", glm::value_ptr(pos), 0.1f, -FLT_MAX, FLT_MAX);
-                center_obj->transform.Translate(pos);
+                ImGui::DragFloat3("translation", glm::value_ptr(center_obj->transform.position), 0.1f, -FLT_MAX, FLT_MAX);
 
                 glm::vec3 scale = center_obj->transform.current_scale;
                 ImGui::DragFloat3("scale", glm::value_ptr(scale), 0.1f, -FLT_MAX, FLT_MAX);
@@ -422,24 +420,52 @@ void imGUIManager::Update()
                     }
                     ImGui::EndCombo();
                 }
+                ImGui::Separator();
 
-                int mode = center_obj->environmentmapping_mode;
-                ImGui::RadioButton("Only reflection", &mode, 0); ImGui::SameLine();
-                ImGui::RadioButton("Only refraction", &mode, 1); ImGui::SameLine();
-                ImGui::RadioButton("Combination of both", &mode, 2);
-                center_obj->environmentmapping_mode = mode;
-                bool whatmode = center_obj->isModePhongShading_EnvironmentMapping;
-                ImGui::Checkbox("PhongShading + EnvironmentMapping", &whatmode);
-                center_obj->isModePhongShading_EnvironmentMapping = whatmode;
 
-                if (mode != 0)
+                ImGui::RadioButton("face normal", &center_obj->drawmode, 0); ImGui::SameLine();
+                ImGui::RadioButton("vertex normal", &center_obj->drawmode, 1);
+    
+
+                ImGui::Checkbox("draw normals", &center_obj->shouldDrawNormals);
+          
+
+
+                ImGui::RadioButton("default mapping", &center_obj->mapping_mode, 0); ImGui::SameLine();
+                ImGui::RadioButton("spherical mapping", &center_obj->mapping_mode, 1); ImGui::SameLine();
+                ImGui::RadioButton("cylindrical mapping", &center_obj->mapping_mode, 2); ImGui::SameLine();
+                ImGui::RadioButton("planar mapping", &center_obj->mapping_mode, 3);
+         
+
+                int mapping_with_what = center_obj->mapping_with_normal ? 1 : 0;
+                ImGui::RadioButton("mapping with position", &mapping_with_what, 0); ImGui::SameLine();
+                ImGui::RadioButton("mapping with normal", &mapping_with_what, 1);
+                center_obj->mapping_with_normal = (mapping_with_what == 1);
+
+                int where_to_calculate = center_obj->should_calculate_uv_in_gpu ? 0 : 1;
+                ImGui::RadioButton("calculate in gpu", &where_to_calculate, 0); ImGui::SameLine();
+                ImGui::RadioButton("calculate in cpu", &where_to_calculate, 1);
+                center_obj->should_calculate_uv_in_gpu = (where_to_calculate == 0);
+
+                ImGui::Separator();
+
+                ImGui::RadioButton("Only reflection", &center_obj->environmentmapping_mode, 0); ImGui::SameLine();
+                ImGui::RadioButton("Only refraction", &center_obj->environmentmapping_mode, 1); ImGui::SameLine();
+                ImGui::RadioButton("Combination of both", &center_obj->environmentmapping_mode, 2);
+
+                ImGui::Checkbox("PhongShading + EnvironmentMapping", &center_obj->isModePhongShading_EnvironmentMapping);
+                if(center_obj->isModePhongShading_EnvironmentMapping)
                 {
-                    float ratioDenominator = center_obj->RatioDenominator;
-                    ImGui::DragFloat("Ratio", &ratioDenominator, 0.01f, 0, 100);
-                    center_obj->RatioDenominator = ratioDenominator;
-                    center_obj->R = 1/ratioDenominator + 0.01f;
-                    center_obj->G = 1 / ratioDenominator;
-                    center_obj->B = std::max(1 / ratioDenominator - 0.01f, 0.0f);
+                    ImGui::DragFloat("MixRatio", &center_obj->mixRate, 0.001f, 0, 1);
+                }
+
+                if (center_obj->environmentmapping_mode != 0)
+                {
+                    ImGui::DragFloat("Ratio", &center_obj->RatioDenominator, 0.01f, 0, 100);
+                    center_obj->RatioDenominator = center_obj->RatioDenominator;
+                    center_obj->R = 1/ center_obj->RatioDenominator + 0.01f;
+                    center_obj->G = 1 / center_obj->RatioDenominator;
+                    center_obj->B = std::max(1 / center_obj->RatioDenominator - 0.01f, 0.0f);
                     if (ImGui::TreeNode("Experiment with diffrent values"))
                     {
 
@@ -475,61 +501,18 @@ void imGUIManager::Update()
                         {
                             center_obj->RatioDenominator = 1.49f;
                         }
+                        ImGui::TreePop();
                     }
-                    ImGui::TreePop();
-                    float r = center_obj->R;
-                    ImGui::DragFloat("R_value", &r, 0.001f, 0, 1);
-                    center_obj->R = r;
-                    float g = center_obj->G;
-                    ImGui::DragFloat("G_value", &g, 0.001f, 0, 1);
-                    center_obj->G = g;
-                    float b = center_obj->B;
-                    ImGui::DragFloat("B_value", &b, 0.001f, 0, 1);
-                    center_obj->B = b;
+            
+
+                    ImGui::DragFloat("R_value", &center_obj->R, 0.001f, 0, 1);
+                    ImGui::DragFloat("G_value", &center_obj->G, 0.001f, 0, 1);
+                    ImGui::DragFloat("B_value", &center_obj->B, 0.001f, 0, 1);
+
                 }
 
                 ImGui::NewLine();
-                ImGui::Separator();
-                ImGui::NewLine();
 
-                int drawmode = center_obj->drawmode;
-                ImGui::RadioButton("face normal", &drawmode, 0); ImGui::SameLine();
-                ImGui::RadioButton("vertex normal", &drawmode, 1);
-                center_obj->drawmode = drawmode;
-                bool drawnormal = center_obj->shouldDrawNormals;
-                ImGui::Checkbox("draw normals", &drawnormal);
-                center_obj->shouldDrawNormals = drawnormal;
-
-                ImGui::NewLine();
-                ImGui::Separator();
-                ImGui::NewLine();
-
-                mapping_option = center_obj->mapping_mode;
-                ImGui::RadioButton("default mapping", &mapping_option, 0); ImGui::SameLine();
-                ImGui::RadioButton("spherical mapping", &mapping_option, 1); ImGui::SameLine();
-                ImGui::RadioButton("cylindrical mapping", &mapping_option, 2); ImGui::SameLine();
-                ImGui::RadioButton("planar mapping", &mapping_option, 3);
-                center_obj->mapping_mode = mapping_option;
-
-                ImGui::NewLine();
-                ImGui::Separator();
-                ImGui::NewLine();
-
-                int mapping_with_what = center_obj->mapping_with_normal ? 1 : 0;
-                ImGui::RadioButton("mapping with position", &mapping_with_what, 0); ImGui::SameLine();
-                ImGui::RadioButton("mapping with normal", &mapping_with_what, 1);
-                center_obj->mapping_with_normal = (mapping_with_what == 1);
-
-                ImGui::NewLine();
-                ImGui::Separator();
-                ImGui::NewLine();
-
-                int where_to_calculate = center_obj->should_calculate_uv_in_gpu ? 0 : 1;
-                ImGui::RadioButton("calculate in gpu", &where_to_calculate, 0); ImGui::SameLine();
-                ImGui::RadioButton("calculate in cpu", &where_to_calculate, 1);
-                center_obj->should_calculate_uv_in_gpu = (where_to_calculate == 0);
-
-                ImGui::NewLine();
                 ImGui::End();
             }
         }

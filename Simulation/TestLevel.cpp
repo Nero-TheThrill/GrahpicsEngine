@@ -12,12 +12,12 @@ TestLevel::TestLevel()
     skysphere = nullptr;
     centerobj = nullptr;
     obj = nullptr;
-    dolphine = nullptr;
+    ramus = nullptr;
     time_count = 0;
 
     reflectivedolpihne = nullptr;
 
-    city = nullptr;
+    grass = nullptr;
 
     jet1 = nullptr;
     jet2 = nullptr;
@@ -29,34 +29,28 @@ void TestLevel::Init()
 {
     IMGUIMANAGER->useIMGUI = true;
     GRAPHICS->SetBackgroundColor(glm::vec4(0.6,0.65,0.7,1.0));
+    
 
-    orbit = new Object("orbit");
-    orbit->SetMeshGroup(GRAPHICS->GetMeshGroup("line"));
-    orbit->SetShader("test");
-    orbit->SetColor(glm::vec3(1, 1, 1));
-    orbit->transform.Translate(glm::vec3(0, -3, 0));
-    orbit->transform.Scale(glm::vec3(9, 9, 9));
+    ramus = new Object("dolphin");
+    ramus->SetMeshGroup(GRAPHICS->GetMeshGroup("ramus"));
+    ramus->SetShader("phong_shading");
+    ramus->transform.Translate(glm::vec3(-14.8f, -1.2f, -16.5f));
+    ramus->transform.Scale(glm::vec3(10.f));
+    ramus->transform.Rotate(54, glm::vec3(0, 1, 0));
+    ramus->drawmode = 1;
 
+    grass = new Object("grass");
+    grass->SetMeshGroup(GRAPHICS->GetMeshGroup("grass"));
+    grass->SetShader("phong_shading");
+    grass->transform.Translate(glm::vec3(0, -20, 0));
+    grass->transform.Scale(glm::vec3(50.f));
+    grass->transform.Rotate(270, glm::vec3(0, 1, 0));
+    grass->drawmode = 1;
 
-    dolphine = new Object("ramus");
-    dolphine->SetMeshGroup(GRAPHICS->GetMeshGroup("dolphin"));
-    dolphine->SetShader("phong_shading");
-    dolphine->transform.Translate(glm::vec3(-14.8f, -6, -11.5f));
-    dolphine->transform.Scale(glm::vec3(10.f));
-    dolphine->transform.Rotate(86, glm::vec3(-1, 0.6, 0.6));
-    dolphine->drawmode = 1;
-
-    city = new Object("city");
-    city->SetMeshGroup(GRAPHICS->GetMeshGroup("desertcity"));
-    city->SetShader("phong_shading");
-    city->transform.Translate(glm::vec3(0, -20, 0));
-    city->transform.Scale(glm::vec3(50.f));
-    city->transform.Rotate(270, glm::vec3(0, 1, 0));
-    city->drawmode = 1;
-
-    reflectivedolpihne = new Object("bumblebee");
+    reflectivedolpihne = new Object("reflective dolphin");
     reflectivedolpihne->SetMeshGroup(GRAPHICS->GetMeshGroup("dolphin"));
     reflectivedolpihne->SetShader("phong_shading_cube");
+    reflectivedolpihne->material = GRAPHICS->GetMaterial("m_environment");
     reflectivedolpihne->SetColor(glm::vec3(0.6f));
     reflectivedolpihne->transform.Translate(glm::vec3(19, -6.5f, -15.7f));
     reflectivedolpihne->transform.Scale(glm::vec3(15.f));
@@ -64,7 +58,8 @@ void TestLevel::Init()
     reflectivedolpihne->drawmode = 1;
     reflectivedolpihne->isUsingCubeMapTexture = true;
     reflectivedolpihne->environmentmapping_mode = 0;
-
+    reflectivedolpihne->isModePhongShading_EnvironmentMapping = true;
+    reflectivedolpihne->mixRate = 0.3f;
 
 
 
@@ -96,9 +91,12 @@ void TestLevel::Init()
     centerobj->drawmode = 1;
     centerobj->mapping_mode = 1;
     centerobj->isUsingCubeMapTexture = true;
+
     GRAPHICS->centerobj = centerobj;
 
-
+    GRAPHICS->camera.View(glm::vec3(0.0f, 4.0f, 25));
+    GRAPHICS->camera.SetPitch(-10);
+    GRAPHICS->camera.SetYaw(-90);
     IMGUIMANAGER->Init();
 }
 
@@ -106,10 +104,7 @@ void TestLevel::Update()
 {
     if (IMGUIMANAGER->lightNumberChanged||IMGUIMANAGER->lightoption!=IMGUIMANAGER->prev_lightoption)
     {
-        for (auto light : lights)
-        {
-            light->alive = false;
-        }
+        OBJECTMANAGER->DeleteAllLights();
         lights.clear();
         for (int i = 0; i < IMGUIMANAGER->lightNumber; i++)
         {
@@ -240,19 +235,19 @@ void TestLevel::Update()
     }
     if (Input::IsPressed(GLFW_KEY_RIGHT))
     {
-        GRAPHICS->camera.RotateYaxis(5 * TIMEMANAGER->deltaTime * 10.f);
+        GRAPHICS->camera.RotateYaxis(3 * TIMEMANAGER->deltaTime * 10.f);
     }
     if (Input::IsPressed(GLFW_KEY_LEFT))
     {
-        GRAPHICS->camera.RotateYaxis(-5 * TIMEMANAGER->deltaTime * 10.f);
+        GRAPHICS->camera.RotateYaxis(-3 * TIMEMANAGER->deltaTime * 10.f);
     }
     if (Input::IsPressed(GLFW_KEY_DOWN))
     {
-        GRAPHICS->camera.RotateXaxis(5 * TIMEMANAGER->deltaTime * 10.f);
+        GRAPHICS->camera.RotateXaxis(3 * TIMEMANAGER->deltaTime * 10.f);
     }
     if (Input::IsPressed(GLFW_KEY_UP))
     {
-        GRAPHICS->camera.RotateXaxis(-5 * TIMEMANAGER->deltaTime * 10.f);
+        GRAPHICS->camera.RotateXaxis(-3 * TIMEMANAGER->deltaTime * 10.f);
     }
     if (Input::IsTriggered(GLFW_KEY_N))
     {

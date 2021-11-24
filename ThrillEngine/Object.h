@@ -35,4 +35,5 @@ public:
     bool isModePhongShading_EnvironmentMapping=false;
     float R=0.980f, G=0.982f, B=0.984f;
     float RatioDenominator = 1.08f;
+    float mixRate = 0.7f;
 };

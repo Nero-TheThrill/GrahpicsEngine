@@ -46,7 +46,9 @@ public:
     void SetLeftTexture(int texture_id);
     void SetRightTexture(int texture_id);
     void SetEmissiveTexture(const std::string& texture_id);
-private:
+    void SetEmissiveTexture(int texture_id);
     int top=-1, bottom=-1, front=-1, back=-1, left=-1, right=-1;
     int emissive_texture = -1;
+private:
+
 };

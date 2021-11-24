@@ -202,3 +202,7 @@ void CubeMapTexture::SetEmissiveTexture(const std::string& texture_id)
 {
     emissive_texture = GRAPHICS->GetTexture(texture_id);
 }
+void CubeMapTexture::SetEmissiveTexture(int texture_id)
+{
+    emissive_texture = texture_id;
+}

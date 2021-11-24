@@ -28,6 +28,7 @@ Object::Object(std::string n)
     draw_normal_shader = GRAPHICS->GetShader("test");
     mesh = nullptr;
     material = nullptr;
+    alive = true;
 }
 
 Object::Object(std::string n, Object* obj)
@@ -44,6 +45,7 @@ Object::Object(std::string n, Object* obj)
     draw_normal_shader = obj->draw_normal_shader;
     shader = obj->shader;
     material = obj->material;
+    alive = true;
 }
 
 
@@ -82,6 +84,7 @@ void Object::Draw()
         shader.set("G", G);
         shader.set("B", B);
         shader.set("RatioDenominator", RatioDenominator);
+        shader.set("mixRate", mixRate);
         mesh->Draw(shader, material);
         glUseProgram(0);
         if (shouldDrawNormals)

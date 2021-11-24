@@ -63,6 +63,26 @@ void Camera::RotateXaxis(float degree)
     view = glm::lookAt(cam_position, cam_position + cam_target, up);
 }
 
+void Camera::SetPitch(float degree)
+{
+    pitch = degree;
+    if (pitch > 89.0f)
+        pitch = 89.0f;
+    if (pitch < -89.0f)
+        pitch = -89.0f;
+}
+
+void Camera::SetYaw(float degree)
+{
+    yaw = degree;
+    glm::vec3 direction;
+    direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    direction.y = sin(glm::radians(pitch));
+    direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    cam_target = glm::normalize(direction);
+    view = glm::lookAt(cam_position, cam_position + cam_target, up);
+}
+
 void Camera::MoveForward(float amount)
 {
     cam_position += glm::normalize((cam_target))*amount * TIMEMANAGER->deltaTime * 2.5f;

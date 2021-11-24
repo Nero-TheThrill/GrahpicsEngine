@@ -17,9 +17,11 @@ public:
     void RegisterObject(Object* obj);
     void RegisterLight(LightObject* light);
     void DeleteAll();
+    void DeleteAllLights();
     Object* GetObject(std::string id);
     std::unordered_map<unsigned, Object*> GetAllObjects();
     std::unordered_map<unsigned, LightObject*> GetAllLights();
+    SkyBox* skybox;
 private:
     unsigned int genObjectsNum = 0;
     std::unordered_map<unsigned, Object*> objects;
@@ -27,11 +29,11 @@ private:
     std::unordered_map<unsigned, LightObject*> lightobjects;
     std::vector<decltype(lightobjects)::key_type> light_to_be_erased;
     
-    SkyBox* skybox;
+
     GLuint FBO=0;
     GLuint texture_top, texture_bottom, texture_front, texture_back, texture_left, texture_right;
     GLuint DepthBuffer = 0;
-    Material* m_environment =nullptr;
+
     glm::vec3 centerobj_position;
     glm::mat4 projection, view;
     glm::vec3 direction;

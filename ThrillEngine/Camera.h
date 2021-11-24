@@ -10,6 +10,8 @@ public:
     void Move(glm::vec3 v);
     void RotateYaxis(float degree);
     void RotateXaxis(float degree);
+    void SetPitch(float degree);
+    void SetYaw(float degree);
     void MoveForward(float amount);
     void MoveSide(float amount);
     void MouseMoveUpdate();

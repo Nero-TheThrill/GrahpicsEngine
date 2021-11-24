@@ -11,9 +11,8 @@ public:
     void Close() override;
     ~TestLevel1();
 private:
-    Object* plane, * orbit, * centerobj, * obj, * ramus, * dragon, * bumblebee;
+    Object* plane, * centerobj, * obj, * dragon;
     std::vector<LightObject*> lights;
-    Object* skysphere;
     float time_count;
 
 };

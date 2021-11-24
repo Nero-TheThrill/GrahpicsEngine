@@ -12,7 +12,7 @@ ObjectManager::ObjectManager()
     OBJECTMANAGER = this;
     genObjectsNum = 0;
     std::cout << "Object Manager Constructor Called" << std::endl;
-    //TODO: Initialize framebufferobject
+
     glGenFramebuffers(1, &FBO);
     glBindFramebuffer(GL_FRAMEBUFFER, FBO);
     glGenTextures(1, &texture_top);
@@ -75,46 +75,15 @@ ObjectManager::ObjectManager()
 
 void ObjectManager::Init()
 {
-    if (GRAPHICS->GetMaterial("m_skybox") == nullptr)
-    {
-        Material* m_skybox = new Material("m_skybox", true);
-        reinterpret_cast<CubeMapTexture*>(m_skybox->texture)->SetFrontTexture("skybox_front");
-        reinterpret_cast<CubeMapTexture*>(m_skybox->texture)->SetBackTexture("skybox_back");
-        reinterpret_cast<CubeMapTexture*>(m_skybox->texture)->SetLeftTexture("skybox_left");
-        reinterpret_cast<CubeMapTexture*>(m_skybox->texture)->SetRightTexture("skybox_right");
-        reinterpret_cast<CubeMapTexture*>(m_skybox->texture)->SetTopTexture("skybox_top");
-        reinterpret_cast<CubeMapTexture*>(m_skybox->texture)->SetBottomTexture("skybox_bottom");
-    }
-    if(m_environment == nullptr)
-    {
-        m_environment = new Material("m_environment",true);
-    }
-    reinterpret_cast<CubeMapTexture*>(m_environment->texture)->SetEmissiveTexture("test");
-    m_environment->ka = glm::vec3(0.2f);
+
     skybox = new SkyBox("skybox");
     skybox->SetShader("nolight");
-    skybox->SetMeshGroup(GRAPHICS->GetMeshGroup("cube"));
+    skybox->SetMeshGroup(GRAPHICS->GetMeshGroup("skycube"));
     skybox->material = GRAPHICS->GetMaterial("m_skybox");
 }
 
 void ObjectManager::Update()
 {
-
-    for (auto light : light_to_be_erased)
-    {
-        lightobjects.erase(light);
-    }
-    for (auto obj : need_to_be_erased)
-    {
-        Object* deletethis = objects.find(obj)->second;
-        objects.erase(obj);
-        delete deletethis;
-    }
-    need_to_be_erased.clear();
-    light_to_be_erased.clear();
-
-
-
     if (skybox != nullptr)
     {
         glDepthMask(GL_FALSE);
@@ -146,6 +115,7 @@ void ObjectManager::Update()
 
         }
     }
+    projection = glm::perspective(glm::radians(90.f), 1.f, GRAPHICS->camera.near, GRAPHICS->camera.far);
     for (std::unordered_map<unsigned, Object*>::iterator obj = objects.begin(); obj != objects.end(); obj++)
     {
         if (obj->second->isUsingCubeMapTexture)
@@ -154,7 +124,13 @@ void ObjectManager::Update()
             {
                 centerobj_position = obj->second->transform.position;
                 GenerateEnvironmentTextures();
-                obj->second->material = m_environment;
+                reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetTopTexture(texture_top);
+                reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetBottomTexture(texture_bottom);
+                reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetLeftTexture(texture_left);
+                reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetRightTexture(texture_right);
+                reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetFrontTexture(texture_front);
+                reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetBackTexture(texture_back);
+
                 obj->second->Update();
             }
             else
@@ -163,6 +139,19 @@ void ObjectManager::Update()
             }
         }
     }
+    for (auto light : light_to_be_erased)
+    {
+        lightobjects.erase(light);
+    }
+    for (auto obj : need_to_be_erased)
+    {
+        Object* deletethis = objects.find(obj)->second;
+        objects.erase(obj);
+        delete deletethis;
+    }
+    need_to_be_erased.clear();
+    light_to_be_erased.clear();
+
 
 
 }
@@ -210,12 +199,8 @@ void ObjectManager::GenerateEnvironmentTextures()
         std::cout << "FBO is incomplete" << std::endl;
     }
     glBindBuffer(GL_UNIFORM_BUFFER, GRAPHICS->uboMatrices);
-    projection = glm::perspective(glm::radians(90.f), 1.f, GRAPHICS->camera.near, GRAPHICS->camera.far);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projection));
-    direction.x = cos(glm::radians(90.f)) * cos(glm::radians(0.f));
-    direction.y = sin(glm::radians(0.f));
-    direction.z = sin(glm::radians(90.f)) * cos(glm::radians(0.f));
-    view = glm::lookAt(centerobj_position, centerobj_position + glm::normalize(direction), glm::vec3(0.0f, 1.0f, 0.0f));
+    view = glm::lookAt(centerobj_position, centerobj_position + glm::vec3(0,0,1), glm::vec3(0.0f, 1.0f, 0.0f));
     glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
@@ -246,12 +231,8 @@ void ObjectManager::GenerateEnvironmentTextures()
         std::cout << "FBO is incomplete" << std::endl;
     }
     glBindBuffer(GL_UNIFORM_BUFFER, GRAPHICS->uboMatrices);
-    projection = glm::perspective(glm::radians(90.f), 1.f, GRAPHICS->camera.near, GRAPHICS->camera.far);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projection));
-    direction.x = cos(glm::radians(90.f)) * cos(glm::radians(180.f));
-    direction.y = sin(glm::radians(180.f));
-    direction.z = sin(glm::radians(90.f)) * cos(glm::radians(180.f));
-    view = glm::lookAt(centerobj_position, centerobj_position + glm::normalize(direction), glm::vec3(0.0f, 1.0f, 0.0f));
+    view = glm::lookAt(centerobj_position, centerobj_position + glm::vec3(0,0,-1), glm::vec3(0.0f, 1.0f, 0.0f));
     glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
@@ -281,12 +262,8 @@ void ObjectManager::GenerateEnvironmentTextures()
         std::cout << "FBO is incomplete" << std::endl;
     }
     glBindBuffer(GL_UNIFORM_BUFFER, GRAPHICS->uboMatrices);
-    projection = glm::perspective(glm::radians(90.f), 1.f, GRAPHICS->camera.near, GRAPHICS->camera.far);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projection));
-    direction.x = cos(glm::radians(90.f)) * cos(glm::radians(89.9f));
-    direction.y = sin(glm::radians(89.9f));
-    direction.z = sin(glm::radians(90.f)) * cos(glm::radians(89.9f));
-    view = glm::lookAt(centerobj_position, centerobj_position + glm::normalize(direction), glm::vec3(0.0f, 1.0f, 0.0f));
+    view = glm::lookAt(centerobj_position, centerobj_position + glm::vec3(0,1,0.000001f), glm::vec3(0.0f, 1.0f, 0.0f));
     glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
@@ -316,12 +293,8 @@ void ObjectManager::GenerateEnvironmentTextures()
         std::cout << "FBO is incomplete" << std::endl;
     }
     glBindBuffer(GL_UNIFORM_BUFFER, GRAPHICS->uboMatrices);
-    projection = glm::perspective(glm::radians(90.f), 1.f, GRAPHICS->camera.near, GRAPHICS->camera.far);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projection));
-    direction.x = cos(glm::radians(270.f)) * cos(glm::radians(-89.9f));
-    direction.y = sin(glm::radians(-89.9f));
-    direction.z = sin(glm::radians(270.f)) * cos(glm::radians(-89.9f));
-    view = glm::lookAt(centerobj_position, centerobj_position + glm::normalize(direction), glm::vec3(0.0f, 1.0f, 0.0f));
+    view = glm::lookAt(centerobj_position, centerobj_position + glm::vec3(0,-1,-0.000001f), glm::vec3(0.0f, 1.0f, 0.0f));
     glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
@@ -351,12 +324,8 @@ void ObjectManager::GenerateEnvironmentTextures()
         std::cout << "FBO is incomplete" << std::endl;
     }
     glBindBuffer(GL_UNIFORM_BUFFER, GRAPHICS->uboMatrices);
-    projection = glm::perspective(glm::radians(90.f), 1.f, GRAPHICS->camera.near, GRAPHICS->camera.far);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projection));
-    direction.x = cos(glm::radians(180.f)) * cos(glm::radians(0.f));
-    direction.y = sin(glm::radians(0.f));
-    direction.z = sin(glm::radians(180.f)) * cos(glm::radians(0.f));
-    view = glm::lookAt(centerobj_position, centerobj_position + glm::normalize(direction), glm::vec3(0.0f, 1.0f, 0.0f));
+    view = glm::lookAt(centerobj_position, centerobj_position + glm::vec3(-1,0,0), glm::vec3(0.0f, 1.0f, 0.0f));
     glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
@@ -386,12 +355,8 @@ void ObjectManager::GenerateEnvironmentTextures()
         std::cout << "FBO is incomplete" << std::endl;
     }
     glBindBuffer(GL_UNIFORM_BUFFER, GRAPHICS->uboMatrices);
-    projection = glm::perspective(glm::radians(90.f), 1.f, GRAPHICS->camera.near, GRAPHICS->camera.far);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projection));
-    direction.x = cos(glm::radians(180.f)) * cos(glm::radians(180.f));
-    direction.y = sin(glm::radians(180.f));
-    direction.z = sin(glm::radians(180.f)) * cos(glm::radians(180.f));
-    view = glm::lookAt(centerobj_position, centerobj_position + glm::normalize(direction), glm::vec3(0.0f, 1.0f, 0.0f));
+    view = glm::lookAt(centerobj_position, centerobj_position + glm::vec3(1,0,0), glm::vec3(0.0f, 1.0f, 0.0f));
     glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
@@ -413,17 +378,7 @@ void ObjectManager::GenerateEnvironmentTextures()
     }
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glDrawBuffer(GL_BACK_LEFT);
-
-
-
-    //TODO: apply to the center object
-    reinterpret_cast<CubeMapTexture*>(m_environment->texture)->SetTopTexture(texture_top);
-    reinterpret_cast<CubeMapTexture*>(m_environment->texture)->SetBottomTexture(texture_bottom);
-    reinterpret_cast<CubeMapTexture*>(m_environment->texture)->SetLeftTexture(texture_left);
-    reinterpret_cast<CubeMapTexture*>(m_environment->texture)->SetRightTexture(texture_right);
-    reinterpret_cast<CubeMapTexture*>(m_environment->texture)->SetFrontTexture(texture_front);
-    reinterpret_cast<CubeMapTexture*>(m_environment->texture)->SetBackTexture(texture_back);
-
+    
     GRAPHICS->UpdatePVmatrices();
 }
 
@@ -450,6 +405,42 @@ void ObjectManager::DeleteAll()
     {
         light_to_be_erased.push_back(light->first);
     }
+    for (auto light : light_to_be_erased)
+    {
+        lightobjects.erase(light);
+    }
+    for (auto obj : need_to_be_erased)
+    {
+        Object* deletethis = objects.find(obj)->second;
+        objects.erase(obj);
+        delete deletethis;
+    }
+    objects.clear();
+    lightobjects.clear();
+    need_to_be_erased.clear();
+    light_to_be_erased.clear();
+}
+
+void ObjectManager::DeleteAllLights()
+{
+    for (std::unordered_map<unsigned, LightObject*>::iterator light = lightobjects.begin(); light != lightobjects.end(); light++)
+    {
+        light_to_be_erased.push_back(light->first);
+        need_to_be_erased.push_back(light->first);
+    }
+    for (auto light : light_to_be_erased)
+    {
+        lightobjects.erase(light);
+    }
+    for (auto obj : need_to_be_erased)
+    {
+        Object* deletethis = objects.find(obj)->second;
+        objects.erase(obj);
+        delete deletethis;
+    }
+    lightobjects.clear();
+    light_to_be_erased.clear();
+    need_to_be_erased.clear();
 }
 
 Object* ObjectManager::GetObject(std::string id)

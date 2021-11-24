@@ -31,6 +31,7 @@ uniform float G;
 uniform float B;
 uniform float RatioDenominator;
 uniform int environmentmapping_mode;
+uniform float mixRate;
 float FresnelPower=5.0;
 float F=((1.0-G)*(1.0-G))/((1.0+G)*(1.0+G));
 vec3 RefractRGB,RefractR,RefractG,RefractB;
@@ -319,7 +320,7 @@ if(should_use_gpuside_uv)
 		result+=CalculateLight(lights[i]);
 	}
 	if(emissive_texture_exists)
-		result+=global_ambient_color*k_a+vec3(texture(emissive_texture,objectTexCoord))/5;
+		result+=global_ambient_color*k_a+vec3(texture(emissive_texture,objectTexCoord));
 	else
 		result+=global_ambient_color*k_a+emissive;
 	float fog_factor=(far-length(view_position-FragPosition))/(far-near);
@@ -334,7 +335,7 @@ if(should_use_gpuside_uv)
 	{
 		if(isModePhongShading_EnvironmentMapping)
 		{	
-			FragColor=vec4(mix(result,resultColor,0.7),1.0);
+			FragColor=vec4(mix(result,resultColor,mixRate),1.0);
 			
 		}
 		else

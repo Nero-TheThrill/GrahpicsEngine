@@ -3,6 +3,7 @@
 #include "Graphics.h"
 #include "LevelManager.h"
 #include "ObjectLoader.h"
+#include "ObjectManager.h"
 #include "TestLevel.h"
 #include "TestLevel1.h"
 
@@ -54,8 +55,7 @@ int main()
     GRAPHICS->LoadTexture("../images/test.png", "test");
     GRAPHICS->LoadTexture("../images/dragon.jpg", "dragon");
     GRAPHICS->LoadTexture("../images/bumblebee.jpg", "bumblebee");
-    GRAPHICS->LoadTexture("../images/metal_roof_diff_512x512.png", "roofdiff");
-    GRAPHICS->LoadTexture("../images/metal_roof_spec_512x512.png", "roofspec");
+    GRAPHICS->LoadTexture("../images/dolphin.jpg", "dolphin");
 
     GRAPHICS->LoadTexture("../images/skybox/TropicalSunnyDay_pz.jpg", "skybox_front");
     GRAPHICS->LoadTexture("../images/skybox/TropicalSunnyDay_nz.jpg", "skybox_back");
@@ -64,27 +64,22 @@ int main()
     GRAPHICS->LoadTexture("../images/skybox/TropicalSunnyDay_py.jpg", "skybox_top");
     GRAPHICS->LoadTexture("../images/skybox/TropicalSunnyDay_ny.jpg", "skybox_bottom");
 
-    objloader.loadObject("../models/grassy-groves-grass-tile.obj", "desertcity");
+
+    objloader.loadObject("../models/grassy-groves-grass-tile.obj", "grass");
     objloader.loadObject("../models/dolphin.obj", "dolphin");
     objloader.loadObject("../models/jet.obj", "jet");
     objloader.loadObject("../models/bumblebee.obj", "bumblebee");
     objloader.loadObject("../models/dragon.obj", "dragon");
-    objloader.loadObject("../models/cube.obj", "cube");
+    objloader.loadObject("../models/cube.obj", "skycube");
     objloader.loadObject("../models/ramus.obj", "ramus");
-    objloader.loadObject("../models/rhino.obj", "rhino");
-    objloader.loadObject("../models/starwars1.obj", "starwars");
     objloader.loadObject("../models/sphere.obj", "sphere");
     objloader.loadObject("../models/cube2.obj", "cube2");
     objloader.loadObject("../models/bunny.obj", "bunny");
     objloader.loadObject("../models/bunny_high_poly.obj", "bunny_high_poly");
     objloader.loadObject("../models/4Sphere.obj", "4Sphere");
-    objloader.loadObject("../models/sphere_modified.obj", "sphere_modified");
     objloader.loadObject("../models/lucy_princeton.obj", "lucy_princeton");
-    objloader.loadObject("../models/cup.obj", "cup");
-    objloader.loadObject("../models/quad.obj", "quad");
-    objloader.loadObject("../models/triangle.obj", "triangle");
     objloader.loadObject("../models/baron.obj", "baron");
-
+    objloader.loadObject("../models/quad.obj", "quad");
     GRAPHICS->AddSphereMesh();
 
 
@@ -92,31 +87,37 @@ int main()
 
     ThrillEngine->Init();
 
-    Material * centermat, * lightmat, * skymat, * jetmat,*planemat;
+    Material * centermat, * lightmat, * jetmat, *environmentmat, *skyboxmat;
 
     new Material("m_default");
-    centermat = new Material("m_centerobj");
-    lightmat = new Material("m_light");
-    skymat = new Material("m_skysphere");
+
+    centermat = new Material("m_centerobj",true);
+    reinterpret_cast<CubeMapTexture*>(centermat->texture)->SetEmissiveTexture("test");
+    centermat->ka = glm::vec3(0.0f);
+    centermat->kd = glm::vec3(0.6f);
 
     jetmat = new Material("m_jet");
-    planemat = new Material("m_plane");
+    jetmat->texture->SetTexture("jet");
 
+    lightmat = new Material("m_light");
     lightmat->emissive = glm::vec3(0.6f);
     lightmat->kd = glm::vec3(0.3f);
 
+    environmentmat = new Material("m_environment", true);
+    reinterpret_cast<CubeMapTexture*>(environmentmat->texture)->SetEmissiveTexture("dolphin");
+    environmentmat->ka = glm::vec3(0.0f);
+    environmentmat->kd = glm::vec3(0.3f);
 
 
-    jetmat->texture->SetTexture("jet");
+    skyboxmat = new Material("m_skybox", true);
+    reinterpret_cast<CubeMapTexture*>(skyboxmat->texture)->SetFrontTexture("skybox_front");
+    reinterpret_cast<CubeMapTexture*>(skyboxmat->texture)->SetBackTexture("skybox_back");
+    reinterpret_cast<CubeMapTexture*>(skyboxmat->texture)->SetLeftTexture("skybox_left");
+    reinterpret_cast<CubeMapTexture*>(skyboxmat->texture)->SetRightTexture("skybox_right");
+    reinterpret_cast<CubeMapTexture*>(skyboxmat->texture)->SetTopTexture("skybox_top");
+    reinterpret_cast<CubeMapTexture*>(skyboxmat->texture)->SetBottomTexture("skybox_bottom");
+    OBJECTMANAGER->skybox->material = skyboxmat;
 
-    centermat->texture->SetDiffuseTexture("roofdiff");
-    centermat->texture->SetSpecularTexture("roofspec");
-
-    skymat->texture->SetTexture("space");
-
-    planemat->ka = glm::vec3(0.08f);
-    planemat->kd = glm::vec3(0.1f);
-    planemat->ks = glm::vec3(0.1f);
 
 
 

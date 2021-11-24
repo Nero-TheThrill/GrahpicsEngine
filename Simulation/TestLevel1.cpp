@@ -7,15 +7,10 @@
 #include "TimeManager.h"
 TestLevel1::TestLevel1()
 {
-    orbit = nullptr;
     plane = nullptr;
-    skysphere = nullptr;
     centerobj = nullptr;
     obj = nullptr;
-    ramus = nullptr;
     time_count = 0;
-
-    bumblebee = nullptr;
 
     dragon = nullptr;
 }
@@ -26,8 +21,7 @@ void TestLevel1::Init()
     time_count = 0;
     GRAPHICS->SetBackgroundColor(glm::vec4(0.6, 0.65, 0.7, 1.0));
     
-
-
+    
     plane = new Object("plane");
     plane->SetMeshGroup(GRAPHICS->GetMeshGroup("quad"));
     plane->SetShader("phong_shading");
@@ -38,20 +32,21 @@ void TestLevel1::Init()
     plane->drawmode = 1;
 
 
-
-
-
-
-
     centerobj = new Object("centerobject");
-    centerobj->SetMeshGroup(GRAPHICS->GetMeshGroup("dragon"));
-    centerobj->SetShader("phong_shading");
-    centerobj->transform.Translate(glm::vec3(0.f, -3.7f, 0.f));
-    centerobj->transform.Rotate(-45, glm::vec3(0, 1, 0));
-    centerobj->transform.Scale(glm::vec3(13.f));
+    centerobj->SetMeshGroup(GRAPHICS->GetMeshGroup("dolphin"));
+    centerobj->SetShader("phong_shading_cube");
+    centerobj->material = GRAPHICS->GetMaterial("m_environment");
+    centerobj->transform.Translate(glm::vec3(0.f, 0.f, 0.f));
+    centerobj->transform.Scale(glm::vec3(8.f));
+    centerobj->transform.Rotate(-97, glm::vec3(0.66f, 0.27f, 0.23f));
     centerobj->drawmode = 1;
-    centerobj->mapping_mode = 0;
+    centerobj->environmentmapping_mode = 0;
+    centerobj->isUsingCubeMapTexture = true;
+    centerobj->isModePhongShading_EnvironmentMapping = true;
+    centerobj->mixRate = 0.9f;
     GRAPHICS->centerobj = centerobj;
+
+
 
 
 
@@ -77,56 +72,58 @@ void TestLevel1::Init()
     {
         if (iter % 8 == 7)
         {
-            light->ambient = glm::vec3(1.f, 0.1f, 0.1f);
-            light->diffuse = glm::vec3(1.f, 0.1f, 0.1f);
-            light->specular = glm::vec3(1.f, 0.1f, 0.1f);
+            light->ambient = glm::vec3(1.f, 0.1f, 0.1f)/3.f;
+            light->diffuse = glm::vec3(1.f, 0.1f, 0.1f) / 3.f;
+            light->specular = glm::vec3(1.f, 0.1f, 0.1f) / 3.f;
         }
         else if (iter % 8 == 6)
         {
-            light->ambient = glm::vec3(1.f, 0.5f, 0.1f);
-            light->diffuse = glm::vec3(1.f, 0.5f, 0.1f);
-            light->specular = glm::vec3(1.f, 0.5f, 0.1f);
+            light->ambient = glm::vec3(1.f, 0.5f, 0.1f) / 3.f;
+            light->diffuse = glm::vec3(1.f, 0.5f, 0.1f) / 3.f;
+            light->specular = glm::vec3(1.f, 0.5f, 0.1f) / 3.f;
         }
         else if (iter % 8 == 5)
         {
-            light->ambient = glm::vec3(0.5f, 0.5f, 0.1f);
-            light->diffuse = glm::vec3(0.5f, 0.5f, 0.1f);
-            light->specular = glm::vec3(0.5f, 0.5f, 0.1f);
+            light->ambient = glm::vec3(0.5f, 0.5f, 0.1f) / 3.f;
+            light->diffuse = glm::vec3(0.5f, 0.5f, 0.1f) / 3.f;
+            light->specular = glm::vec3(0.5f, 0.5f, 0.1f) / 3.f;
         }
         else if (iter % 8 == 4)
         {
-            light->ambient = glm::vec3(0.1f, 1.f, 0.1f);
-            light->diffuse = glm::vec3(0.1f, 1.f, 0.1f);
-            light->specular = glm::vec3(0.1f, 1.f, 0.1f);
+            light->ambient = glm::vec3(0.1f, 1.f, 0.1f) / 3.f;
+            light->diffuse = glm::vec3(0.1f, 1.f, 0.1f) / 3.f;
+            light->specular = glm::vec3(0.1f, 1.f, 0.1f) / 3.f;
         }
         else if (iter % 8 == 3)
         {
-            light->ambient = glm::vec3(0.1f, 0.1f, 1.f);
-            light->diffuse = glm::vec3(0.1f, 0.1f, 1.f);
-            light->specular = glm::vec3(0.1f, 0.1f, 1.f);
+            light->ambient = glm::vec3(0.1f, 0.1f, 1.f)/3.f;
+            light->diffuse = glm::vec3(0.1f, 0.1f, 1.f)/3.f;
+            light->specular = glm::vec3(0.1f, 0.1f, 1.f) / 3.f;
         }
         else if (iter % 8 == 2)
         {
-            light->ambient = glm::vec3(0.1f, 0.1f, 0.6f);
-            light->diffuse = glm::vec3(0.1f, 0.1f, 0.6f);
-            light->specular = glm::vec3(0.1f, 0.1f, 0.6f);
+            light->ambient = glm::vec3(0.1f, 0.1f, 0.6f)/3.f;
+            light->diffuse = glm::vec3(0.1f, 0.1f, 0.6f)/3.f;
+            light->specular = glm::vec3(0.1f, 0.1f, 0.6f) / 3.f;
         }
         else if (iter % 8 == 1)
         {
-            light->ambient = glm::vec3(0.6f, 0.1f, 1.f);
-            light->diffuse = glm::vec3(0.6f, 0.1f, 1.f);
-            light->specular = glm::vec3(0.6f, 0.1f, 1.f);
+            light->ambient = glm::vec3(0.6f, 0.1f, 1.f)/3.f;
+            light->diffuse = glm::vec3(0.6f, 0.1f, 1.f)/3.f;
+            light->specular = glm::vec3(0.6f, 0.1f, 1.f) / 3.f;
         }
         else
         {
-            light->ambient = glm::vec3(1.f, 1.f, 1.f);
-            light->diffuse = glm::vec3(1.f, 1.f, 1.f);
-            light->specular = glm::vec3(1.f, 1.f, 1.f);
+            light->ambient = glm::vec3(1.f, 1.f, 1.f)/3.f;
+            light->diffuse = glm::vec3(1.f, 1.f, 1.f)/3.f;
+            light->specular = glm::vec3(1.f, 1.f, 1.f) / 3.f;
         }
         iter++;
     }
 
-
+    GRAPHICS->camera.View(glm::vec3(0.0f, 4.0f, 25));
+    GRAPHICS->camera.SetPitch(-10);
+    GRAPHICS->camera.SetYaw(-90);
     IMGUIMANAGER->Init();
 }
 
@@ -144,43 +141,43 @@ void TestLevel1::Update()
 
     if (Input::IsPressed(GLFW_KEY_Q))
     {
-        GRAPHICS->camera.Move(glm::vec3(0, 1, 0));
+        GRAPHICS->camera.Move(glm::vec3(0, 2, 0));
     }
     if (Input::IsPressed(GLFW_KEY_E))
     {
-        GRAPHICS->camera.Move(glm::vec3(0, -1, 0));
+        GRAPHICS->camera.Move(glm::vec3(0, -2, 0));
     }
     if (Input::IsPressed(GLFW_KEY_D))
     {
-        GRAPHICS->camera.MoveSide(2);
+        GRAPHICS->camera.MoveSide(5);
     }
     if (Input::IsPressed(GLFW_KEY_A))
     {
-        GRAPHICS->camera.MoveSide(-2);
+        GRAPHICS->camera.MoveSide(-5);
     }
     if (Input::IsPressed(GLFW_KEY_W))
     {
-        GRAPHICS->camera.MoveForward(2);
+        GRAPHICS->camera.MoveForward(5);
     }
     if (Input::IsPressed(GLFW_KEY_S))
     {
-        GRAPHICS->camera.MoveForward(-2);
+        GRAPHICS->camera.MoveForward(-5);
     }
     if (Input::IsPressed(GLFW_KEY_RIGHT))
     {
-        GRAPHICS->camera.RotateYaxis(2 * TIMEMANAGER->deltaTime * 10.f);
+        GRAPHICS->camera.RotateYaxis(3 * TIMEMANAGER->deltaTime * 10.f);
     }
     if (Input::IsPressed(GLFW_KEY_LEFT))
     {
-        GRAPHICS->camera.RotateYaxis(-2 * TIMEMANAGER->deltaTime * 10.f);
+        GRAPHICS->camera.RotateYaxis(-3 * TIMEMANAGER->deltaTime * 10.f);
     }
     if (Input::IsPressed(GLFW_KEY_DOWN))
     {
-        GRAPHICS->camera.RotateXaxis(2 * TIMEMANAGER->deltaTime * 10.f);
+        GRAPHICS->camera.RotateXaxis(3 * TIMEMANAGER->deltaTime * 10.f);
     }
     if (Input::IsPressed(GLFW_KEY_UP))
     {
-        GRAPHICS->camera.RotateXaxis(-2 * TIMEMANAGER->deltaTime * 10.f);
+        GRAPHICS->camera.RotateXaxis(-3 * TIMEMANAGER->deltaTime * 10.f);
     }
     if (Input::IsTriggered(GLFW_KEY_N))
     {

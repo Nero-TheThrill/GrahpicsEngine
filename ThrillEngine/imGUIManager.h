@@ -22,5 +22,6 @@ public:
     int mapping_option = 0;
     bool should_mapping_on_gpu = true;
     bool useIMGUI = true;
+
 };
 extern imGUIManager* IMGUIMANAGER;
