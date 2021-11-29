@@ -41,10 +41,11 @@ void TestLevel::Init()
 
     grass = new Object("grass");
     grass->SetMeshGroup(GRAPHICS->GetMeshGroup("grass"));
+    grass->material=GRAPHICS->GetMaterial("m_ground");
     grass->SetShader("phong_shading");
-    grass->transform.Translate(glm::vec3(0, -20, 0));
-    grass->transform.Scale(glm::vec3(50.f));
-    grass->transform.Rotate(270, glm::vec3(0, 1, 0));
+    grass->transform.Translate(glm::vec3(0, 8, -53));
+    grass->transform.Scale(glm::vec3(1000,100,1000));
+    grass->transform.Rotate(62, glm::vec3(0, 1, 0));
     grass->drawmode = 1;
 
     reflectivedolpihne = new Object("reflective dolphin");

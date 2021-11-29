@@ -391,8 +391,9 @@ void imGUIManager::Update()
             {
                 ImGui::Begin("CenterObject Manager");
 
-                ImGui::DragFloat3("translation", glm::value_ptr(center_obj->transform.position), 0.1f, -FLT_MAX, FLT_MAX);
-
+                glm::vec3 pos = center_obj->transform.position;
+                ImGui::DragFloat3("translation", glm::value_ptr(pos), 0.1f, -FLT_MAX, FLT_MAX);
+                center_obj->transform.Translate(pos);
                 glm::vec3 scale = center_obj->transform.current_scale;
                 ImGui::DragFloat3("scale", glm::value_ptr(scale), 0.1f, -FLT_MAX, FLT_MAX);
                 center_obj->transform.Scale(scale);

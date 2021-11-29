@@ -98,6 +98,13 @@ void Object::Draw()
     }
 }
 
+void Object::SendView(glm::vec3 v)
+{
+    glUseProgram(shader.program_handle);
+    shader.set("test", v);
+    glUseProgram(0);
+}
+
 
 
 

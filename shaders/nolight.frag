@@ -34,10 +34,10 @@ void main()
 	if (abstmpVec3.y >= abstmpVec3.x && abstmpVec3.y >= abstmpVec3.z)
 	{
 	    if(tmpVec3.y < 0)
-			realTexCoord.x = -tmpVec3.x/abstmpVec3.y;
+			realTexCoord.x = tmpVec3.x/abstmpVec3.y;
 	    else
-	    	realTexCoord.x = tmpVec3.x/abstmpVec3.y;
-	    realTexCoord.y = -tmpVec3.z/abstmpVec3.y;
+	    	realTexCoord.x = -tmpVec3.x/abstmpVec3.y;
+	    realTexCoord.y = tmpVec3.z/abstmpVec3.y;
 	    realTexCoord=(realTexCoord+vec2(1))/2;
 	    if(tmpVec3.y>0)
 	    	FragColor=texture(top,realTexCoord);

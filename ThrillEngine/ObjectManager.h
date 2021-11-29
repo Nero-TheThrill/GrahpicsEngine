@@ -12,7 +12,8 @@ public:
     void Init() override;
     void Update() override;
     void EnvironmentTextureCallback(int w, int h);
-    void GenerateEnvironmentTextures();
+    void GenerateEnvironmentTextures(int count);
+    void ReGenerateEnvironmentTextures(unsigned objId);
     ~ObjectManager();
     void RegisterObject(Object* obj);
     void RegisterLight(LightObject* light);
@@ -23,6 +24,7 @@ public:
     std::unordered_map<unsigned, LightObject*> GetAllLights();
     SkyBox* skybox;
 private:
+    unsigned int UBO = 0;
     unsigned int genObjectsNum = 0;
     std::unordered_map<unsigned, Object*> objects;
     std::vector<decltype(objects)::key_type> need_to_be_erased;
@@ -31,7 +33,10 @@ private:
     
 
     GLuint FBO=0;
-    GLuint texture_top, texture_bottom, texture_front, texture_back, texture_left, texture_right;
+    GLuint cubemapTextures[6];
+    GLuint cubemapTextures1[6];
+    GLuint cubemapTextures_regenerate[6];
+    glm::vec3 camDirection[6];
     GLuint DepthBuffer = 0;
 
     glm::vec3 centerobj_position;

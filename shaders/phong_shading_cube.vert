@@ -25,8 +25,8 @@ void main()
 	Normal=mat3(transpose(inverse(model))) * aNormal;  
 	FragPosition=vec3(model*vec4(aPos,1.0));
 	TexCoord = vec2(aTexCoord.x, aTexCoord.y);
-	pos=vec3(mat4(mat3(model)) * vec4(aPos, 1.0));
-	norm=vec3(mat4(mat3(model)) * vec4(aNormal, 1.0));
+	pos=vec3(model * vec4(aPos, 1.0));
+	norm=vec3(model * vec4(aNormal, 1.0));
 	t_norm=aNormal;
 	t_pos=aPos;
 }

@@ -9,6 +9,8 @@ in vec3 norm;
 in vec3 t_norm;
 in vec3 t_pos;
 
+uniform vec3 test;
+
 uniform bool item_selected;
 
 
@@ -287,7 +289,7 @@ if(should_use_gpuside_uv)
 		objectTexCoord=TexCoord;
 
 
-	I = normalize(FragPosition - view_position);
+	I = normalize(FragPosition - test);
 	vec3 reflectDirection = I-2*dot(n_normal,I)*n_normal;
 
 	fresnelRatio=F + (1.0 - F) * pow((1.0 - dot(-I,n_normal)), FresnelPower);

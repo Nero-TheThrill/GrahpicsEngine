@@ -16,6 +16,7 @@ public:
     void Update();
     void SetShader(std::string id);
     void Draw();
+    void SendView(glm::vec3 v);
     bool alive = true;
     unsigned id;
     int drawmode = 0;// 0: facenormal 1: vertexnormal
