@@ -5,7 +5,7 @@
 #include "Graphics.h"
 
 ObjectManager* OBJECTMANAGER = nullptr;
-Object* objid1 = nullptr, * objid2 = nullptr;
+
 ObjectManager::ObjectManager()
 {
     int width=static_cast<int>(APPLICATION->GetWindowSize().x), height = static_cast<int>(APPLICATION->GetWindowSize().y);
@@ -37,6 +37,22 @@ ObjectManager::ObjectManager()
 
         glGenTextures(1, &cubemapTextures_regenerate[i]);
         glBindTexture(GL_TEXTURE_2D, cubemapTextures_regenerate[i]);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_INT, 0);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+        glGenTextures(1, &cubemapTextures_regenerate1[i]);
+        glBindTexture(GL_TEXTURE_2D, cubemapTextures_regenerate1[i]);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_INT, 0);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+        glGenTextures(1, &cubemapTextures_final[i]);
+        glBindTexture(GL_TEXTURE_2D, cubemapTextures_final[i]);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_INT, 0);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -118,14 +134,22 @@ void ObjectManager::Update()
                 GenerateEnvironmentTextures(count);
                 count++;
             }
-            else
+        }
+    }
+    count = 0;
+    for (std::unordered_map<unsigned, Object*>::iterator obj = objects.begin(); obj != objects.end(); obj++)
+    {
+        if (obj->second->isUsingCubeMapTexture)
+        {
+            if (obj->second->alive)
             {
-                need_to_be_erased.push_back(obj->first);
+                centerobj_position = obj->second->transform.position;
+                ReGenerateEnvironmentTextures(count, obj->second->id);
+                count++;
             }
         }
     }
-    GRAPHICS->camera.cam_position = campos;
-    GRAPHICS->UpdateLightInfo();
+    count = 0;
     for (std::unordered_map<unsigned, Object*>::iterator obj = objects.begin(); obj != objects.end(); obj++)
     {
         if (obj->second->isUsingCubeMapTexture)
@@ -134,14 +158,15 @@ void ObjectManager::Update()
             {
                 centerobj_position = obj->second->transform.position;
 
-                ReGenerateEnvironmentTextures(obj->second->id);
+                GenerateEnvironmentTexturesFinal(count,obj->second->id);
+                count++;
+                reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetTopTexture(cubemapTextures_final[0]);
+                reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetBottomTexture(cubemapTextures_final[1]);
+                reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetLeftTexture(cubemapTextures_final[2]);
+                reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetRightTexture(cubemapTextures_final[3]);
+                reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetFrontTexture(cubemapTextures_final[4]);
+                reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetBackTexture(cubemapTextures_final[5]);
 
-                reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetTopTexture(cubemapTextures_regenerate[0]);
-                reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetBottomTexture(cubemapTextures_regenerate[1]);
-                reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetLeftTexture(cubemapTextures_regenerate[2]);
-                reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetRightTexture(cubemapTextures_regenerate[3]);
-                reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetFrontTexture(cubemapTextures_regenerate[4]);
-                reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetBackTexture(cubemapTextures_regenerate[5]);
                 obj->second->SendView(campos);
                 obj->second->Update();
             }
@@ -178,6 +203,10 @@ void ObjectManager::EnvironmentTextureCallback(int w, int h)
         glBindTexture(GL_TEXTURE_2D, cubemapTextures1[i]);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_INT, 0);
         glBindTexture(GL_TEXTURE_2D, cubemapTextures_regenerate[i]);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_INT, 0);
+        glBindTexture(GL_TEXTURE_2D, cubemapTextures_regenerate1[i]);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_INT, 0);
+        glBindTexture(GL_TEXTURE_2D, cubemapTextures_final[i]);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_INT, 0);
     }
 
@@ -235,7 +264,89 @@ void ObjectManager::GenerateEnvironmentTextures(int count)
     GRAPHICS->UpdatePVmatrices();
 }
 
-void ObjectManager::ReGenerateEnvironmentTextures(unsigned objId)
+void ObjectManager::ReGenerateEnvironmentTextures(int count, unsigned objId)
+{
+    projection = glm::perspective(glm::radians(90.f), 1.f, GRAPHICS->camera.near, GRAPHICS->camera.far);
+    int width = static_cast<int>(APPLICATION->GetWindowSize().x), height = static_cast<int>(APPLICATION->GetWindowSize().y);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+    GLenum drawBuffers[2] = { GL_COLOR_ATTACHMENT0,GL_DEPTH_ATTACHMENT };
+    for (int i = 0; i < 6; i++)
+    {
+        if (count == 0)
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, cubemapTextures_regenerate[i], 0);
+        else if (count == 1)
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, cubemapTextures_regenerate1[i], 0);
+        glDrawBuffers(2, drawBuffers);
+        glViewport(0, 0, width, height);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        {
+            std::cout << "FBO is incomplete" << std::endl;
+        }
+        glBindBuffer(GL_UNIFORM_BUFFER, GRAPHICS->uboMatrices);
+        glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projection));
+        view = glm::lookAt(centerobj_position, centerobj_position + camDirection[i], glm::vec3(0.0f, 1.0f, 0.0f));
+        glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
+        glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+        if (skybox != nullptr)
+        {
+            glDepthMask(GL_FALSE);
+            skybox->Update();
+            glDepthMask(GL_TRUE);
+        }
+        for (std::unordered_map<unsigned, Object*>::iterator obj = objects.begin(); obj != objects.end(); obj++)
+        {
+            if (obj->second->id != objId)
+            {
+                if (obj->second->isUsingCubeMapTexture)
+                {
+                    if (obj->second->alive)
+                    {
+                        if (count == 1)
+                        {
+                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetTopTexture(cubemapTextures[0]);
+                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetBottomTexture(cubemapTextures[1]);
+                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetLeftTexture(cubemapTextures[2]);
+                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetRightTexture(cubemapTextures[3]);
+                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetFrontTexture(cubemapTextures[4]);
+                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetBackTexture(cubemapTextures[5]);
+                        }
+                        else if (count == 0)
+                        {
+                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetTopTexture(cubemapTextures1[0]);
+                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetBottomTexture(cubemapTextures1[1]);
+                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetLeftTexture(cubemapTextures1[2]);
+                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetRightTexture(cubemapTextures1[3]);
+                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetFrontTexture(cubemapTextures1[4]);
+                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetBackTexture(cubemapTextures1[5]);
+                        }
+                        obj->second->SendView(centerobj_position);
+                        obj->second->Update();
+                    }
+                }
+                else
+                {
+                    if (obj->second->alive)
+                    {
+
+                        obj->second->Update();
+                    }
+                }
+
+
+            }
+        }
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glDrawBuffer(GL_BACK_LEFT);
+
+    GRAPHICS->UpdatePVmatrices();
+
+}
+
+void ObjectManager::GenerateEnvironmentTexturesFinal(int count, unsigned objId)
 {
     projection = glm::perspective(glm::radians(90.f), 1.f, GRAPHICS->camera.near, GRAPHICS->camera.far);
     int width = static_cast<int>(APPLICATION->GetWindowSize().x), height = static_cast<int>(APPLICATION->GetWindowSize().y);
@@ -247,7 +358,7 @@ void ObjectManager::ReGenerateEnvironmentTextures(unsigned objId)
     for (int i = 0; i < 6; i++)
     {
        
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, cubemapTextures_regenerate[i], 0);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, cubemapTextures_final[i], 0);
 
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -267,7 +378,6 @@ void ObjectManager::ReGenerateEnvironmentTextures(unsigned objId)
             skybox->Update();
             glDepthMask(GL_TRUE);
         }
-        int count = 0;
         for (std::unordered_map<unsigned, Object*>::iterator obj = objects.begin(); obj != objects.end(); obj++)
         {
             if (obj->second->id != objId)
@@ -276,25 +386,24 @@ void ObjectManager::ReGenerateEnvironmentTextures(unsigned objId)
                 {
                     if (obj->second->alive)
                     {
-                        if (count == 0)
+                        if (count == 1)
                         {
-                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetTopTexture(cubemapTextures[0]);
-                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetBottomTexture(cubemapTextures[1]);
-                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetLeftTexture(cubemapTextures[2]);
-                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetRightTexture(cubemapTextures[3]);
-                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetFrontTexture(cubemapTextures[4]);
-                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetBackTexture(cubemapTextures[5]);
+                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetTopTexture(cubemapTextures_regenerate[0]);
+                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetBottomTexture(cubemapTextures_regenerate[1]);
+                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetLeftTexture(cubemapTextures_regenerate[2]);
+                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetRightTexture(cubemapTextures_regenerate[3]);
+                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetFrontTexture(cubemapTextures_regenerate[4]);
+                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetBackTexture(cubemapTextures_regenerate[5]);
                         }
-                        else if (count == 1)
+                        else if (count == 0)
                         {
-                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetTopTexture(cubemapTextures1[0]);
-                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetBottomTexture(cubemapTextures1[1]);
-                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetLeftTexture(cubemapTextures1[2]);
-                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetRightTexture(cubemapTextures1[3]);
-                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetFrontTexture(cubemapTextures1[4]);
-                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetBackTexture(cubemapTextures1[5]);
+                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetTopTexture(cubemapTextures_regenerate1[0]);
+                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetBottomTexture(cubemapTextures_regenerate1[1]);
+                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetLeftTexture(cubemapTextures_regenerate1[2]);
+                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetRightTexture(cubemapTextures_regenerate1[3]);
+                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetFrontTexture(cubemapTextures_regenerate1[4]);
+                            reinterpret_cast<CubeMapTexture*>(obj->second->material->texture)->SetBackTexture(cubemapTextures_regenerate1[5]);
                         }
-                        count++;
                         obj->second->SendView(centerobj_position);
                         obj->second->Update();
                     }

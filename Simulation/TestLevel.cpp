@@ -39,17 +39,17 @@ void TestLevel::Init()
     ramus->transform.Rotate(54, glm::vec3(0, 1, 0));
     ramus->drawmode = 1;
 
-    grass = new Object("grass");
-    grass->SetMeshGroup(GRAPHICS->GetMeshGroup("grass"));
-    grass->material=GRAPHICS->GetMaterial("m_ground");
-    grass->SetShader("phong_shading");
-    grass->transform.Translate(glm::vec3(0, 8, -53));
-    grass->transform.Scale(glm::vec3(1000,100,1000));
-    grass->transform.Rotate(62, glm::vec3(0, 1, 0));
-    grass->drawmode = 1;
+    //grass = new Object("grass");
+    //grass->SetMeshGroup(GRAPHICS->GetMeshGroup("grass"));
+    //grass->material=GRAPHICS->GetMaterial("m_ground");
+    //grass->SetShader("phong_shading");
+    //grass->transform.Translate(glm::vec3(0, 8, -53));
+    //grass->transform.Scale(glm::vec3(1000,100,1000));
+    //grass->transform.Rotate(62, glm::vec3(0, 1, 0));
+    //grass->drawmode = 1;
 
     reflectivedolpihne = new Object("reflective dolphin");
-    reflectivedolpihne->SetMeshGroup(GRAPHICS->GetMeshGroup("dolphin"));
+    reflectivedolpihne->SetMeshGroup(GRAPHICS->GetMeshGroup("sphere"));
     reflectivedolpihne->SetShader("phong_shading_cube");
     reflectivedolpihne->material = GRAPHICS->GetMaterial("m_environment");
     reflectivedolpihne->SetColor(glm::vec3(0.6f));
@@ -60,7 +60,7 @@ void TestLevel::Init()
     reflectivedolpihne->isUsingCubeMapTexture = true;
     reflectivedolpihne->environmentmapping_mode = 0;
     reflectivedolpihne->isModePhongShading_EnvironmentMapping = true;
-    reflectivedolpihne->mixRate = 0.3f;
+    reflectivedolpihne->mixRate =1.f;
 
 
 

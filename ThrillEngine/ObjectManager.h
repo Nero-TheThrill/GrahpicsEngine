@@ -13,7 +13,8 @@ public:
     void Update() override;
     void EnvironmentTextureCallback(int w, int h);
     void GenerateEnvironmentTextures(int count);
-    void ReGenerateEnvironmentTextures(unsigned objId);
+    void ReGenerateEnvironmentTextures(int count, unsigned objId);
+    void GenerateEnvironmentTexturesFinal(int count, unsigned objId);
     ~ObjectManager();
     void RegisterObject(Object* obj);
     void RegisterLight(LightObject* light);
@@ -36,6 +37,10 @@ private:
     GLuint cubemapTextures[6];
     GLuint cubemapTextures1[6];
     GLuint cubemapTextures_regenerate[6];
+    GLuint cubemapTextures_regenerate1[6];
+    GLuint cubemapTextures_final[6];
+    GLuint cubemapTextures_final1[6];
+
     glm::vec3 camDirection[6];
     GLuint DepthBuffer = 0;
 
