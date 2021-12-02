@@ -49,7 +49,7 @@ void TestLevel::Init()
     //grass->drawmode = 1;
 
     reflectivedolpihne = new Object("reflective dolphin");
-    reflectivedolpihne->SetMeshGroup(GRAPHICS->GetMeshGroup("sphere"));
+    reflectivedolpihne->SetMeshGroup(GRAPHICS->GetMeshGroup("dolphin"));
     reflectivedolpihne->SetShader("phong_shading_cube");
     reflectivedolpihne->material = GRAPHICS->GetMaterial("m_environment");
     reflectivedolpihne->SetColor(glm::vec3(0.6f));
@@ -60,7 +60,7 @@ void TestLevel::Init()
     reflectivedolpihne->isUsingCubeMapTexture = true;
     reflectivedolpihne->environmentmapping_mode = 0;
     reflectivedolpihne->isModePhongShading_EnvironmentMapping = true;
-    reflectivedolpihne->mixRate =1.f;
+    reflectivedolpihne->mixRate =0.3f;
 
 
 
